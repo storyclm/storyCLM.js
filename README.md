@@ -42,7 +42,7 @@ StoryCLM.js - это библиотека, предоставляющая дос
 * querybuilder - конструктор запросов [TablesQuery](./tablesquery.md). Показывает как создавать запросы для таблиц в формате [TablesQuery](./tablesquery.md).
 
 
- ## Подключение
+## Подключение
 
 ```sh
 <script src="js/storyclm-1.5.0.js"></script>
