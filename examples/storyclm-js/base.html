@@ -1,0 +1,228 @@
+﻿<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="format-detection" content="telephone=no">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="clm-swipe-next" content="">
+    <meta name="clm-swipe-previous" content="">
+    <meta name="clm" content="">
+    <title>Base</title>
+    <link href="css/main.css" rel="stylesheet" />
+    <link href="css/bootstrap.css" rel="stylesheet">
+    <link href="css/template.css" rel="stylesheet">
+</head>
+<body>
+    <div id="background">
+        <div class="row" style="margin:5px;">
+            <div class="col-md-3">
+                <a class="btn btn-default" style="width:100%;" href="index.html">Назад</a><br /><br />
+                <div class="list-group">
+                    <a href="#" id="Go" class="list-group-item">Go (name, data)</a>
+                    <a href="#" id="Go1" class="list-group-item">Go (name)</a>
+                    <a href="#" id="GetNavigationData" class="list-group-item">Get Navigation Data</a>
+                    <a href="#" id="GetInfo" class="list-group-item">Get Info</a>
+                    <a href="#" id="Set" class="list-group-item">Set</a>
+                    <a href="#" id="GetUserInfo" class="list-group-item">Get User Info</a>
+                    <a href="#" id="GetGeoLocationInfo" class="list-group-item">Get GeoLocation Info</a>
+                </div>
+            </div>
+            <div id="def" style="display:none;">
+                <div data-i="Go">
+                    <div class="request">
+                        <pre>
+{
+    "Command": "go",
+    "Data": {
+        "slideName": "index.html",
+        "data": {
+            "test": "test"
+        }
+    }
+}
+</pre>
+                    </div>
+                    <div class="signa">StoryCLM.Go("index.html", { test: "test" }, callback);</div>
+                    <div class="text">
+                        Переходит указанный слайд и передает ему данные.
+                    </div>
+                </div>
+                <div data-i="Go1">
+                    <div class="request">
+                        <pre>
+{
+    "Command": "go",
+    "Data": {
+        "slideName": "index.html",
+        "data": {}
+    }
+}
+</pre>
+                    </div>
+                    <div class="signa">StoryCLM.Go("index.html", callback);</div>
+                    <div class="text">
+                        Переходит указанный слайд.
+                    </div>
+                </div>
+                <div data-i="GetNavigationData">
+                    <div class="request">
+                        <pre></pre>
+                    </div>
+                    <div class="signa">StoryCLM.GetNavigationData();</div>
+                    <div class="text">
+                        Получает данные, которые были переданы в слайд при вызове метода Open или Go.
+                    </div>
+                </div>
+                <div data-i="GetInfo">
+                    <div class="request">
+                        <pre>
+{
+    "Command": "getAppInfo",
+    "Data": {}
+}
+</pre>
+                    </div>
+                    <div class="signa">StoryCLM.System.GetInfo(callback);</div>
+                    <div class="text">
+                        Получает системную информацию.
+                    </div>
+                </div>
+                <div data-i="Set">
+                    <div class="request">
+                        <pre>
+{
+    "Command": "setCustomEvent",
+    "Data": {
+        "key": "KEY",
+        "value": "test"
+    }
+}
+</pre>
+                    </div>
+                    <div class="signa">StoryCLM.CustomEvents.Set("KEY", "test", callback);</div>
+                    <div class="text">
+                        Записывает кастомные данные и отправляет на сервер. Данные в формате key/value.
+                    </div>
+                </div>
+                <div data-i="GetUserInfo">
+                    <div class="request">
+                        <pre>
+{
+    "Command": "getUserInfo",
+    "Data": {}
+}
+</pre>
+                    </div>
+                    <div class="signa">StoryCLM.User.Get(callback);</div>
+                    <div class="text">
+                        Получает информацию о текущем пользователе.
+                    </div>
+                </div>
+                <div data-i="GetGeoLocationInfo">
+                    <div class="request">
+                        <pre>
+{
+    "Command": "getGeoLocationInfo",
+    "Data": {}
+}
+</pre>
+                    </div>
+                    <div class="signa">StoryCLM.Geolocation.Get(callback);</div>
+                    <div class="text">
+                        Получает данные геолокации.
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-9">
+                <p class="text-primary">
+                    StoryCLM
+                </p>
+                <input type="text" id="signa" class="form-control">
+                <div class="jumbotron" id="text"></div>
+                <ul class="nav nav-tabs" role="tablist">
+                    <li role="presentation" class="active"><a href="#response" aria-controls="response" role="tab" data-toggle="tab">Response</a></li>
+                    <li role="presentation"><a href="#request" aria-controls="profile" role="tab" data-toggle="tab">Request</a></li>
+                </ul>
+                <div class="tab-content">
+                    <div role="tabpanel" class="tab-pane active" id="response"></div>
+                    <div role="tabpanel" class="tab-pane" id="request"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script src="js/jquery-2.1.1.min.js"></script>
+    <script src="js/bootstrap.js"></script>
+    <script src="js/main.js"></script>
+    <script src="js/storyclm-1.5.0.js"></script>
+    <script>
+        $(function () {
+            $(".list-group a").on(clickEvent, function () {
+                $("#response").text("");
+                switch (this.id) {
+                    case "Go":
+                        {
+                            StoryCLM.Go("index.html", { test: "test" }, function (message) {
+                                setJson("response", message);
+                            });
+                            loadDocData("Go");
+                            return false;
+                        }
+                    case "Go1":
+                        {
+                            StoryCLM.Go("index.html", function (message) {
+                                setJson("response", message);
+                            });
+                            loadDocData("Go1");
+                            return false;
+                        }
+                    case "GetNavigationData":
+                        {
+                            setJson("response", StoryCLM.GetNavigationData());
+                            loadDocData("GetNavigationData");
+                            return false;
+                        }
+                    case "GetInfo":
+                        {
+                            StoryCLM.System.GetInfo(function (message) {
+                                setJson("response", message);
+                            });
+                            loadDocData("GetInfo");
+                            return false;
+                        }
+                    case "Set":
+                        {
+                            StoryCLM.CustomEvents.Set("KEY", "test", function (message) {
+                                setJson("response", message);
+                            });
+                            loadDocData("Set");
+                            return false;
+                        }
+                    case "GetUserInfo":
+                        {
+                            StoryCLM.User.Get(function (message) {
+                                setJson("response", message);
+                            });
+                            loadDocData("GetUserInfo");
+                            return false;
+                        }
+                    case "GetGeoLocationInfo":
+                        {
+                            StoryCLM.Geolocation.Get(function (message) {
+                                setJson("response", message);
+                            });
+                            loadDocData("GetGeoLocationInfo");
+                            return false;
+                        }
+                    default:
+                        {
+                            return false;
+                        }
+                }
+            });
+        });
+    </script>
+</body>
+
+</html>

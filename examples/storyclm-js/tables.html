@@ -1,0 +1,620 @@
+﻿<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="format-detection" content="telephone=no">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="clm-swipe-next" content="">
+    <meta name="clm-swipe-previous" content="">
+    <meta name="clm" content="">
+    <title>Tables</title>
+    <link href="css/main.css" rel="stylesheet" />
+    <link href="css/bootstrap.css" rel="stylesheet">
+    <link href="css/template.css" rel="stylesheet">
+    <style>
+        td:last-child {
+            text-align: left;
+        }
+    </style>
+</head>
+<body>
+    <div id="background">
+        <div class="row" style="margin:5px;">
+            <div class="col-md-3">
+                <a class="btn btn-default" style="width:100%;" href="index.html">Назад</a><br /><br />
+                <div class="list-group">
+                    <a href="#" id="GetTables" class="list-group-item">Get Tables</a>
+                    <a href="#" id="Insert" class="list-group-item">Insert (tableId, entry)</a>
+                    <a href="#" id="Insert1" class="list-group-item">Insert (tableId, entries[])</a>
+                    <a href="#" id="Update" class="list-group-item">Update (tableId, entry)</a>
+                    <a href="#" id="Update1" class="list-group-item">Update (tableId, entries[])</a>
+                    <a href="#" id="Count" class="list-group-item">Count (tableId)</a>
+                    <a href="#" id="Count1" class="list-group-item">Count (tableId, query)</a>
+                    <a href="#" id="Find" class="list-group-item">Find (tableId, id)</a>
+                    <a href="#" id="Find1" class="list-group-item">Find (tableId, ids[])</a>
+                    <a href="#" id="Find2" class="list-group-item">Find (tableId, query)</a>
+                    <a href="#" id="Find3" class="list-group-item">Find Simple (tableId, query)</a>
+                    <a href="#" id="Delete" class="list-group-item">Delete (tableId, id)</a>
+                    <a href="#" id="Delete1" class="list-group-item">Delete (tableId, ids[])</a>
+                </div>
+            </div>
+            <div id="def" style="display:none;">
+                <div data-i="GetTables">
+                    <div class="request">
+                        <pre>
+{
+    "Command": "tables",
+    "Data": {}
+}
+</pre>
+                    </div>
+                    <div class="signa">StoryCLM.Tables.Get(callback);</div>
+                    <div class="text">
+                        Получает все доступные таблицы и их схемы.
+                    </div>
+                </div>
+                <div data-i="Insert">
+                    <div class="request">
+                        <pre>
+{
+    "Command": "insertEntry",
+    "Data": {
+        "tableId": 6,
+        "entry": {
+            "Name": "Vladimir",
+            "Age": 22,
+            "Gender": true,
+            "Rating": 2.2,
+            "Created": "1995-12-16T21:00:00.000Z"
+        }
+    }
+}
+</pre>
+                    </div>
+                    <div class="signa">StoryCLM.Tables.Insert(6, entry, callback);</div>
+                    <div class="text">
+                        Добавляет новую запись в таблицу. Запись должна соотвествовать схеме таблицы.
+                        Добавлять запись в таблицу можно если таблица работает в режимах: Application и Default.
+                        С таблицами в режиме Default можно работать только при наличии интернета.
+                        Данная операция не может быть применена к таблице в режиме Master.
+                    </div>
+                </div>
+                <div data-i="Insert1">
+                    <div class="request">
+                        <pre>
+{
+    "Command": "insertEntries",
+    "Data": {
+        "tableId": 6,
+        "entries": [
+            {
+                "Name": "Vladimir",
+                "Age": 22,
+                "Gender": true,
+                "Rating": 2.2,
+                "Created": "1995-12-16T21:00:00.000Z"
+            },
+            {
+                "Name": "Vladimir",
+                "Age": 22,
+                "Gender": true,
+                "Rating": 2.2,
+                "Created": "1995-12-16T21:00:00.000Z"
+            },
+            {
+                "Name": "Vladimir",
+                "Age": 22,
+                "Gender": true,
+                "Rating": 2.2,
+                "Created": "1995-12-16T21:00:00.000Z"
+            }
+        ]
+    }
+}
+</pre>
+                    </div>
+                    <div class="signa">StoryCLM.Tables.Insert(6, entries, callback);</div>
+                    <div class="text">
+                        Добавляет коллекцию записей в таблицу. Записи должны соотвествовать схеме таблицы.
+                        Добавлять записи в таблицу можно только если таблица работает в режимах: Application и Default.
+                        С таблицами в режиме Default можно работать только при наличии интернета.
+                        Данная операция не может быть применена к таблице в режиме Master.
+                    </div>
+                </div>
+                <div data-i="Update">
+                    <div class="request">
+                        <pre>
+{
+    "Command": "updateEntry",
+    "Data": {
+        "tableId": 6,
+        "entry": {
+            "Name": "Anna",
+            "Age": 33,
+            "Gender": false,
+            "Rating": 3.3,
+            "Created": "1995-12-16T21:00:00.000Z",
+            "_id": "DD7776E0E74A47DE879D877F287CD191"
+        }
+    }
+}
+</pre>
+                    </div>
+                    <div class="signa">StoryCLM.Tables.Update(6, entry, callback);</div>
+                    <div class="text">
+                        Перезаписывает запись в таблице. Перезаписывать можно все поля записи кроме идетификатора (id/_id).
+                        Запись должна соотвествовать схеме таблицы.
+                        Обновлять запись в таблице можно только если таблица работает в режимах: Application и Default.
+                        С таблицами в режиме Default можно работать только при наличии интернета.
+                        С данными в таблице, которая работает в режиме Application,
+                        можно производить операции до тех пор пока эти данные не будут отправлены на сервер.
+                        Данная операция не может быть применена к таблице в режиме Master.
+                    </div>
+                </div>
+                <div data-i="Update1">
+                    <div class="request">
+                        <pre>
+{
+    "Command": "updateEntries",
+    "Data": {
+        "tableId": 6,
+        "entries": [
+            {
+                "Name": "Anna",
+                "Age": 33,
+                "Gender": false,
+                "Rating": 3.3,
+                "Created": "1995-12-16T21:00:00.000Z",
+                "_id": "DD7776E0E74A47DE879D877F287CD191"
+            },
+            {
+                "Name": "Anna",
+                "Age": 33,
+                "Gender": false,
+                "Rating": 3.3,
+                "Created": "1995-12-16T21:00:00.000Z",
+                "_id": "DD7776E0E74A47DE879D877F287CD191"
+            },
+            {
+                "Name": "Anna",
+                "Age": 33,
+                "Gender": false,
+                "Rating": 3.3,
+                "Created": "1995-12-16T21:00:00.000Z",
+                "_id": "DD7776E0E74A47DE879D877F287CD191"
+            }
+        ]
+    }
+}
+</pre>
+                    </div>
+                    <div class="signa">StoryCLM.Tables.Update(6, entries, callback);</div>
+                    <div class="text">
+                        Перезаписывает записи в таблице. Перезаписывать можно все поля кроме идетификатора (id/_id).
+                        Записи должны соотвествовать схеме таблицы.
+                        Обновлять записи в таблице можно только если таблица работает в режимах: Application и Default.
+                        С таблицами в режиме Default можно работать только при наличии интернета.
+                        С данными в таблице, которая работает в режиме Application,
+                        можно производить операции до тех пор пока эти данные не будут отправлены на сервер.
+                        Данная операция не может быть применена к таблице в режиме Master.
+                    </div>
+                </div>
+                <div data-i="Count">
+                    <div class="request">
+                        <pre>
+{
+    "Command": "count",
+    "Data": {
+        "tableId": 6
+    }
+}
+</pre>
+                    </div>
+                    <div class="signa">StoryCLM.Tables.Count(6, callback);</div>
+                    <div class="text">
+                        Получает колличество записей в таблице.
+                        В таблицах, которые работают офлайн, колличество записей - это колличесво записей в локальной базе.
+                    </div>
+                </div>
+                <div data-i="Count1">
+                    <div class="request">
+                        <pre>
+{
+    "Command": "countByQuery",
+    "Data": {
+        "tableId": 6,
+        "query": "[age][gt][30]"
+    }
+}
+</pre>
+                    </div>
+                    <div class="signa">StoryCLM.Tables.Count(6, "[age][gt][30]", callback);</div>
+                    <div class="text">
+                        Получает колличество записей по запросу. Используется для постраничной навигации.
+                        В таблицах, которые работают офлайн, колличество записей - это колличесво записей в локальной базе.
+                    </div>
+                </div>
+                <div data-i="Find">
+                    <div class="request">
+                        <pre>
+{
+    "Command": "findById",
+    "Data": {
+        "tableId": 6,
+        "id": "DD7776E0E74A47DE879D877F287CD191"
+    }
+}
+</pre>
+                    </div>
+                    <div class="signa">StoryCLM.Tables.Find(6, id, callback);</div>
+                    <div class="text">
+                        Получает запись по ее идентификатору.
+                        С данными в таблице, которая работает в режиме Application,
+                        можно производить операции до тех пор пока эти данные не будут отправлены на сервер.
+                    </div>
+                </div>
+                <div data-i="Find1">
+                    <div class="request">
+                        <pre>
+{
+    "Command": "findByIds",
+    "Data": {
+        "tableId": 6,
+        "ids": [
+            "DD7776E0E74A47DE879D877F287CD191",
+            "DD7776E0E74A47DE879D877F287CD191",
+            "DD7776E0E74A47DE879D877F287CD191"
+        ]
+    }
+}
+</pre>
+                    </div>
+                    <div class="signa">StoryCLM.Tables.Find(6, ids, callback);</div>
+                    <div class="text">
+                        Получает записи по списку идентификаторов.
+                        С данными в таблице, которая работает в режиме Application,
+                        можно производить операции до тех пор пока эти данные не будут отправлены на сервер.
+                    </div>
+                </div>
+                <div data-i="Find2">
+                    <div class="request">
+                        <pre>
+{
+    "Command": "findByQuery",
+    "Data": {
+        "skip": 0,
+        "take": 100,
+        "query": "[age][gt][30]",
+        "sort": 1,
+        "sortfield": "age"
+    }
+}
+</pre>
+                    </div>
+                    <div class="signa">StoryCLM.Tables.Find(6, new TablesQuery().Query("[age][gt][30]").Sort(1, "age").Skip(0).Take(100), callback);</div>
+                    <div class="text">
+                        Получает записи по запросу. <br />
+                        Запрос: [age][gt][30] - подробно о запросах во вкладке "TablesQuery".<br />
+                        Сортировка: по полю "age", тип сортировки - DESC (0 - ASC, 1 - DESC, -1 - без сортировки).<br />
+                        Пропустить записей: 0 (Skip(0)). <br />
+                        Выбрать записей: 100 (Take(100)). <br />
+                        С данными в таблице, которая работает в режиме Application,
+                        можно производить операции до тех пор пока эти данные не будут отправлены на сервер.
+                    </div>
+                </div>
+                <div data-i="Find3">
+                    <div class="request">
+                        <pre>
+{
+    "Command": "findByQuery",
+    "Data": {
+        "skip": 0,
+        "take": 100,
+        "query": "",
+        "sort": -1,
+        "sortfield": ""
+    }
+}
+</pre>
+                    </div>
+                    <div class="signa">StoryCLM.Tables.Find(6, new TablesQuery().Skip(0).Take(100), callback);</div>
+                    <div class="text">
+                        Получает записи постранично. <br />
+                        Пропустить записей: 0 (Skip(0)). <br />
+                        Выбрать записей: 100 (Take(100)). <br />
+                        С данными в таблице, которая работает в режиме Application,
+                        можно производить операции до тех пор пока эти данные не будут отправлены на сервер.
+                    </div>
+                </div>
+                <div data-i="Delete">
+                    <div class="request">
+                        <pre>
+{
+    "Command": "deleteById",
+    "Data": {
+        "tableId": 6,
+        "id": "DD7776E0E74A47DE879D877F287CD191"
+    }
+}
+</pre>
+                    </div>
+                    <div class="signa">StoryCLM.Tables.Delete(6, id, callback);</div>
+                    <div class="text">
+                        Удаляет запись по идентификатору.
+                        С данными в таблице, которая работает в режиме Application,
+                        можно производить операции до тех пор пока эти данные не будут отправлены на сервер.
+                        Данная операция не может быть применена к таблице в режиме Master.
+                    </div>
+                </div>
+                <div data-i="Delete1">
+                    <div class="request">
+                        <pre>
+{
+    "Command": "deleteByIds",
+    "Data": {
+        "tableId": 6,
+        "ids": [
+            "DD7776E0E74A47DE879D877F287CD191",
+            "DD7776E0E74A47DE879D877F287CD191",
+            "DD7776E0E74A47DE879D877F287CD191"
+        ]
+    }
+}
+</pre>
+                    </div>
+                    <div class="signa">StoryCLM.Tables.Delete(6, ids, callback);</div>
+                    <div class="text">
+                        Удаляет запись по идентификатору.
+                        С данными в таблице, которая работает в режиме Application,
+                        можно производить операции до тех пор пока эти данные не будут отправлены на сервер.
+                        Данная операция не может быть применена к таблице в режиме Master.
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-9">
+                <p class="text-primary">
+                    StoryCLM -> Tables
+                </p>
+                <input type="text" id="signa" class="form-control">
+                <div class="jumbotron" id="text"></div>
+                <ul class="nav nav-tabs" role="tablist">
+                    <li role="presentation" class="active"><a href="#response" aria-controls="response" role="tab" data-toggle="tab">Response</a></li>
+                    <li role="presentation"><a href="#request" aria-controls="request" role="tab" data-toggle="tab">Request</a></li>
+                    <li role="presentation"><a href="#tablesQuery" aria-controls="profile" role="tab" data-toggle="tab">TablesQuery description</a></li>
+                </ul>
+                <div class="tab-content">
+                    <div role="tabpanel" class="tab-pane active" id="response"></div>
+                    <div role="tabpanel" class="tab-pane" id="request"></div>
+                    <div role="tabpanel" class="tab-pane" id="tablesQuery">
+                        <p>
+                            TablesQuery - это язык запросов, разработанного специально для StoryCLM.
+                            Запрос в данном формате легко транслируется в любы другие языки запросов.
+                            Параметры из которых создается запрос могут быть двух типов: Comparison и Logical. <br />
+                            Comparison (операторы сравнения):
+                        </p>
+                        <table style="width:100%">
+                            <tr>
+                                <th>Оператор</th>
+                                <th>Тип поля для которого он применим</th>
+                                <th>Пример  запроса</th>
+                                <th>Описание</th>
+                            </tr>
+                            <tr><td>[eq]</td><td>(string, int, double, bool, date)</td><td>[fieldname][eq]["value"]</td><td>Equals</td></tr>
+                            <tr><td>[lt]</td><td>(int, double, date)</td><td>[fieldname][lt][value]</td><td>Less Than operator</td></tr>
+                            <tr><td>[lte]</td><td>(int, double, date)</td><td>[fieldname][lte][value]</td><td>Less Than or Equal to operator</td></tr>
+                            <tr><td>[gt]</td><td>(int, double, date)</td><td>[fieldname][gt][value]</td><td>Greater Than operator</td></tr>
+                            <tr><td>[gte]</td><td>(int, double, date)</td><td>[fieldname][gte][value]</td><td>Greater Than or Equal to operator</td></tr>
+                            <tr><td>[ne]</td><td>(string, int, double, bool, date)</td><td>[fieldname][ne]["value"]</td><td>Not Equal to operator</td></tr>
+                            <tr><td>[in]</td><td>(string, int, double, bool, date)</td><td>[fieldname][in]["val","val"]</td><td>Contained IN array operator</td></tr>
+                            <tr><td>[nin]</td><td>(string,  int, double, date)</td><td>[fieldname][nin]["val","val"]</td><td>Not contained IN array</td></tr>
+                            <tr><td>[cn]</td><td>(string)</td><td>[fieldname][cn]["value"]</td><td>Contains</td></tr>
+                            <tr><td>[re]</td><td>(string)</td><td>[fieldname][re]["value"]</td><td>Regular Expression</td></tr>
+                            <tr><td>[sw]</td><td>(string)</td><td>[fieldname][sw]["value"]</td><td>Starts With</td></tr>
+                            <tr><td>[ew]</td><td>(string)</td><td>[fieldname][ew]["value"]</td><td>Ends With</td></tr>
+                        </table>
+                        <br />
+                        <p>
+                            Logical (логические операторы): <br />
+                            Используются для "соединения" несколько операторов сравнения операторов сравнения. Такие операторы могут располагаться только между операторами сравнения.
+                            Операторы сравнения стоящие в начале записи, в конце, соединяющие другие логические операторы, соединяющие логический оператор и оператор сравнения учитываться не будут.
+                        </p>
+                        <table style="width:100%; text-align:left;">
+                            <tr>
+                                <th>Оператор</th>
+                                <th>Тип поля для которого он применим</th>
+                                <th>Пример  запроса</th>
+                            </tr>
+                            <tr><td>[or]</td><td>(логический оператор)</td><td>[fieldname][eq]["value"][or][fieldname][eq]["value1"]</td></tr>
+                            <tr><td>[and] </td><td>(логический оператор)</td><td>[fieldname][eq]["value"][and][fieldname][eq]["value1"]</td></tr>
+                        </table>                                  
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script src="js/jquery-2.1.1.min.js"></script>
+    <script src="js/bootstrap.js"></script>
+    <script src="js/main.js"></script>
+    <script src="js/storyclm-1.5.0.js"></script>
+    <script>
+        $(function () {
+            $(".list-group a").on(clickEvent, function () {
+                $("#response").text("");
+                switch (this.id) {
+                    case "GetTables":
+                        {
+                            StoryCLM.Tables.Get(function (message) {
+                                setJson("response", message);
+                            });
+                            loadDocData("GetTables");
+                            return false;
+                        }
+                    case "Insert":
+                        {
+                            var entry = testDataSource.createProfile();
+                            StoryCLM.Tables.Insert(6, entry, function (message) {
+                                setJson("response", message);
+                            });
+                            loadDocData("Insert");
+                            return false;
+                        }
+                    case "Insert1":
+                        {
+                            var entries = testDataSource.createProfiles();
+                            StoryCLM.Tables.Insert(6, entries, function (message) {
+                                setJson("response", message);
+                            });
+                            loadDocData("Insert1");
+                            return false;
+                        }
+                    case "Update":
+                        {
+                            var entry = testDataSource.updateProfile(testDataSource.createProfile());
+                            StoryCLM.Tables.Update(6, entry, function (message) {
+                                setJson("response", message);
+                            });
+                            loadDocData("Update");
+                            return false;
+                        }
+                    case "Update1":
+                        {
+                            var entries = testDataSource.updateProfiles(testDataSource.createProfiles());
+                            StoryCLM.Tables.Update(6, entries, function (message) {
+                                setJson("response", message);
+                            });
+                            loadDocData("Update1");
+                            return false;
+                        }
+                    case "Count":
+                        {
+                            StoryCLM.Tables.Count(6, function (message) {
+                                setJson("response", message);
+                            });
+                            loadDocData("Count");
+                            return false;
+                        }
+                    case "Count1":
+                        {
+                            StoryCLM.Tables.Count(6, "[age][gt][30]", function (message) {
+                                setJson("response", message);
+                            });
+                            loadDocData("Count1");
+                            return false;
+                        }
+                    case "Find":
+                        {
+                            var id = "DD7776E0E74A47DE879D877F287CD191";
+                            StoryCLM.Tables.Find(6, id, function (message) {
+                                setJson("response", message);
+                            });
+                            loadDocData("Find");
+                            return false;
+                        }
+                    case "Find1":
+                        {
+                            var ids = ["DD7776E0E74A47DE879D877F287CD191", "DD7776E0E74A47DE879D877F287CD191", "DD7776E0E74A47DE879D877F287CD191"];
+                            StoryCLM.Tables.Find(6, ids, function (message) {
+                                setJson("response", message);
+                            });
+                            loadDocData("Find1");
+                            return false;
+                        }
+                    case "Find2":
+                        {
+                            StoryCLM.Tables.Find(6, new TablesQuery().Query("[age][gt][30]").Sort(1, "age").Skip(0).Take(100), function (message) {
+                                setJson("response", message);
+                            });
+                            loadDocData("Find2");
+                            return false;
+                        }
+                    case "Find3":
+                        {
+                            StoryCLM.Tables.Find(6, new TablesQuery().Skip(0).Take(100), function (message) {
+                                setJson("response", message);
+                            });
+                            loadDocData("Find3");
+                            return false;
+                        }
+                    case "Delete":
+                        {
+                            var id = "DD7776E0E74A47DE879D877F287CD191";
+                            StoryCLM.Tables.Delete(6, id, function (message) {
+                                setJson("response", message);
+                            });
+                            loadDocData("Delete");
+                            return false;
+                        }
+                    case "Delete1":
+                        {
+                            var ids = ["DD7776E0E74A47DE879D877F287CD191", "DD7776E0E74A47DE879D877F287CD191", "DD7776E0E74A47DE879D877F287CD191"];
+                            StoryCLM.Tables.Delete(6, ids, function (message) {
+                                setJson("response", message);
+                            });
+                            loadDocData("Delete1");
+                            return false;
+                        }
+                    default:
+                        {
+                            return false;
+                        }
+                }
+            });
+
+            var testDataSource = (function () {
+
+                /// Обновляет коллекцию профилей
+                function _updateProfiles(o) {
+                    var result = [];
+                    for (var i = 0; i < o.length; i++)
+                        result.push(_updateProfile(o[i]));
+                    return result;
+                }
+
+                /// Обновляет профиль
+                function _updateProfile(o) {
+                    o._id = "DD7776E0E74A47DE879D877F287CD191";
+                    o.Name = "Anna";
+                    o.Age = 33;
+                    o.Gender = false;
+                    o.Rating = 3.3;
+                    o.Created = new Date(1995, 11, 17).toISOString();
+                    return o;
+                }
+
+                /// Создает коллекцию профилей
+                function _createProfiles() {
+                    var result = [];
+                    for (var i = 0; i < 3; i++)
+                        result.push(_createProfile());
+                    return result;
+                }
+
+                /// Создает новый профиль
+                function _createProfile() {
+                    return {
+                        Name: "Vladimir",
+                        Age: 22,
+                        Gender: true,
+                        Rating: 2.2,
+                        Created: new Date(2000, 11, 17).toISOString()
+                    };
+                }
+
+                return {
+                    updateProfiles: _updateProfiles,
+                    updateProfile: _updateProfile,
+                    createProfiles: _createProfiles,
+                    createProfile: _createProfile
+                };
+
+            })();
+
+        });
+    </script>
+</body>
+
+
+
+</html>
