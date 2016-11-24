@@ -1,0 +1,162 @@
+﻿<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="format-detection" content="telephone=no">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="clm-swipe-next" content="">
+    <meta name="clm-swipe-previous" content="">
+    <meta name="clm" content="">
+    <title>TablesQuery</title>
+    <link href="css/main.css" rel="stylesheet" />
+    <link href="css/bootstrap.css" rel="stylesheet">
+    <link href="css/template.css" rel="stylesheet">
+    <style>
+        #background {
+        overflow:visible;
+        }
+
+        .is > div {
+            float:left;
+            margin-right:10px;
+        }
+
+        .is .form-control {
+         width:50px;
+         padding:2px;
+         height:24px;
+        }
+
+        
+        .is .btn {
+         padding: 1px 6px;
+        }
+
+        .is .input-group-btn {
+         width:auto;
+        }
+
+        label {
+        font-size:14px;
+        margin-bottom:0px;
+        }
+
+        .pm {
+        width:100%; 
+        font-family:Arial; 
+        font-size:12px; 
+        padding:2px; 
+        height:24px;
+        }
+
+        .col-md-2, .col-md-12 {
+        padding-left:0;
+        padding-right:5px;
+        }
+
+    </style>
+</head>
+<body>
+    <div id="background">
+        <div class="row" style="margin:5px;">
+            <div class="col-md-12">
+                <label for="resultQuery">Запрос:</label>
+                <input type="text" id="resultQuery" class="form-control pm" />
+            </div>
+        </div>
+        <div class="row" style="margin:5px;">
+            <div class="col-md-2">
+                <label for="tableId">Table Id:</label>
+                <input type="text" id="tableId" class="form-control pm" />
+            </div>
+            <div class="col-md-2">
+                <label for="SortType">Sort Type:</label>
+                <input type="text" id="SortType" class="form-control pm" />
+            </div>
+            <div class="col-md-2">
+                <label for="SortFieldName">Sort Field Name:</label>
+                <input type="text" id="SortFieldName" class="form-control pm" />
+            </div>
+            <div class="col-md-2">
+                <label for="Skip">Skip:</label>
+                <input type="text" id="Skip" class="form-control pm" value="0" />
+            </div>
+            <div class="col-md-2">
+                <label for="Take">Take:</label>
+                <input type="text" id="Take" class="form-control pm" value="100" />
+            </div>
+            <div class="col-md-2">
+                <button class="btn btn-default" style="width:100%; margin-top:25px; height:24px; padding: 2px 12px;">Выполнить</button>
+            </div>
+        </div>
+        <div class="row" style="margin:5px;">
+            <label>Конструктор запросов:</label><br />
+            <div class="col-md-12">
+                <div class="is"></div>
+            </div>
+        </div>
+        <div class="row" style="margin:5px;">
+            <div class="col-md-12">
+            </div>
+        </div>
+    </div>
+    <script src="js/storyclm-1.5.0.js"></script>
+    <script src="js/jquery-2.1.1.min.js"></script>
+    <script src="js/jquery.validate.min.js"></script>
+    <script src="js/jquery.validate.unobtrusive.min.js"></script>
+    <script src="js/bootstrap.js"></script>
+    <script src="js/tablesQueryBuilder.js" charset="windows-1251"></script>
+    <script>
+        var clickEvent = ('ontouchstart' in window ? 'touchend' : 'click');
+
+        function callback(msg)
+        {
+
+        }
+
+        function vCallback(validateState) {
+            console.log(validateState);
+            $("#resultQuery").val("");
+        }
+
+        function rCallback(query) {
+            var q = `StoryCLM.Tables.Find(6, new TablesQuery().Query('${query}').Sort(1, 'age').Skip(0).Take(100), callback);`;
+            $("#resultQuery").val(q);
+        }
+
+        $(function () {
+
+            tablesQueryBuilder.init({
+                root: ".is",
+                schema: [
+                    {
+                        k: "Name",
+                        t: 1
+                    },
+                    {
+                        k: "Age",
+                        t: 2
+                    },
+                    {
+                        k: "Gender",
+                        t: 4
+                    },
+                    {
+                        k: "Rating",
+                        t: 3
+                    },
+                    {
+                        k: "Created",
+                        t: 5
+                    }
+                ],
+                validateCallback: vCallback,
+                renderCallback: rCallback
+            });
+
+        });
+    </script>
+</body>
+</html>
