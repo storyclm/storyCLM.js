@@ -95,8 +95,8 @@ var tablesQueryBuilder = (function () {
     }
 
     function _createTriplet(data) {
-
-        if ($('.triplet').length > 0) {
+        var triplets = $('.triplet');
+        if (triplets.length > 0) {
             if (!_validate()) return false;
         }
 
@@ -123,15 +123,27 @@ var tablesQueryBuilder = (function () {
 
 
         var triplet = $(template);
+        var isLogical = !(triplets.length % 2 !== 0);
+        if (isLogical) {
+            _getOperators().forEach(function (item) {
+                if (!item.isLogical) {
+                    triplet.find(".tripletOperatorMenu ul").append(`<li><a data-type="${item.name}" data-m="1" data-log="${item.isLogical}" href="#${item.name}">${item.ruValue}</a></li>`);
+                }
+            });
 
-        _getOperators().forEach(function (item) {
-            triplet.find(".tripletOperatorMenu ul").append(`<li><a data-type="${item.name}" data-m="1" data-log="${item.isLogical}" href="#${item.name}">${item.ruValue}</a></li>`);
-        });
+            _getSchema().forEach(function (item) {
+                triplet.find(".tripletFieldMenu ul").append(`<li><a data-type="${item.t}" data-m="0" data-key="${item.k}" href="#${item.k}">${item.k}</a></li>`);
+            });
+        }
+        else {
+            _getOperators().forEach(function (item) {
+                if (item.isLogical) {
+                    triplet.find(".tripletOperatorMenu ul").append(`<li><a data-type="${item.name}" data-m="1" data-log="${item.isLogical}" href="#${item.name}">${item.ruValue}</a></li>`);
+                }
+            });
+        }
 
-        _getSchema().forEach(function (item) {
-            triplet.find(".tripletFieldMenu ul").append(`<li><a data-type="${item.t}" data-m="0" data-key="${item.k}" href="#${item.k}">${item.k}</a></li>`);
-        });
-
+        _changeState(isLogical, triplet);
         $(options.root).append(triplet);
         _updateButtons();
 
@@ -180,11 +192,12 @@ var tablesQueryBuilder = (function () {
             }
             if (isError) validationState.push(vsItem);
         });
-        if (validationState.length > 0) {
-            if (typeof options.validateCallback === "function")
-                options.validateCallback(validationState);
-            return false;
-        }
+
+        if (typeof options.validateCallback === "function")
+            options.validateCallback(validationState);
+
+        if (validationState.length > 0) return false;
+        
         return true;
     }
 
@@ -206,18 +219,45 @@ var tablesQueryBuilder = (function () {
 
     function _addTriplet(event) {
         event.preventDefault();
-        _render();
         _createTriplet();
+        _render();
     };
 
     function _removeTriplet(event) {
         event.preventDefault();
         var $formGroup = $(this).closest('.form-group');
         var $multipleFormGroup = $formGroup.closest('.multiple-form-group');
+        $($formGroup).nextAll().remove();
         $formGroup.remove();
         _updateButtons();
         _render();
     };
+
+    function _changeState(isLogical, triplet) {
+
+        if (!isLogical) {
+            triplet.find("> .tripletFieldMenu").css("display", "none");
+            triplet.find("> input").css("display", "none");
+            _setLogicalValue(triplet, "[and]", true, "È");
+        }
+        else {
+            triplet.find("> .tripletFieldMenu").css("display", "table-cell");
+            triplet.find("> input").css("display", "table-cell");
+        }
+
+    }
+
+    function _setLogicalValue(triplet, type, log, text){
+        triplet.find('.tripletOperatorMenu input').data("type", type);
+        triplet.find('.tripletOperatorMenu input').data("log", log);
+        triplet.find('.tripletOperatorMenu .concept').text(text);
+    }
+
+    function _setValue(triplet, type, key, text) {
+        triplet.find('.tripletFieldMenu input').data("type", type);
+        triplet.find('.tripletFieldMenu input').data("key", key);
+        triplet.find('.tripletFieldMenu .concept').text(text);
+    }
 
     function _selectGroup(event) {
         event.preventDefault();
@@ -227,28 +267,13 @@ var tablesQueryBuilder = (function () {
 
             var type = $(this).data("type");
             var isLogical = $(this).data("log");
-
-            $selectGroup.find('.tripletOperatorMenu input').data("type", type);
-            $selectGroup.find('.tripletOperatorMenu input').data("log", isLogical);
-            $selectGroup.find('.tripletOperatorMenu .concept').text($(this).text());
-
-            if (isLogical) {
-                $selectGroup.find("> .tripletFieldMenu").css("display", "none");
-                $selectGroup.find("> input").css("display", "none");
-            }
-            else {
-                $selectGroup.find("> .tripletFieldMenu").css("display", "table-cell");
-                $selectGroup.find("> input").css("display", "table-cell");
-            }
+            _setLogicalValue($selectGroup, type, isLogical, $(this).text());
 
         }
         else {
             var type = $(this).data("type");
             var key = $(this).data("key");
-
-            $selectGroup.find('.tripletFieldMenu input').data("type", type);
-            $selectGroup.find('.tripletFieldMenu input').data("key", key);
-            $selectGroup.find('.tripletFieldMenu .concept').text($(this).text());
+            _setValue($selectGroup, type, key, $(this).text());
         }
         _render();
     }
@@ -266,6 +291,7 @@ var tablesQueryBuilder = (function () {
             else {
                 query += `[${item.field}]`;
                 query += item.operator;
+
                 if (item.fieldType === 1 || item.fieldType === 5) {
                     query += `["${item.value}"]`;
                 }
@@ -293,7 +319,8 @@ var tablesQueryBuilder = (function () {
     }
 
     return {
-        init: _init
+        init: _init,
+        getSchema: _getSchema
     };
 
 })();
