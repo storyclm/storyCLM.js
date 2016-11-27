@@ -38,8 +38,8 @@ StoryCLM.js - это библиотека, предоставляющая дос
 детально разобраться в работе библиотеке на реальных примерах:
 
 * [storyclm-js](https://github.com/storyclm/storyCLM.js/tree/master/examples/storyclm-js) - интерактивный справочник по всем функциям библиотеки с подробным описанием;
-* [tables](https://github.com/storyclm/storyCLM.js/tree/master/examples/tables) - приложение, которое показывает на реальном примере работу с таблицами, постраничной выборкой, добавлнием, редактированием и удаление записей;
-* querybuilder - конструктор запросов [TablesQuery](./tablesquery.md). Показывает как создавать запросы для таблиц в формате [TablesQuery](./tablesquery.md).
+* [tables](https://github.com/storyclm/storyCLM.js/tree/master/examples/tables) - приложение, которое показывает на реальном примере работу с таблицами. В примере продемонстрирована постраничная выборка и CRUD операции.
+* [querybuilder](https://github.com/storyclm/storyCLM.js/tree/master/examples/tablesquery) - конструктор запросов [TablesQuery](./tablesquery.md). Приложение - это визуальный конструктор запросов. Конструируя и отправляя запрос, можно освоить работу с выборкой данных из таблиц в StoryCLM. 
 
 
 ## Подключение

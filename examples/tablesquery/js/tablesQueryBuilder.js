@@ -43,7 +43,7 @@ var tablesQueryBuilder = (function () {
             case 1:
                 {
                     result.type = "string";
-                    result.reg = /[а-яА-ЯёЁa-zA-Z0-9]+$/;
+                    result.reg = /.*/;
                     result.message = 'Поле должно содержать строку';
                     return result;
                 }
@@ -51,27 +51,28 @@ var tablesQueryBuilder = (function () {
                 {
                     result.type = "int";
                     result.message = 'Поле должно содержать целое число';
-                    result.reg = /^[0-9]+$/;
+                    result.reg = /^\-?[0-9]+$/;
                     return result;
                 }
             case 3:
                 {
                     result.type = "double";
                     result.message = 'Поле должно содержать число с плавающей точкой';
-                    result.reg = /\-?[0-9]*[.][0-9]*$/;
+                    result.reg = /\-?[0-9]*[.][0-9]+$/;
                     return result;
                 }
             case 4:
                 {
                     result.type = "bool";
                     result.message = 'Поле должно содержать логическую переменную';
+                    result.reg = /^true|false$\i /;
                     return result;
                 }
             case 5:
                 {
                     result.type = "date";
                     result.message = 'Поле должно содержать дату в формате дд.мм.гггг';
-                    result.reg = /[0-9]{2}\.[0-9]{2}\.[0-9]{4}$/;
+                    result.reg = /\^[0-9]{1,2}\.[0-9]{1,2}\.[0-9]{4}( ([0-1]?[0-9]|2[0-3])(:[0-9][0-9]){1,2})?$\ /;
                     return result;
                 }
             default:
@@ -123,24 +124,39 @@ var tablesQueryBuilder = (function () {
 
 
         var triplet = $(template);
-        var isLogical = !(triplets.length % 2 !== 0);
+        var isLogical = (triplets.length % 2 !== 0);
         if (isLogical) {
-            _getOperators().forEach(function (item) {
-                if (!item.isLogical) {
-                    triplet.find(".tripletOperatorMenu ul").append(`<li><a data-type="${item.name}" data-m="1" data-log="${item.isLogical}" href="#${item.name}">${item.ruValue}</a></li>`);
-                }
-            });
-
-            _getSchema().forEach(function (item) {
-                triplet.find(".tripletFieldMenu ul").append(`<li><a data-type="${item.t}" data-m="0" data-key="${item.k}" href="#${item.k}">${item.k}</a></li>`);
-            });
-        }
-        else {
             _getOperators().forEach(function (item) {
                 if (item.isLogical) {
                     triplet.find(".tripletOperatorMenu ul").append(`<li><a data-type="${item.name}" data-m="1" data-log="${item.isLogical}" href="#${item.name}">${item.ruValue}</a></li>`);
                 }
             });
+        }
+        else {
+            _getOperators().forEach(function (item) {
+                if (!item.isLogical) {
+                    triplet.find(".tripletOperatorMenu ul").append(`<li><a data-type="${item.name}" data-m="1" data-log="${item.isLogical}" href="#${item.name}">${item.ruValue}</a></li>`);
+                }
+            });
+            _getSchema().forEach(function (item) {
+                triplet.find(".tripletFieldMenu ul").append(`<li><a data-type="${item.t}" data-m="0" data-key="${item.k}" href="#${item.k}">${item.k}</a></li>`);
+            });
+        }
+
+        console.log(data);
+        if (typeof data !== "undefined") {
+            var op = _getOperatorByName(data.operator);
+            if (data.isOperatorLogical) {
+                _setLogicalValue(triplet, data.operator, true, op.ruValue);
+            }
+            else {
+                _setValue(triplet, data.fieldType, data.field, data.field);
+                _setLogicalValue(triplet, data.operator, false, op.ruValue);
+                triplet.find("> input").val(data.value);
+            }
+        }
+        else {
+            if (isLogical) _setLogicalValue(triplet, "[and]", true, "И");
         }
 
         _changeState(isLogical, triplet);
@@ -193,8 +209,8 @@ var tablesQueryBuilder = (function () {
             if (isError) validationState.push(vsItem);
         });
 
-        if (typeof options.validateCallback === "function")
-            options.validateCallback(validationState);
+        if (typeof options.onValidate === "function")
+            options.onValidate(validationState);
 
         if (validationState.length > 0) return false;
         
@@ -235,16 +251,14 @@ var tablesQueryBuilder = (function () {
 
     function _changeState(isLogical, triplet) {
 
-        if (!isLogical) {
+        if (isLogical) {
             triplet.find("> .tripletFieldMenu").css("display", "none");
             triplet.find("> input").css("display", "none");
-            _setLogicalValue(triplet, "[and]", true, "И");
         }
         else {
             triplet.find("> .tripletFieldMenu").css("display", "table-cell");
             triplet.find("> input").css("display", "table-cell");
         }
-
     }
 
     function _setLogicalValue(triplet, type, log, text){
@@ -262,13 +276,10 @@ var tablesQueryBuilder = (function () {
     function _selectGroup(event) {
         event.preventDefault();
         var $selectGroup = $(this).closest('.triplet');
-
         if (Number.parseInt($(this).data("m")) === 1) {
-
             var type = $(this).data("type");
             var isLogical = $(this).data("log");
             _setLogicalValue($selectGroup, type, isLogical, $(this).text());
-
         }
         else {
             var type = $(this).data("type");
@@ -292,35 +303,49 @@ var tablesQueryBuilder = (function () {
                 query += `[${item.field}]`;
                 query += item.operator;
 
-                if (item.fieldType === 1 || item.fieldType === 5) {
-                    query += `["${item.value}"]`;
+                if (item.operator === "[in]" || item.operator === "[nin]") {
+                    if (item.fieldType === 1 || item.fieldType === 5) {
+                        vArr = item.value.split(',')
+                        if (vArr.length > 0){
+                            vArr = vArr.map((item) => `"${item}"` );
+                            query += `["${vArr.join()}"]`;
+                        }
+                        else {
+                            query += `["${item.value}"]`;
+                        }
+                    }
+                    else {
+                        query += `[${item.value}]`;
+                    }
+
                 }
                 else {
-                    query += `[${item.value}]`;
+                    if (item.fieldType === 1 || item.fieldType === 5) {
+                        query += `["${item.value}"]`;
+                    }
+                    else {
+                        query += `[${item.value}]`;
+                    }
                 }
-                //item.value
-                //item.field
-                //item.operator
-                //item.fieldType
             }
         });
-        if (typeof options.renderCallback === "function")
-            options.renderCallback(query);
+        if (typeof options.onRender === "function")
+            options.onRender(query, triplets);
     }
 
     function _init(op) {
-
         options = op;
         $(document).on('click', '.btn-add', _addTriplet);
         $(document).on('click', '.btn-remove', _removeTriplet);
         $(document).on('click', '.dropdown-menu a', _selectGroup);
         $(document).on('input', 'input', _render);
-        _createTriplet();
     }
 
     return {
         init: _init,
-        getSchema: _getSchema
+        getSchema: _getSchema,
+        createTriplet: _createTriplet,
+        render: _render
     };
 
 })();
