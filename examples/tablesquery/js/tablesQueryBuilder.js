@@ -8,20 +8,20 @@ var tablesQueryBuilder = (function () {
 
     function _getOperators() {
         return [
-            { name: "[eq]", isLogical: false, enValue: "Equals", ruValue: "Ðàâíî", types: ["string", "int", "double", "bool", "date"] },
-            { name: "[lt]", isLogical: false, enValue: "Less Than operator", ruValue: "Ìåíüøå", types: ["int", "double", "date"] },
-            { name: "[lte]", isLogical: false, enValue: "Less Than or Equal to operator", ruValue: "Ìåíüøå èëè ðàâíî", types: ["int", "double", "date"] },
-            { name: "[gt]", isLogical: false, enValue: "Greater Than operator", ruValue: "Áîëüøå", types: ["int", "double", "date"] },
-            { name: "[gte]", isLogical: false, enValue: "Greater Than or Equal to operator", ruValue: "Áîëüøå èëè ðàâíî", types: ["int", "double", "date"] },
-            { name: "[ne]", isLogical: false, enValue: "Not Equal to operator", ruValue: "Íå ðàâíî", types: ["string", "int", "double", "bool", "date"] },
-            { name: "[in]", isLogical: false, enValue: "Contained IN array operator", ruValue: "Ñîäåðæèò", types: ["string", "int", "double", "bool", "date"] },
-            { name: "[nin]", isLogical: false, enValue: "Not contained IN array", ruValue: "Íå ñîäåðæèò", types: ["string", "int", "double", "bool", "date"] },
-            { name: "[cn]", isLogical: false, enValue: "Contains", ruValue: "Ñîäåðæèò", types: ["string"] },
-            { name: "[re]", isLogical: false, enValue: "Regular Expression", ruValue: "Ðåã", types: ["string"] },
-            { name: "[sw]", isLogical: false, enValue: "Starts With", ruValue: "Íà÷èíàåòñÿ ñ", types: ["string"] },
-            { name: "[ew]", isLogical: false, enValue: "Ends With", ruValue: "Çàêàí÷èâàåòñÿ íà", types: ["string"] },
-            { name: "[or]", isLogical: true, enValue: "Or", ruValue: "Èëè", types: [] },
-            { name: "[and]", isLogical: true, enValue: "And", ruValue: "È", types: [] }
+            { name: "[eq]", isLogical: false, enValue: "Equals", ruValue: "Ð Ð°Ð²Ð½Ð¾", types: ["string", "int", "double", "bool", "date"] },
+            { name: "[lt]", isLogical: false, enValue: "Less Than operator", ruValue: "ÐœÐµÐ½ÑŒÑˆÐµ", types: ["int", "double", "date"] },
+            { name: "[lte]", isLogical: false, enValue: "Less Than or Equal to operator", ruValue: "ÐœÐµÐ½ÑŒÑˆÐµ Ð¸Ð»Ð¸ Ñ€Ð°Ð²Ð½Ð¾", types: ["int", "double", "date"] },
+            { name: "[gt]", isLogical: false, enValue: "Greater Than operator", ruValue: "Ð‘Ð¾Ð»ÑŒÑˆÐµ", types: ["int", "double", "date"] },
+            { name: "[gte]", isLogical: false, enValue: "Greater Than or Equal to operator", ruValue: "Ð‘Ð¾Ð»ÑŒÑˆÐµ Ð¸Ð»Ð¸ Ñ€Ð°Ð²Ð½Ð¾", types: ["int", "double", "date"] },
+            { name: "[ne]", isLogical: false, enValue: "Not Equal to operator", ruValue: "ÐÐµ Ñ€Ð°Ð²Ð½Ð¾", types: ["string", "int", "double", "bool", "date"] },
+            { name: "[in]", isLogical: false, enValue: "Contained IN array operator", ruValue: "Ð¡Ð¾Ð´ÐµÑ€Ð¶Ð¸Ñ‚", types: ["string", "int", "double", "bool", "date"] },
+            { name: "[nin]", isLogical: false, enValue: "Not contained IN array", ruValue: "ÐÐµ ÑÐ¾Ð´ÐµÑ€Ð¶Ð¸Ñ‚", types: ["string", "int", "double", "bool", "date"] },
+            { name: "[cn]", isLogical: false, enValue: "Contains", ruValue: "Ð¡Ð¾Ð´ÐµÑ€Ð¶Ð¸Ñ‚", types: ["string"] },
+            { name: "[re]", isLogical: false, enValue: "Regular Expression", ruValue: "Ð ÐµÐ³", types: ["string"] },
+            { name: "[sw]", isLogical: false, enValue: "Starts With", ruValue: "ÐÐ°Ñ‡Ð¸Ð½Ð°ÐµÑ‚ÑÑ Ñ", types: ["string"] },
+            { name: "[ew]", isLogical: false, enValue: "Ends With", ruValue: "Ð—Ð°ÐºÐ°Ð½Ñ‡Ð¸Ð²Ð°ÐµÑ‚ÑÑ Ð½Ð°", types: ["string"] },
+            { name: "[or]", isLogical: true, enValue: "Or", ruValue: "Ð˜Ð»Ð¸", types: [] },
+            { name: "[and]", isLogical: true, enValue: "And", ruValue: "Ð˜", types: [] }
         ];
     }
 
@@ -44,34 +44,34 @@ var tablesQueryBuilder = (function () {
                 {
                     result.type = "string";
                     result.reg = /.*/;
-                    result.message = 'Ïîëå äîëæíî ñîäåðæàòü ñòðîêó';
+                    result.message = 'ÐŸÐ¾Ð»Ðµ Ð´Ð¾Ð»Ð¶Ð½Ð¾ ÑÐ¾Ð´ÐµÑ€Ð¶Ð°Ñ‚ÑŒ ÑÑ‚Ñ€Ð¾ÐºÑƒ';
                     return result;
                 }
             case 2:
                 {
                     result.type = "int";
-                    result.message = 'Ïîëå äîëæíî ñîäåðæàòü öåëîå ÷èñëî';
+                    result.message = 'ÐŸÐ¾Ð»Ðµ Ð´Ð¾Ð»Ð¶Ð½Ð¾ ÑÐ¾Ð´ÐµÑ€Ð¶Ð°Ñ‚ÑŒ Ñ†ÐµÐ»Ð¾Ðµ Ñ‡Ð¸ÑÐ»Ð¾';
                     result.reg = /^\-?[0-9]+$/;
                     return result;
                 }
             case 3:
                 {
                     result.type = "double";
-                    result.message = 'Ïîëå äîëæíî ñîäåðæàòü ÷èñëî ñ ïëàâàþùåé òî÷êîé';
+                    result.message = 'ÐŸÐ¾Ð»Ðµ Ð´Ð¾Ð»Ð¶Ð½Ð¾ ÑÐ¾Ð´ÐµÑ€Ð¶Ð°Ñ‚ÑŒ Ñ‡Ð¸ÑÐ»Ð¾ Ñ Ð¿Ð»Ð°Ð²Ð°ÑŽÑ‰ÐµÐ¹ Ñ‚Ð¾Ñ‡ÐºÐ¾Ð¹';
                     result.reg = /-?[0-9]*[.][0-9]+$/;
                     return result;
                 }
             case 4:
                 {
                     result.type = "bool";
-                    result.message = 'Ïîëå äîëæíî ñîäåðæàòü ëîãè÷åñêóþ ïåðåìåííóþ';
+                    result.message = 'ÐŸÐ¾Ð»Ðµ Ð´Ð¾Ð»Ð¶Ð½Ð¾ ÑÐ¾Ð´ÐµÑ€Ð¶Ð°Ñ‚ÑŒ Ð»Ð¾Ð³Ð¸Ñ‡ÐµÑÐºÑƒÑŽ Ð¿ÐµÑ€ÐµÐ¼ÐµÐ½Ð½ÑƒÑŽ';
                     result.reg = /^true|false$/i;
                     return result;
                 }
             case 5:
                 {
                     result.type = "date";
-                    result.message = 'Ïîëå äîëæíî ñîäåðæàòü äàòó â ôîðìàòå ää.ìì.ãããã';
+                    result.message = 'ÐŸÐ¾Ð»Ðµ Ð´Ð¾Ð»Ð¶Ð½Ð¾ ÑÐ¾Ð´ÐµÑ€Ð¶Ð°Ñ‚ÑŒ Ð´Ð°Ñ‚Ñƒ Ð² Ñ„Ð¾Ñ€Ð¼Ð°Ñ‚Ðµ Ð´Ð´.Ð¼Ð¼.Ð³Ð³Ð³Ð³';
                     result.reg = /^[0-9]{1,2}\.[0-9]{1,2}\.[0-9]{4}( ([0-1]?[0-9]|2[0-3])(:[0-9][0-9]){1,2})?$/;
                     return result;
                 }
@@ -156,7 +156,7 @@ var tablesQueryBuilder = (function () {
             }
         }
         else {
-            if (isLogical) _setLogicalValue(triplet, "[and]", true, "È");
+            if (isLogical) _setLogicalValue(triplet, "[and]", true, "Ð˜");
         }
 
         _changeState(isLogical, triplet);
@@ -172,21 +172,21 @@ var tablesQueryBuilder = (function () {
         triplets.forEach(function (item, index) {
             var vsItem = {};
             var isError = false;
-            vsItem.index = `Íîìåð îïåðàòîðà: ${index + 1}`;
+            vsItem.index = `ÐÐ¾Ð¼ÐµÑ€ Ð¾Ð¿ÐµÑ€Ð°Ñ‚Ð¾Ñ€Ð°: ${index + 1}`;
 
             if (typeof item.operator === "undefined") {
                 isError = true;
-                vsItem.operator = 'Íåîáõîäèìî âûáðàòü îïåðàòîð';
+                vsItem.operator = 'ÐÐµÐ¾Ð±Ñ…Ð¾Ð´Ð¸Ð¼Ð¾ Ð²Ñ‹Ð±Ñ€Ð°Ñ‚ÑŒ Ð¾Ð¿ÐµÑ€Ð°Ñ‚Ð¾Ñ€';
             }
 
             if (!item.isOperatorLogical) {
                 if (item.value === "") {
                     isError = true;
-                    vsItem.value = 'Çíà÷åíèå îïåðàòîðà íå ìîæåò áûòü ïóñòûì';
+                    vsItem.value = 'Ð—Ð½Ð°Ñ‡ÐµÐ½Ð¸Ðµ Ð¾Ð¿ÐµÑ€Ð°Ñ‚Ð¾Ñ€Ð° Ð½Ðµ Ð¼Ð¾Ð¶ÐµÑ‚ Ð±Ñ‹Ñ‚ÑŒ Ð¿ÑƒÑÑ‚Ñ‹Ð¼';
                 }
                 if (typeof item.field === "undefined") {
                     isError = true;
-                    vsItem.field = 'Íåîáõîäèìî âûáðàòü ïîëå òàáëèöû';
+                    vsItem.field = 'ÐÐµÐ¾Ð±Ñ…Ð¾Ð´Ð¸Ð¼Ð¾ Ð²Ñ‹Ð±Ñ€Ð°Ñ‚ÑŒ Ð¿Ð¾Ð»Ðµ Ñ‚Ð°Ð±Ð»Ð¸Ñ†Ñ‹';
                 }
 
                 if (typeof item.operator !== "undefined" && typeof item.field !== "undefined") {
@@ -194,7 +194,7 @@ var tablesQueryBuilder = (function () {
                     var f = _getSchemaTypeValidationParams(item.fieldType);
                     if (op.types.indexOf(f.type) === -1) {
                         isError = true;
-                        vsItem.fieldType = 'Òèï ïîëÿ íå ñîîòâåòñâóåò îïåðàòîðó';
+                        vsItem.fieldType = 'Ð¢Ð¸Ð¿ Ð¿Ð¾Ð»Ñ Ð½Ðµ ÑÐ¾Ð¾Ñ‚Ð²ÐµÑ‚ÑÐ²ÑƒÐµÑ‚ Ð¾Ð¿ÐµÑ€Ð°Ñ‚Ð¾Ñ€Ñƒ';
                     }
                 }
 
@@ -202,7 +202,7 @@ var tablesQueryBuilder = (function () {
                     var f = _getSchemaTypeValidationParams(item.fieldType);
                     if (!f.reg.test(item.value)) {
                         isError = true;
-                        vsItem.value = 'Çíà÷åíèå íå ñîîòâåòñâóåò òèïó ïîëÿ';
+                        vsItem.value = 'Ð—Ð½Ð°Ñ‡ÐµÐ½Ð¸Ðµ Ð½Ðµ ÑÐ¾Ð¾Ñ‚Ð²ÐµÑ‚ÑÐ²ÑƒÐµÑ‚ Ñ‚Ð¸Ð¿Ñƒ Ð¿Ð¾Ð»Ñ';
                     }
                 }
             }
@@ -222,7 +222,7 @@ var tablesQueryBuilder = (function () {
         var lastTriplets = $('.triplet:last');
         if (allTriplets.length > 1) {
             allTriplets.find(".ms").removeClass('btn-add btn-remove');
-            allTriplets.find(".ms").addClass('btn-remove').html('–');
+            allTriplets.find(".ms").addClass('btn-remove').html('â€“');
 
             lastTriplets.find(".ms").removeClass('btn-add btn-remove');
             lastTriplets.find(".ms").addClass('btn-add').html('+');
