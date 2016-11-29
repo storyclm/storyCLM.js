@@ -58,21 +58,21 @@ var tablesQueryBuilder = (function () {
                 {
                     result.type = "double";
                     result.message = 'Поле должно содержать число с плавающей точкой';
-                    result.reg = /\-?[0-9]*[.][0-9]+$/;
+                    result.reg = /-?[0-9]*[.][0-9]+$/;
                     return result;
                 }
             case 4:
                 {
                     result.type = "bool";
                     result.message = 'Поле должно содержать логическую переменную';
-                    result.reg = /^true|false$\i /;
+                    result.reg = /^true|false$/i;
                     return result;
                 }
             case 5:
                 {
                     result.type = "date";
                     result.message = 'Поле должно содержать дату в формате дд.мм.гггг';
-                    result.reg = /\^[0-9]{1,2}\.[0-9]{1,2}\.[0-9]{4}( ([0-1]?[0-9]|2[0-3])(:[0-9][0-9]){1,2})?$\ /;
+                    result.reg = /^[0-9]{1,2}\.[0-9]{1,2}\.[0-9]{4}( ([0-1]?[0-9]|2[0-3])(:[0-9][0-9]){1,2})?$/;
                     return result;
                 }
             default:
