@@ -30,7 +30,7 @@
             UUIDcreatePart(2) +
             UUIDcreatePart(2) +
             UUIDcreatePart(6);
-    };
+    }
 
     function UUIDcreatePart(length) {
         var uuidpart = "";
@@ -76,8 +76,7 @@
         }, 1);
     }
 
-    function _getNavigationData()
-    {
+    function _getNavigationData() {
         return slideData;
     }
 
@@ -100,8 +99,7 @@
 
 })();
 
-function StoryCLMApiMessage(data)
-{
+function StoryCLMApiMessage(data) {
     if (this instanceof StoryCLMApiMessage) {
         if (data) {
             this.status = data.Status;
@@ -119,8 +117,7 @@ function StoryCLMApiMessage(data)
     else return new StoryCLMApiMessage(data);
 }
 
-function StoryCLMparametersErrorMessge(callback)
-{
+function StoryCLMparametersErrorMessge(callback) {
     if (typeof callback === "function")
         callback(new StoryCLMApiMessage({
             status: "error",
@@ -156,11 +153,11 @@ StoryCLM.Go = function (name, data, callback) {
         if (typeof callback === "function")
             callback(new StoryCLMApiMessage(data));
     });
-}
+};
 
 StoryCLM.GetNavigationData = function () {
     return window.StoryCLMNavigationData || {};
-}
+};
 
 StoryCLM.System = (function () {
     function _getInfo(callback)
@@ -510,12 +507,12 @@ StoryCLM.Tables = (function () {
 
         if (Array.isArray(id)) {
 
-            var command = "deleteByIds";
+            command = "deleteByIds";
             options.ids = id;
 
         } else if (typeof id === "string") {
 
-            var command = "deleteById";
+            command = "deleteById";
             options.id = id;
 
         }
@@ -529,7 +526,7 @@ StoryCLM.Tables = (function () {
     function _update(tableId, entry, callback) {
         var options = {
             tableId: tableId
-        }
+        };
         var command = "";
 
         if (typeof tableId !== "number" || typeof entry === "undefined") {
@@ -554,7 +551,7 @@ StoryCLM.Tables = (function () {
     function _insert(tableId, entry, callback) {
         var options = {
             tableId: tableId
-        }
+        };
         var command = "";
 
         if (typeof tableId !== "number" || typeof entry === "undefined") {
@@ -588,7 +585,7 @@ StoryCLM.Tables = (function () {
     function _count(tableId, query, callback) {
         var options = {
             tableId: tableId
-        }
+        };
         var command = "count";
 
         if (typeof tableId !== "number") {
