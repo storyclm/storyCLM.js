@@ -5,7 +5,7 @@ StoryCLM.js - это библиотека, предоставляющая дос
 В других CLM системах, а так же без StoryCLM данная библиотека работать не будет.
 
 ## Версия
-Текущая версия документации актуальна для StoryCLM.js (1.5.0) и для версии клиентского приложения 2.7.0 и выше.
+Текущая версия документации актуальна для StoryCLM.js (1.6.0) и для версии клиентского приложения 2.7.0 и выше.
 
 ## Общие сведения
 Библиотека состоит из четырех разделов (пространств имен):
@@ -14,6 +14,7 @@ StoryCLM.js - это библиотека, предоставляющая дос
  * Presentation - функции для манипуляций с перезентациями и их содержимым
  * Tables - работа с системной базой данных
  * UI - настройка отображения системных контроллов в презентации
+ * Http - доступ к внешним HTTP ресурсам
 
 ## Возвращаемый объект и ошибки
 
@@ -34,18 +35,18 @@ StoryCLM.js - это библиотека, предоставляющая дос
   * data - данные, которые вернула функция, если операция прошла успешно. Результат выполнения функции;
 
 ## Дополнительные материалы
-В каталоге "[examples](https://github.com/storyclm/storyCLM.js/tree/master/examples)" находятся три приложения - примера. Загрузив их в StoryCLM, можно подробно изучить код и 
+В каталоге "[storyclm.js](https://github.com/storyclm/StoryCLM-Samples/tree/master/storyclm.js)" находятся три приложения - примера. Загрузив их в StoryCLM, можно подробно изучить код и 
 детально разобраться в работе библиотеке на реальных примерах:
 
-* [storyclm-js](https://github.com/storyclm/storyCLM.js/tree/master/examples/storyclm-js) - интерактивный справочник по всем функциям библиотеки с подробным описанием;
-* [tables](https://github.com/storyclm/storyCLM.js/tree/master/examples/tables) - приложение, которое показывает на реальном примере работу с таблицами. В примере продемонстрирована постраничная выборка и CRUD операции.
-* [querybuilder](https://github.com/storyclm/storyCLM.js/tree/master/examples/tablesquery) - конструктор запросов [TablesQuery](./tablesquery.md). Приложение - это визуальный конструктор запросов. Конструируя и отправляя запрос, можно освоить работу с выборкой данных из таблиц в StoryCLM. 
+* [storyclm-js](https://github.com/storyclm/StoryCLM-Samples/tree/master/storyclm.js/storyclm-js) - интерактивный справочник по всем функциям библиотеки с подробным описанием;
+* [tables](https://github.com/storyclm/StoryCLM-Samples/tree/master/storyclm.js/tables) - приложение, которое показывает на реальном примере работу с таблицами. В примере продемонстрирована постраничная выборка и CRUD операции.
+* [querybuilder](https://github.com/storyclm/StoryCLM-Samples/tree/master/storyclm.js/tablesquery) - конструктор запросов [TablesQuery](https://github.com/storyclm/documentation/blob/master/TABLES_QUERY.md). Приложение - это визуальный конструктор запросов. Конструируя и отправляя запрос, можно освоить работу с выборкой данных из таблиц в StoryCLM. 
 
 
 ## Подключение
 
 ```sh
-<script src="js/storyclm-1.5.0.js"></script>
+<script src="js/storyclm-1.6.0.js"></script>
 ```
 
 ### Base
@@ -1212,12 +1213,12 @@ StoryCLM.Presentation.SetComplete();
 ```
 **Описание:**
 
-Получает колличество записей по [запросу](./tablesquery.md). Используется для постраничной навигации. В таблицах, которые работают офлайн, колличество записей - это колличесво записей в локальной базе.
+Получает колличество записей по [запросу](https://github.com/storyclm/documentation/blob/master/TABLES_QUERY.md). Используется для постраничной навигации. В таблицах, которые работают офлайн, колличество записей - это колличесво записей в локальной базе.
 
 **Параметры:**
 
 * id - идентификатор таблицы (6).
-* [tablesQuery](./tablesquery.md) - запрос ([age][gt][30]).
+* [tablesQuery](https://github.com/storyclm/documentation/blob/master/TABLES_QUERY.md) - запрос ([age][gt][30]).
 * callback - функция, в которую будет передан результат выполнения операции.
 
 **Запрос:**
@@ -1309,12 +1310,12 @@ StoryCLM.Presentation.SetComplete();
 ```
 **Описание:**
 
-Получает записи по [запросу](./tablesquery.md). [Запрос](./tablesquery.md): [age][gt][30] - подробно о запросах во вкладке "TablesQuery". Сортировка: по полю "age", тип сортировки - DESC (0 - ASC, 1 - DESC, -1 - без сортировки). Пропустить записей: 0 (Skip(0)). Выбрать записей: 100 (Take(100)). С данными в таблице, которая работает в режиме Application, можно производить операции до тех пор пока эти данные не будут отправлены на сервер.
+Получает записи по [запросу](https://github.com/storyclm/documentation/blob/master/TABLES_QUERY.md). [Запрос](https://github.com/storyclm/documentation/blob/master/TABLES_QUERY.md): [age][gt][30] - подробно о запросах во вкладке "TablesQuery". Сортировка: по полю "age", тип сортировки - DESC (0 - ASC, 1 - DESC, -1 - без сортировки). Пропустить записей: 0 (Skip(0)). Выбрать записей: 100 (Take(100)). С данными в таблице, которая работает в режиме Application, можно производить операции до тех пор пока эти данные не будут отправлены на сервер.
 
 **Параметры:**
 
 * tableId - идентификатор таблицы (6).
-* [tablesQuery](./tablesquery.md) - запрос ([age][gt][30]).
+* [tablesQuery](https://github.com/storyclm/documentation/blob/master/TABLES_QUERY.md) - запрос ([age][gt][30]).
 * callback - функция, в которую будет передан результат выполнения операции.
 
 **Запрос:**
@@ -1348,7 +1349,7 @@ StoryCLM.Presentation.SetComplete();
 **Параметры:**
 
 * tableId - идентификатор таблицы (6).
-* [tablesQuery](./tablesquery.md) - запроc.
+* [tablesQuery](https://github.com/storyclm/documentation/blob/master/TABLES_QUERY.md) - запроc.
 * callback - функция, в которую будет передан результат выполнения операции.
 
 **Запрос:**

@@ -1,6 +1,6 @@
 /*!
-* StoryCLM Library v1.5.0
-* Copyright(c) 2016, Vladimir Klyuev, Breffi Inc. All rights reserved.
+* StoryCLM Library v1.6.0
+* Copyright(c) 2017, Vladimir Klyuev, Breffi Inc. All rights reserved.
 * License: Licensed under The MIT License.
 */
 ; (function () {
@@ -615,5 +615,153 @@ StoryCLM.Tables = (function () {
         Insert: _insert,
         Get: _tables,
         Count: _count
+    };
+})();
+
+StoryCLM.Http = (function () {
+
+    function isURL(str) {
+        var pattern = new RegExp('^(https?:\\/\\/)?' + // protocol
+        '((([a-z\\d]([a-z\\d-]*[a-z\\d])*)\\.?)+[a-z]{2,}|' + // domain name
+        '((\\d{1,3}\\.){3}\\d{1,3}))' + // OR ip (v4) address
+        '(\\:\\d+)?(\\/[-a-z\\d%_.~+]*)*' + // port and path
+        '(\\?[;&a-z\\d%_.~+=-]*)?' + // query string
+        '(\\#[-a-z\\d_]*)?$', 'i'); // fragment locator
+        return pattern.test(str);
+    }
+
+    function _post(url, body, headers, callback) {
+        var command = "httppost";
+        var options = {};
+        if (typeof url === "undefined" || !isURL(url)) {
+            StoryCLMparametersErrorMessge(callback);
+            return;
+        }
+        if (arguments.length === 3) {
+            if (typeof headers === "function") {
+                if (typeof body === "string") {
+                    callback = headers;
+                    headers = {};
+                }
+                else {
+                    callback = headers;
+                    headers = body;
+                    body = ""
+                }
+            }
+        }
+        else if (arguments.length === 2) {
+            if (typeof body === "function") {
+                callback = body;
+                body = "";
+            }
+            else {
+                if (typeof body !== "string") {
+                    StoryCLMparametersErrorMessge(callback);
+                    return;
+                }
+            }
+        }
+        body = body || "";
+        headers = headers || {};
+        options = { url: url, body: body, headers: headers };
+        StoryCLMBridge.Invoke(command, options, function (data) {
+            if (typeof callback === "function")
+                callback(new StoryCLMApiMessage(data));
+        });
+    }
+
+    function _put(url, body, headers, callback) {
+        var command = "httpput";
+        var options = {};
+        if (typeof url === "undefined" || !isURL(url)) {
+            StoryCLMparametersErrorMessge(callback);
+            return;
+        }
+        if (arguments.length === 3) {
+            if (typeof headers === "function") {
+                if (typeof body === "string") {
+                    callback = headers;
+                    headers = {};
+                }
+                else {
+                    callback = headers;
+                    headers = body;
+                    body = ""
+                }
+            }
+        }
+        else if (arguments.length === 2) {
+            if (typeof body === "function") {
+                callback = body;
+                body = "";
+            }
+            else {
+                if (typeof body !== "string") {
+                    StoryCLMparametersErrorMessge(callback);
+                    return;
+                }
+            }
+        }
+        body = body || "";
+        headers = headers || {};
+        options = { url: url, body: body, headers: headers };
+        StoryCLMBridge.Invoke(command, options, function (data) {
+            if (typeof callback === "function")
+                callback(new StoryCLMApiMessage(data));
+        });
+    }
+
+    function _get(url, headers, callback) {
+        var command = "httpget";
+        if (typeof url === "undefined" || !isURL(url)) {
+            StoryCLMparametersErrorMessge(callback);
+            return;
+        }
+        var options = {
+            url: url
+        };
+
+        if (arguments.length === 3) {
+            options.headers = headers;
+        }
+        else if (arguments.length === 2) {
+            callback = headers;
+        }
+
+        StoryCLMBridge.Invoke(command, options, function (data) {
+            if (typeof callback === "function")
+                callback(new StoryCLMApiMessage(data));
+        });
+    }
+
+    function _delete(url, headers, callback) {
+        var command = "httpdelete";
+        if (typeof url === "undefined" || !isURL(url)) {
+            StoryCLMparametersErrorMessge(callback);
+            return;
+        }
+        var options = {
+            url: url
+        };
+
+        if (arguments.length === 3) {
+            options.headers = headers;
+        }
+        else if (arguments.length === 2) {
+            callback = headers;
+        }
+
+        StoryCLMBridge.Invoke(command, options, function (data) {
+            if (typeof callback === "function")
+                callback(new StoryCLMApiMessage(data));
+        });
+    }
+
+    return {
+        Post: _post,
+        Put: _put,
+        Get: _get,
+        Delete: _delete
     };
 })();
