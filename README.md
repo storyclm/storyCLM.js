@@ -1437,3 +1437,376 @@ StoryCLM.Presentation.SetComplete();
 
 ```
 --------------------------
+
+### Http
+
+Пространство имен Http содержит методы, которые позволяют презентации взаимодействовать с внешними сервисами по протоколу HTTP.
+Тем самым, возможно произвести интеграцию с внешними сервисами, минуя сервер StoryCLM.
+
+Тело запроса должно быть в формате Base64:
+```
+    function utf8_to_b64(str) {
+        return window.btoa(encodeURIComponent(escape(str)));
+    }
+
+    var entry = {
+        Name: "Dima",
+        Age: 555,
+        Gender: true,
+        Rating: 5.5,
+        Created: new Date(2000, 11, 17).toISOString()
+    };
+
+    var body = utf8_to_b64(JSON.stringify(entry, null, 4));
+```
+
+Список заголовков доблжен быть в виде объекта:
+```
+    var headers = {
+        "Accept": "application/json",
+        "Accept-Language": "en-us,en;q=0.5",
+        "Accept-Charset": "utf-8"
+    };
+```
+
+Тело ответа и заголовки прихотя в аналогичных форматах.
+
+#### Method: StoryCLM.Http.Post
+
+```sh
+ StoryCLM.Http.Post(url, body, headers, callback);
+```
+**Описание:**
+
+Отправляет запрос с методом POST.
+
+**Параметры:**
+
+* url - идентификатор (адрес) ресурса.
+* body - тело запроса. Строка в формате Base64.
+* headers - набор заголовков.
+* callback - функция, в которую будет передан результат выполнения операции.
+
+**Запрос:**
+```sh
+{
+    "Command": "httppost",
+    "Data": {
+        "url": "https://api.storyclm.com/v1/webhooks/58d0dc946e80aa015812ba40/8f6dd154257d4d62bf30d430a3fcbfec",
+        "body": "JTI1N0IlMjUwQSUyNTIwJTI1MjAlMjUyMCUyNTIwJTI1MjJOYW1lJTI1MjIlMjUzQSUyNTIwJTI1MjJEaW1hJTI1MjIlMjUyQyUyNTBBJTI1MjAlMjUyMCUyNTIwJTI1MjAlMjUyMkFnZSUyNTIyJTI1M0ElMjUyMDU1NSUyNTJDJTI1MEElMjUyMCUyNTIwJTI1MjAlMjUyMCUyNTIyR2VuZGVyJTI1MjIlMjUzQSUyNTIwdHJ1ZSUyNTJDJTI1MEElMjUyMCUyNTIwJTI1MjAlMjUyMCUyNTIyUmF0aW5nJTI1MjIlMjUzQSUyNTIwNS41JTI1MkMlMjUwQSUyNTIwJTI1MjAlMjUyMCUyNTIwJTI1MjJDcmVhdGVkJTI1MjIlMjUzQSUyNTIwJTI1MjIyMDAwLTEyLTE2VDIxJTI1M0EwMCUyNTNBMDAuMDAwWiUyNTIyJTI1MEElMjU3RA==",
+        "headers": {
+            "Accept": "application/json",
+            "Accept-Language": "en-us,en;q=0.5",
+            "Accept-Charset": "utf-8"
+        }
+    }
+}
+```
+**Ответ:**
+```sh
+{
+   "status":"Success",
+   "errorCode":200,
+   "errorMessage":"",
+    "data": {
+        "body": "JTI1N0IlMjUwQSUyNTIwJTI1MjAlMjUyMCUyNTIwJTI1MjJOYW1lJTI1MjIlMjUzQSUyNTIwJTI1MjJEaW1hJTI1MjIlMjUyQyUyNTBBJTI1MjAlMjUyMCUyNTIwJTI1MjAlMjUyMkFnZSUyNTIyJTI1M0ElMjUyMDU1NSUyNTJDJTI1MEElMjUyMCUyNTIwJTI1MjAlMjUyMCUyNTIyR2VuZGVyJTI1MjIlMjUzQSUyNTIwdHJ1ZSUyNTJDJTI1MEElMjUyMCUyNTIwJTI1MjAlMjUyMCUyNTIyUmF0aW5nJTI1MjIlMjUzQSUyNTIwNS41JTI1MkMlMjUwQSUyNTIwJTI1MjAlMjUyMCUyNTIwJTI1MjJDcmVhdGVkJTI1MjIlMjUzQSUyNTIwJTI1MjIyMDAwLTEyLTE2VDIxJTI1M0EwMCUyNTNBMDAuMDAwWiUyNTIyJTI1MEElMjU3RA==",
+        "headers": {
+            "Content-Type": "application/json; charset=UTF-8"
+        }
+    }
+}
+```
+--------------------------
+
+#### Method: StoryCLM.Http.Post
+
+```sh
+ StoryCLM.Http.Post(url, body, callback);
+```
+**Описание:**
+
+Отправляет запрос с методом POST.
+
+**Параметры:**
+
+* url - идентификатор (адрес) ресурса.
+* body - тело запроса. Строка в формате Base64.
+* callback - функция, в которую будет передан результат выполнения операции.
+
+**Запрос:**
+```sh
+{
+    "Command": "httppost",
+    "Data": {
+        "url": "https://api.storyclm.com/v1/webhooks/58d0dc946e80aa015812ba40/8f6dd154257d4d62bf30d430a3fcbfec",
+        "body": "JTI1N0IlMjUwQSUyNTIwJTI1MjAlMjUyMCUyNTIwJTI1MjJOYW1lJTI1MjIlMjUzQSUyNTIwJTI1MjJEaW1hJTI1MjIlMjUyQyUyNTBBJTI1MjAlMjUyMCUyNTIwJTI1MjAlMjUyMkFnZSUyNTIyJTI1M0ElMjUyMDU1NSUyNTJDJTI1MEElMjUyMCUyNTIwJTI1MjAlMjUyMCUyNTIyR2VuZGVyJTI1MjIlMjUzQSUyNTIwdHJ1ZSUyNTJDJTI1MEElMjUyMCUyNTIwJTI1MjAlMjUyMCUyNTIyUmF0aW5nJTI1MjIlMjUzQSUyNTIwNS41JTI1MkMlMjUwQSUyNTIwJTI1MjAlMjUyMCUyNTIwJTI1MjJDcmVhdGVkJTI1MjIlMjUzQSUyNTIwJTI1MjIyMDAwLTEyLTE2VDIxJTI1M0EwMCUyNTNBMDAuMDAwWiUyNTIyJTI1MEElMjU3RA==",
+    }
+}
+```
+**Ответ:**
+```sh
+{
+   "status":"Success",
+   "errorCode":200,
+   "errorMessage":"",
+    "data": {
+        "body": "JTI1N0IlMjUwQSUyNTIwJTI1MjAlMjUyMCUyNTIwJTI1MjJOYW1lJTI1MjIlMjUzQSUyNTIwJTI1MjJEaW1hJTI1MjIlMjUyQyUyNTBBJTI1MjAlMjUyMCUyNTIwJTI1MjAlMjUyMkFnZSUyNTIyJTI1M0ElMjUyMDU1NSUyNTJDJTI1MEElMjUyMCUyNTIwJTI1MjAlMjUyMCUyNTIyR2VuZGVyJTI1MjIlMjUzQSUyNTIwdHJ1ZSUyNTJDJTI1MEElMjUyMCUyNTIwJTI1MjAlMjUyMCUyNTIyUmF0aW5nJTI1MjIlMjUzQSUyNTIwNS41JTI1MkMlMjUwQSUyNTIwJTI1MjAlMjUyMCUyNTIwJTI1MjJDcmVhdGVkJTI1MjIlMjUzQSUyNTIwJTI1MjIyMDAwLTEyLTE2VDIxJTI1M0EwMCUyNTNBMDAuMDAwWiUyNTIyJTI1MEElMjU3RA==",
+        "headers": {
+            "Content-Type": "application/json; charset=UTF-8"
+        }
+    }
+}
+```
+--------------------------
+#### Method: StoryCLM.Http.Put
+
+```sh
+ StoryCLM.Http.Put(url, body, headers, callback);
+```
+**Описание:**
+
+Отправляет запрос с методом PUT.
+
+**Параметры:**
+
+* url - идентификатор (адрес) ресурса.
+* body - тело запроса. Строка в формате Base64.
+* headers - набор заголовков.
+* callback - функция, в которую будет передан результат выполнения операции.
+
+**Запрос:**
+```sh
+{
+    "Command": "httpput",
+    "Data": {
+        "url": "https://api.storyclm.com/v1/webhooks/58d0dc946e80aa015812ba40/8f6dd154257d4d62bf30d430a3fcbfec",
+        "body": "JTI1N0IlMjUwQSUyNTIwJTI1MjAlMjUyMCUyNTIwJTI1MjJOYW1lJTI1MjIlMjUzQSUyNTIwJTI1MjJEaW1hJTI1MjIlMjUyQyUyNTBBJTI1MjAlMjUyMCUyNTIwJTI1MjAlMjUyMkFnZSUyNTIyJTI1M0ElMjUyMDU1NSUyNTJDJTI1MEElMjUyMCUyNTIwJTI1MjAlMjUyMCUyNTIyR2VuZGVyJTI1MjIlMjUzQSUyNTIwdHJ1ZSUyNTJDJTI1MEElMjUyMCUyNTIwJTI1MjAlMjUyMCUyNTIyUmF0aW5nJTI1MjIlMjUzQSUyNTIwNS41JTI1MkMlMjUwQSUyNTIwJTI1MjAlMjUyMCUyNTIwJTI1MjJDcmVhdGVkJTI1MjIlMjUzQSUyNTIwJTI1MjIyMDAwLTEyLTE2VDIxJTI1M0EwMCUyNTNBMDAuMDAwWiUyNTIyJTI1MEElMjU3RA==",
+        "headers": {
+            "Accept": "application/json",
+            "Accept-Language": "en-us,en;q=0.5",
+            "Accept-Charset": "utf-8"
+        }
+    }
+}
+```
+**Ответ:**
+```sh
+{
+   "status":"Success",
+   "errorCode":200,
+   "errorMessage":"",
+    "data": {
+        "body": "JTI1N0IlMjUwQSUyNTIwJTI1MjAlMjUyMCUyNTIwJTI1MjJOYW1lJTI1MjIlMjUzQSUyNTIwJTI1MjJEaW1hJTI1MjIlMjUyQyUyNTBBJTI1MjAlMjUyMCUyNTIwJTI1MjAlMjUyMkFnZSUyNTIyJTI1M0ElMjUyMDU1NSUyNTJDJTI1MEElMjUyMCUyNTIwJTI1MjAlMjUyMCUyNTIyR2VuZGVyJTI1MjIlMjUzQSUyNTIwdHJ1ZSUyNTJDJTI1MEElMjUyMCUyNTIwJTI1MjAlMjUyMCUyNTIyUmF0aW5nJTI1MjIlMjUzQSUyNTIwNS41JTI1MkMlMjUwQSUyNTIwJTI1MjAlMjUyMCUyNTIwJTI1MjJDcmVhdGVkJTI1MjIlMjUzQSUyNTIwJTI1MjIyMDAwLTEyLTE2VDIxJTI1M0EwMCUyNTNBMDAuMDAwWiUyNTIyJTI1MEElMjU3RA==",
+        "headers": {
+            "Content-Type": "application/json; charset=UTF-8"
+        }
+    }
+}
+```
+--------------------------
+#### Method: StoryCLM.Http.Put
+
+```sh
+ StoryCLM.Http.Put(url, body, callback);
+```
+**Описание:**
+
+Отправляет запрос с методом PUT.
+
+**Параметры:**
+
+* url - идентификатор (адрес) ресурса.
+* body - тело запроса. Строка в формате Base64.
+* callback - функция, в которую будет передан результат выполнения операции.
+
+**Запрос:**
+```sh
+{
+    "Command": "httpput",
+    "Data": {
+        "url": "https://api.storyclm.com/v1/webhooks/58d0dc946e80aa015812ba40/8f6dd154257d4d62bf30d430a3fcbfec",
+        "body": "JTI1N0IlMjUwQSUyNTIwJTI1MjAlMjUyMCUyNTIwJTI1MjJOYW1lJTI1MjIlMjUzQSUyNTIwJTI1MjJEaW1hJTI1MjIlMjUyQyUyNTBBJTI1MjAlMjUyMCUyNTIwJTI1MjAlMjUyMkFnZSUyNTIyJTI1M0ElMjUyMDU1NSUyNTJDJTI1MEElMjUyMCUyNTIwJTI1MjAlMjUyMCUyNTIyR2VuZGVyJTI1MjIlMjUzQSUyNTIwdHJ1ZSUyNTJDJTI1MEElMjUyMCUyNTIwJTI1MjAlMjUyMCUyNTIyUmF0aW5nJTI1MjIlMjUzQSUyNTIwNS41JTI1MkMlMjUwQSUyNTIwJTI1MjAlMjUyMCUyNTIwJTI1MjJDcmVhdGVkJTI1MjIlMjUzQSUyNTIwJTI1MjIyMDAwLTEyLTE2VDIxJTI1M0EwMCUyNTNBMDAuMDAwWiUyNTIyJTI1MEElMjU3RA==",
+    }
+}
+```
+**Ответ:**
+```sh
+{
+   "status":"Success",
+   "errorCode":200,
+   "errorMessage":"",
+    "data": {
+        "body": "JTI1N0IlMjUwQSUyNTIwJTI1MjAlMjUyMCUyNTIwJTI1MjJOYW1lJTI1MjIlMjUzQSUyNTIwJTI1MjJEaW1hJTI1MjIlMjUyQyUyNTBBJTI1MjAlMjUyMCUyNTIwJTI1MjAlMjUyMkFnZSUyNTIyJTI1M0ElMjUyMDU1NSUyNTJDJTI1MEElMjUyMCUyNTIwJTI1MjAlMjUyMCUyNTIyR2VuZGVyJTI1MjIlMjUzQSUyNTIwdHJ1ZSUyNTJDJTI1MEElMjUyMCUyNTIwJTI1MjAlMjUyMCUyNTIyUmF0aW5nJTI1MjIlMjUzQSUyNTIwNS41JTI1MkMlMjUwQSUyNTIwJTI1MjAlMjUyMCUyNTIwJTI1MjJDcmVhdGVkJTI1MjIlMjUzQSUyNTIwJTI1MjIyMDAwLTEyLTE2VDIxJTI1M0EwMCUyNTNBMDAuMDAwWiUyNTIyJTI1MEElMjU3RA==",
+        "headers": {
+            "Content-Type": "application/json; charset=UTF-8"
+        }
+    }
+}
+```
+--------------------------
+#### Method: StoryCLM.Http.Get
+
+```sh
+ StoryCLM.Http.Get(url, headers, callback);
+```
+**Описание:**
+
+Отправляет запрос с методом Get.
+
+**Параметры:**
+
+* url - идентификатор (адрес) ресурса.
+* headers - набор заголовков.
+* callback - функция, в которую будет передан результат выполнения операции.
+
+**Запрос:**
+```sh
+{
+    "Command": "httpget",
+    "Data": {
+        "url": "https://api.storyclm.com/v1/webhooks/58d0dc946e80aa015812ba40/8f6dd154257d4d62bf30d430a3fcbfec",
+        "headers": {
+            "Accept": "application/json",
+            "Accept-Language": "en-us,en;q=0.5",
+            "Accept-Charset": "utf-8"
+        }
+    }
+}
+```
+**Ответ:**
+```sh
+{
+   "status":"Success",
+   "errorCode":200,
+   "errorMessage":"",
+    "data": {
+        "body": "JTI1N0IlMjUwQSUyNTIwJTI1MjAlMjUyMCUyNTIwJTI1MjJOYW1lJTI1MjIlMjUzQSUyNTIwJTI1MjJEaW1hJTI1MjIlMjUyQyUyNTBBJTI1MjAlMjUyMCUyNTIwJTI1MjAlMjUyMkFnZSUyNTIyJTI1M0ElMjUyMDU1NSUyNTJDJTI1MEElMjUyMCUyNTIwJTI1MjAlMjUyMCUyNTIyR2VuZGVyJTI1MjIlMjUzQSUyNTIwdHJ1ZSUyNTJDJTI1MEElMjUyMCUyNTIwJTI1MjAlMjUyMCUyNTIyUmF0aW5nJTI1MjIlMjUzQSUyNTIwNS41JTI1MkMlMjUwQSUyNTIwJTI1MjAlMjUyMCUyNTIwJTI1MjJDcmVhdGVkJTI1MjIlMjUzQSUyNTIwJTI1MjIyMDAwLTEyLTE2VDIxJTI1M0EwMCUyNTNBMDAuMDAwWiUyNTIyJTI1MEElMjU3RA==",
+        "headers": {
+            "Content-Type": "application/json; charset=UTF-8"
+        }
+    }
+}
+```
+--------------------------
+#### Method: StoryCLM.Http.Get
+
+```sh
+ StoryCLM.Http.Get(url, callback);
+```
+**Описание:**
+
+Отправляет запрос с методом Get.
+
+**Параметры:**
+
+* url - идентификатор (адрес) ресурса.
+* callback - функция, в которую будет передан результат выполнения операции.
+
+**Запрос:**
+```sh
+{
+    "Command": "httpget",
+    "Data": {
+        "url": "https://api.storyclm.com/v1/webhooks/58d0dc946e80aa015812ba40/8f6dd154257d4d62bf30d430a3fcbfec",
+        "headers": {}
+    }
+}
+```
+**Ответ:**
+```sh
+{
+   "status":"Success",
+   "errorCode":200,
+   "errorMessage":"",
+    "data": {
+        "body": "JTI1N0IlMjUwQSUyNTIwJTI1MjAlMjUyMCUyNTIwJTI1MjJOYW1lJTI1MjIlMjUzQSUyNTIwJTI1MjJEaW1hJTI1MjIlMjUyQyUyNTBBJTI1MjAlMjUyMCUyNTIwJTI1MjAlMjUyMkFnZSUyNTIyJTI1M0ElMjUyMDU1NSUyNTJDJTI1MEElMjUyMCUyNTIwJTI1MjAlMjUyMCUyNTIyR2VuZGVyJTI1MjIlMjUzQSUyNTIwdHJ1ZSUyNTJDJTI1MEElMjUyMCUyNTIwJTI1MjAlMjUyMCUyNTIyUmF0aW5nJTI1MjIlMjUzQSUyNTIwNS41JTI1MkMlMjUwQSUyNTIwJTI1MjAlMjUyMCUyNTIwJTI1MjJDcmVhdGVkJTI1MjIlMjUzQSUyNTIwJTI1MjIyMDAwLTEyLTE2VDIxJTI1M0EwMCUyNTNBMDAuMDAwWiUyNTIyJTI1MEElMjU3RA==",
+        "headers": {
+            "Content-Type": "application/json; charset=UTF-8"
+        }
+    }
+}
+```
+--------------------------
+#### Method: StoryCLM.Http.Delete
+
+```sh
+ StoryCLM.Http.Delete(url, headers, callback);
+```
+**Описание:**
+
+Отправляет запрос с методом Delete.
+
+**Параметры:**
+
+* url - идентификатор (адрес) ресурса.
+* headers - набор заголовков.
+* callback - функция, в которую будет передан результат выполнения операции.
+
+**Запрос:**
+```sh
+{
+    "Command": "httpdelete",
+    "Data": {
+        "url": "https://api.storyclm.com/v1/webhooks/58d0dc946e80aa015812ba40/8f6dd154257d4d62bf30d430a3fcbfec",
+        "headers": {
+            "Accept": "application/json",
+            "Accept-Language": "en-us,en;q=0.5",
+            "Accept-Charset": "utf-8"
+        }
+    }
+}
+```
+**Ответ:**
+```sh
+{
+   "status":"Success",
+   "errorCode":200,
+   "errorMessage":"",
+    "data": {
+        "body": "JTI1N0IlMjUwQSUyNTIwJTI1MjAlMjUyMCUyNTIwJTI1MjJOYW1lJTI1MjIlMjUzQSUyNTIwJTI1MjJEaW1hJTI1MjIlMjUyQyUyNTBBJTI1MjAlMjUyMCUyNTIwJTI1MjAlMjUyMkFnZSUyNTIyJTI1M0ElMjUyMDU1NSUyNTJDJTI1MEElMjUyMCUyNTIwJTI1MjAlMjUyMCUyNTIyR2VuZGVyJTI1MjIlMjUzQSUyNTIwdHJ1ZSUyNTJDJTI1MEElMjUyMCUyNTIwJTI1MjAlMjUyMCUyNTIyUmF0aW5nJTI1MjIlMjUzQSUyNTIwNS41JTI1MkMlMjUwQSUyNTIwJTI1MjAlMjUyMCUyNTIwJTI1MjJDcmVhdGVkJTI1MjIlMjUzQSUyNTIwJTI1MjIyMDAwLTEyLTE2VDIxJTI1M0EwMCUyNTNBMDAuMDAwWiUyNTIyJTI1MEElMjU3RA==",
+        "headers": {
+            "Content-Type": "application/json; charset=UTF-8"
+        }
+    }
+}
+```
+--------------------------
+#### Method: StoryCLM.Http.Delete
+
+```sh
+ StoryCLM.Http.Delete(url, headers, callback);
+```
+**Описание:**
+
+Отправляет запрос с методом Delete.
+
+**Параметры:**
+
+* url - идентификатор (адрес) ресурса.
+* callback - функция, в которую будет передан результат выполнения операции.
+
+**Запрос:**
+```sh
+{
+    "Command": "httpdelete",
+    "Data": {
+        "url": "https://api.storyclm.com/v1/webhooks/58d0dc946e80aa015812ba40/8f6dd154257d4d62bf30d430a3fcbfec",
+        "headers": {}
+    }
+}
+```
+**Ответ:**
+```sh
+{
+   "status":"Success",
+   "errorCode":200,
+   "errorMessage":"",
+    "data": {
+        "body": "JTI1N0IlMjUwQSUyNTIwJTI1MjAlMjUyMCUyNTIwJTI1MjJOYW1lJTI1MjIlMjUzQSUyNTIwJTI1MjJEaW1hJTI1MjIlMjUyQyUyNTBBJTI1MjAlMjUyMCUyNTIwJTI1MjAlMjUyMkFnZSUyNTIyJTI1M0ElMjUyMDU1NSUyNTJDJTI1MEElMjUyMCUyNTIwJTI1MjAlMjUyMCUyNTIyR2VuZGVyJTI1MjIlMjUzQSUyNTIwdHJ1ZSUyNTJDJTI1MEElMjUyMCUyNTIwJTI1MjAlMjUyMCUyNTIyUmF0aW5nJTI1MjIlMjUzQSUyNTIwNS41JTI1MkMlMjUwQSUyNTIwJTI1MjAlMjUyMCUyNTIwJTI1MjJDcmVhdGVkJTI1MjIlMjUzQSUyNTIwJTI1MjIyMDAwLTEyLTE2VDIxJTI1M0EwMCUyNTNBMDAuMDAwWiUyNTIyJTI1MEElMjU3RA==",
+        "headers": {
+            "Content-Type": "application/json; charset=UTF-8"
+        }
+    }
+}
+```
+--------------------------
