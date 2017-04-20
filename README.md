@@ -5,7 +5,7 @@ StoryCLM.js - это библиотека, предоставляющая дос
 В других CLM системах, а так же без StoryCLM данная библиотека работать не будет.
 
 ## Версия
-Текущая версия документации актуальна для StoryCLM.js (1.6.0) и для версии клиентского приложения 2.7.0 и выше.
+Текущая версия документации актуальна для StoryCLM.js (1.6.0) и для версии клиентского приложения 2.9.0 и выше.
 
 ## Общие сведения
 Библиотека состоит из четырех разделов (пространств имен):
@@ -1441,35 +1441,46 @@ StoryCLM.Presentation.SetComplete();
 ### Http
 
 Пространство имен Http содержит методы, которые позволяют презентации взаимодействовать с внешними сервисами по протоколу HTTP.
-Тем самым, возможно произвести интеграцию с внешними сервисами, минуя сервер StoryCLM.
+Тем самым, возможно произвести интеграцию с внешними сервисами, минуя сервер StoryCLM. Такой подход называется "Интеграция без сервера."
+При таком подходе презентация обменивается данными напрямую с внешним сервисом по средсвам HTTP запросов, миную сервер StoryCLM. В таком случае, пришедшие в ответ от сервиса данны, либо хранятся в localstorage, либо не сохраняются совсем.
 
-Тело запроса должно быть в формате Base64:
+Запрос обычно состоит из трех частей:
+* URL - уникальный идендифкатор ресурса.
+* Header - объект-коллекция заголовков.
+* Body - данные в формате Base64.
+
+**Body**
+
+Тело запроса должно быть в формате Base64, это позволяет передвать по протоколы HTTP практически любые данные от текстовых (формы, json, xml) до бинарных (картинки).
+Пример создания тела документа в формате json и кодирование его в Base64:
 ```
     function utf8_to_b64(str) {
-        return window.btoa(encodeURIComponent(escape(str)));
+        return window.btoa(str);
     }
 
     var entry = {
-        Name: "Dima",
-        Age: 555,
-        Gender: true,
-        Rating: 5.5,
-        Created: new Date(2000, 11, 17).toISOString()
-    };
+		 userId: 666,
+        id: 555,
+        title: "test",
+        body: "test"
+	};
 
     var body = utf8_to_b64(JSON.stringify(entry, null, 4));
 ```
-
-Список заголовков доблжен быть в виде объекта:
+Если потребуется, можно задать список заголовков. Список заголовков доблжен быть в виде объекта:
 ```
     var headers = {
         "Accept": "application/json",
         "Accept-Language": "en-us,en;q=0.5",
-        "Accept-Charset": "utf-8"
+        "Accept-Charset": "utf-8",
+        "Content-Type": "application/json"
     };
 ```
+Тело ответа и заголовки ответа приходят в аналогичных форматах. После получения, тело нужно декодировать из Base64.
 
-Тело ответа и заголовки прихотя в аналогичных форматах.
+**ПРИМЕЧАНИЕ:** для того что бы лучше освоить работу с методами приведенными ниже, можно скачать презентацию "[storyclm-js](https://github.com/storyclm/Samples/tree/master/storyclm.js/storyclm-js)".
+
+
 
 #### Method: StoryCLM.Http.Post
 
@@ -1492,12 +1503,13 @@ StoryCLM.Presentation.SetComplete();
 {
     "Command": "httppost",
     "Data": {
-        "url": "https://api.storyclm.com/v1/webhooks/58d0dc946e80aa015812ba40/8f6dd154257d4d62bf30d430a3fcbfec",
-        "body": "JTI1N0IlMjUwQSUyNTIwJTI1MjAlMjUyMCUyNTIwJTI1MjJOYW1lJTI1MjIlMjUzQSUyNTIwJTI1MjJEaW1hJTI1MjIlMjUyQyUyNTBBJTI1MjAlMjUyMCUyNTIwJTI1MjAlMjUyMkFnZSUyNTIyJTI1M0ElMjUyMDU1NSUyNTJDJTI1MEElMjUyMCUyNTIwJTI1MjAlMjUyMCUyNTIyR2VuZGVyJTI1MjIlMjUzQSUyNTIwdHJ1ZSUyNTJDJTI1MEElMjUyMCUyNTIwJTI1MjAlMjUyMCUyNTIyUmF0aW5nJTI1MjIlMjUzQSUyNTIwNS41JTI1MkMlMjUwQSUyNTIwJTI1MjAlMjUyMCUyNTIwJTI1MjJDcmVhdGVkJTI1MjIlMjUzQSUyNTIwJTI1MjIyMDAwLTEyLTE2VDIxJTI1M0EwMCUyNTNBMDAuMDAwWiUyNTIyJTI1MEElMjU3RA==",
+        "url": "https://jsonplaceholder.typicode.com/posts",
+        "body": "JTI1N0IlMjUwQSUyNTIwJTI1MjAlMjUyMCUyNTIwJTI1MjJ1c2VySWQlMjUyMiUyNTNBJTI1MjA2NjYlMjUyQyUyNTBBJTI1MjAlMjUyMCUyNTIwJTI1MjAlMjUyMmlkJTI1MjIlMjUzQSUyNTIwNTU1JTI1MkMlMjUwQSUyNTIwJTI1MjAlMjUyMCUyNTIwJTI1MjJ0aXRsZSUyNTIyJTI1M0ElMjUyMCUyNTIydGVzdCUyNTIyJTI1MkMlMjUwQSUyNTIwJTI1MjAlMjUyMCUyNTIwJTI1MjJib2R5JTI1MjIlMjUzQSUyNTIwJTI1MjJ0ZXN0JTI1MjIlMjUwQSUyNTdE",
         "headers": {
             "Accept": "application/json",
             "Accept-Language": "en-us,en;q=0.5",
-            "Accept-Charset": "utf-8"
+            "Accept-Charset": "utf-8",
+            "Content-Type": "application/json"
         }
     }
 }
@@ -1505,15 +1517,37 @@ StoryCLM.Presentation.SetComplete();
 **Ответ:**
 ```sh
 {
-   "status":"Success",
-   "errorCode":200,
-   "errorMessage":"",
-    "data": {
-        "body": "JTI1N0IlMjUwQSUyNTIwJTI1MjAlMjUyMCUyNTIwJTI1MjJOYW1lJTI1MjIlMjUzQSUyNTIwJTI1MjJEaW1hJTI1MjIlMjUyQyUyNTBBJTI1MjAlMjUyMCUyNTIwJTI1MjAlMjUyMkFnZSUyNTIyJTI1M0ElMjUyMDU1NSUyNTJDJTI1MEElMjUyMCUyNTIwJTI1MjAlMjUyMCUyNTIyR2VuZGVyJTI1MjIlMjUzQSUyNTIwdHJ1ZSUyNTJDJTI1MEElMjUyMCUyNTIwJTI1MjAlMjUyMCUyNTIyUmF0aW5nJTI1MjIlMjUzQSUyNTIwNS41JTI1MkMlMjUwQSUyNTIwJTI1MjAlMjUyMCUyNTIwJTI1MjJDcmVhdGVkJTI1MjIlMjUzQSUyNTIwJTI1MjIyMDAwLTEyLTE2VDIxJTI1M0EwMCUyNTNBMDAuMDAwWiUyNTIyJTI1MEElMjU3RA==",
-        "headers": {
-            "Content-Type": "application/json; charset=UTF-8"
-        }
-    }
+  "ErrorMessage" : "",
+  "Status" : "created",
+  "ErrorCode" : 201,
+  "Data" : {
+    "headers" : {
+      "Content-Type" : "application\/json; charset=utf-8",
+      "Pragma" : "no-cache",
+      "x-powered-by" : "Express",
+      "Via" : "1.1 vegur",
+      "Server" : "cloudflare-nginx",
+      "Expires" : "-1",
+      "Cache-Control" : "no-cache",
+      "Date" : "Thu, 20 Apr 2017 13:46:15 GMT",
+      "access-control-allow-credentials" : "true",
+      "Content-Length" : "69",
+      "x-content-type-options" : "nosniff",
+      "Etag" : "W\/\"45-t\/mYTZNeHjOxV+BVh0Fzsrtii50\"",
+      "Vary" : "Origin, X-HTTP-Method-Override, Accept-Encoding",
+      "cf-ray" : "35288c76ba8b4e0c-DME"
+    },
+    "body" : "ewogICJ1c2VySWQiOiA2NjYsCiAgImlkIjogNTU1LAogICJ0aXRsZSI6ICJ0ZXN0IiwKICAiYm9keSI6ICJ0ZXN0Igp9"
+  }
+}
+```
+**Тело ответа:**
+```sh
+{
+    "userId": 666,
+    "id": 555,
+    "title": "test",
+    "body": "test"
 }
 ```
 --------------------------
@@ -1538,23 +1572,46 @@ StoryCLM.Presentation.SetComplete();
 {
     "Command": "httppost",
     "Data": {
-        "url": "https://api.storyclm.com/v1/webhooks/58d0dc946e80aa015812ba40/8f6dd154257d4d62bf30d430a3fcbfec",
-        "body": "JTI1N0IlMjUwQSUyNTIwJTI1MjAlMjUyMCUyNTIwJTI1MjJOYW1lJTI1MjIlMjUzQSUyNTIwJTI1MjJEaW1hJTI1MjIlMjUyQyUyNTBBJTI1MjAlMjUyMCUyNTIwJTI1MjAlMjUyMkFnZSUyNTIyJTI1M0ElMjUyMDU1NSUyNTJDJTI1MEElMjUyMCUyNTIwJTI1MjAlMjUyMCUyNTIyR2VuZGVyJTI1MjIlMjUzQSUyNTIwdHJ1ZSUyNTJDJTI1MEElMjUyMCUyNTIwJTI1MjAlMjUyMCUyNTIyUmF0aW5nJTI1MjIlMjUzQSUyNTIwNS41JTI1MkMlMjUwQSUyNTIwJTI1MjAlMjUyMCUyNTIwJTI1MjJDcmVhdGVkJTI1MjIlMjUzQSUyNTIwJTI1MjIyMDAwLTEyLTE2VDIxJTI1M0EwMCUyNTNBMDAuMDAwWiUyNTIyJTI1MEElMjU3RA==",
+        "url": "https://jsonplaceholder.typicode.com/posts",
+        "body": "JTI1N0IlMjUwQSUyNTIwJTI1MjAlMjUyMCUyNTIwJTI1MjJ1c2VySWQlMjUyMiUyNTNBJTI1MjA2NjYlMjUyQyUyNTBBJTI1MjAlMjUyMCUyNTIwJTI1MjAlMjUyMmlkJTI1MjIlMjUzQSUyNTIwNTU1JTI1MkMlMjUwQSUyNTIwJTI1MjAlMjUyMCUyNTIwJTI1MjJ0aXRsZSUyNTIyJTI1M0ElMjUyMCUyNTIydGVzdCUyNTIyJTI1MkMlMjUwQSUyNTIwJTI1MjAlMjUyMCUyNTIwJTI1MjJib2R5JTI1MjIlMjUzQSUyNTIwJTI1MjJ0ZXN0JTI1MjIlMjUwQSUyNTdE",
+        "headers": {}
     }
 }
 ```
 **Ответ:**
 ```sh
 {
-   "status":"Success",
-   "errorCode":200,
-   "errorMessage":"",
-    "data": {
-        "body": "JTI1N0IlMjUwQSUyNTIwJTI1MjAlMjUyMCUyNTIwJTI1MjJOYW1lJTI1MjIlMjUzQSUyNTIwJTI1MjJEaW1hJTI1MjIlMjUyQyUyNTBBJTI1MjAlMjUyMCUyNTIwJTI1MjAlMjUyMkFnZSUyNTIyJTI1M0ElMjUyMDU1NSUyNTJDJTI1MEElMjUyMCUyNTIwJTI1MjAlMjUyMCUyNTIyR2VuZGVyJTI1MjIlMjUzQSUyNTIwdHJ1ZSUyNTJDJTI1MEElMjUyMCUyNTIwJTI1MjAlMjUyMCUyNTIyUmF0aW5nJTI1MjIlMjUzQSUyNTIwNS41JTI1MkMlMjUwQSUyNTIwJTI1MjAlMjUyMCUyNTIwJTI1MjJDcmVhdGVkJTI1MjIlMjUzQSUyNTIwJTI1MjIyMDAwLTEyLTE2VDIxJTI1M0EwMCUyNTNBMDAuMDAwWiUyNTIyJTI1MEElMjU3RA==",
-        "headers": {
-            "Content-Type": "application/json; charset=UTF-8"
-        }
-    }
+  "ErrorMessage" : "",
+  "Status" : "created",
+  "ErrorCode" : 201,
+  "Data" : {
+    "headers" : {
+      "Content-Type" : "application\/json; charset=utf-8",
+      "Pragma" : "no-cache",
+      "x-powered-by" : "Express",
+      "Via" : "1.1 vegur",
+      "Server" : "cloudflare-nginx",
+      "Expires" : "-1",
+      "Cache-Control" : "no-cache",
+      "Date" : "Thu, 20 Apr 2017 13:46:15 GMT",
+      "access-control-allow-credentials" : "true",
+      "Content-Length" : "69",
+      "x-content-type-options" : "nosniff",
+      "Etag" : "W\/\"45-t\/mYTZNeHjOxV+BVh0Fzsrtii50\"",
+      "Vary" : "Origin, X-HTTP-Method-Override, Accept-Encoding",
+      "cf-ray" : "35288c76ba8b4e0c-DME"
+    },
+    "body" : "ewogICJ1c2VySWQiOiA2NjYsCiAgImlkIjogNTU1LAogICJ0aXRsZSI6ICJ0ZXN0IiwKICAiYm9keSI6ICJ0ZXN0Igp9"
+  }
+}
+```
+**Тело ответа:**
+```sh
+{
+    "userId": 666,
+    "id": 555,
+    "title": "test",
+    "body": "test"
 }
 ```
 --------------------------
@@ -1579,12 +1636,13 @@ StoryCLM.Presentation.SetComplete();
 {
     "Command": "httpput",
     "Data": {
-        "url": "https://api.storyclm.com/v1/webhooks/58d0dc946e80aa015812ba40/8f6dd154257d4d62bf30d430a3fcbfec",
-        "body": "JTI1N0IlMjUwQSUyNTIwJTI1MjAlMjUyMCUyNTIwJTI1MjJOYW1lJTI1MjIlMjUzQSUyNTIwJTI1MjJEaW1hJTI1MjIlMjUyQyUyNTBBJTI1MjAlMjUyMCUyNTIwJTI1MjAlMjUyMkFnZSUyNTIyJTI1M0ElMjUyMDU1NSUyNTJDJTI1MEElMjUyMCUyNTIwJTI1MjAlMjUyMCUyNTIyR2VuZGVyJTI1MjIlMjUzQSUyNTIwdHJ1ZSUyNTJDJTI1MEElMjUyMCUyNTIwJTI1MjAlMjUyMCUyNTIyUmF0aW5nJTI1MjIlMjUzQSUyNTIwNS41JTI1MkMlMjUwQSUyNTIwJTI1MjAlMjUyMCUyNTIwJTI1MjJDcmVhdGVkJTI1MjIlMjUzQSUyNTIwJTI1MjIyMDAwLTEyLTE2VDIxJTI1M0EwMCUyNTNBMDAuMDAwWiUyNTIyJTI1MEElMjU3RA==",
+        "url": "https://jsonplaceholder.typicode.com/posts/1",
+        "body": "JTI1N0IlMjUwQSUyNTIwJTI1MjAlMjUyMCUyNTIwJTI1MjJ1c2VySWQlMjUyMiUyNTNBJTI1MjA2NjYlMjUyQyUyNTBBJTI1MjAlMjUyMCUyNTIwJTI1MjAlMjUyMmlkJTI1MjIlMjUzQSUyNTIwNTU1JTI1MkMlMjUwQSUyNTIwJTI1MjAlMjUyMCUyNTIwJTI1MjJ0aXRsZSUyNTIyJTI1M0ElMjUyMCUyNTIydGVzdCUyNTIyJTI1MkMlMjUwQSUyNTIwJTI1MjAlMjUyMCUyNTIwJTI1MjJib2R5JTI1MjIlMjUzQSUyNTIwJTI1MjJ0ZXN0JTI1MjIlMjUwQSUyNTdE",
         "headers": {
             "Accept": "application/json",
             "Accept-Language": "en-us,en;q=0.5",
-            "Accept-Charset": "utf-8"
+            "Accept-Charset": "utf-8",
+            "Content-Type": "application/json"
         }
     }
 }
@@ -1592,15 +1650,37 @@ StoryCLM.Presentation.SetComplete();
 **Ответ:**
 ```sh
 {
-   "status":"Success",
-   "errorCode":200,
-   "errorMessage":"",
-    "data": {
-        "body": "JTI1N0IlMjUwQSUyNTIwJTI1MjAlMjUyMCUyNTIwJTI1MjJOYW1lJTI1MjIlMjUzQSUyNTIwJTI1MjJEaW1hJTI1MjIlMjUyQyUyNTBBJTI1MjAlMjUyMCUyNTIwJTI1MjAlMjUyMkFnZSUyNTIyJTI1M0ElMjUyMDU1NSUyNTJDJTI1MEElMjUyMCUyNTIwJTI1MjAlMjUyMCUyNTIyR2VuZGVyJTI1MjIlMjUzQSUyNTIwdHJ1ZSUyNTJDJTI1MEElMjUyMCUyNTIwJTI1MjAlMjUyMCUyNTIyUmF0aW5nJTI1MjIlMjUzQSUyNTIwNS41JTI1MkMlMjUwQSUyNTIwJTI1MjAlMjUyMCUyNTIwJTI1MjJDcmVhdGVkJTI1MjIlMjUzQSUyNTIwJTI1MjIyMDAwLTEyLTE2VDIxJTI1M0EwMCUyNTNBMDAuMDAwWiUyNTIyJTI1MEElMjU3RA==",
-        "headers": {
-            "Content-Type": "application/json; charset=UTF-8"
-        }
-    }
+  "ErrorMessage" : "",
+  "Status" : "no error",
+  "ErrorCode" : 200,
+  "Data" : {
+    "headers" : {
+      "Content-Type" : "application\/json; charset=utf-8",
+      "Pragma" : "no-cache",
+      "x-powered-by" : "Express",
+      "Via" : "1.1 vegur",
+      "Server" : "cloudflare-nginx",
+      "Content-Encoding" : "gzip",
+      "Expires" : "-1",
+      "Cache-Control" : "no-cache",
+      "Date" : "Thu, 20 Apr 2017 13:48:38 GMT",
+      "access-control-allow-credentials" : "true",
+      "x-content-type-options" : "nosniff",
+      "Etag" : "W\/\"43-PsA+O8XAGFcGfXof\/Wtj7IAtJBA\"",
+      "Vary" : "Origin, Accept-Encoding",
+      "cf-ray" : "35288ff4e95e4e0c-DME"
+    },
+    "body" : "ewogICJ1c2VySWQiOiA2NjYsCiAgImlkIjogMSwKICAidGl0bGUiOiAidGVzdCIsCiAgImJvZHkiOiAidGVzdCIKfQ=="
+  }
+}
+```
+**Тело ответа:**
+```sh
+{
+    "userId": 666,
+    "id": 555,
+    "title": "test",
+    "body": "test"
 }
 ```
 --------------------------
@@ -1624,23 +1704,46 @@ StoryCLM.Presentation.SetComplete();
 {
     "Command": "httpput",
     "Data": {
-        "url": "https://api.storyclm.com/v1/webhooks/58d0dc946e80aa015812ba40/8f6dd154257d4d62bf30d430a3fcbfec",
-        "body": "JTI1N0IlMjUwQSUyNTIwJTI1MjAlMjUyMCUyNTIwJTI1MjJOYW1lJTI1MjIlMjUzQSUyNTIwJTI1MjJEaW1hJTI1MjIlMjUyQyUyNTBBJTI1MjAlMjUyMCUyNTIwJTI1MjAlMjUyMkFnZSUyNTIyJTI1M0ElMjUyMDU1NSUyNTJDJTI1MEElMjUyMCUyNTIwJTI1MjAlMjUyMCUyNTIyR2VuZGVyJTI1MjIlMjUzQSUyNTIwdHJ1ZSUyNTJDJTI1MEElMjUyMCUyNTIwJTI1MjAlMjUyMCUyNTIyUmF0aW5nJTI1MjIlMjUzQSUyNTIwNS41JTI1MkMlMjUwQSUyNTIwJTI1MjAlMjUyMCUyNTIwJTI1MjJDcmVhdGVkJTI1MjIlMjUzQSUyNTIwJTI1MjIyMDAwLTEyLTE2VDIxJTI1M0EwMCUyNTNBMDAuMDAwWiUyNTIyJTI1MEElMjU3RA==",
+        "url": "https://jsonplaceholder.typicode.com/posts/1",
+        "body": "JTI1N0IlMjUwQSUyNTIwJTI1MjAlMjUyMCUyNTIwJTI1MjJ1c2VySWQlMjUyMiUyNTNBJTI1MjA2NjYlMjUyQyUyNTBBJTI1MjAlMjUyMCUyNTIwJTI1MjAlMjUyMmlkJTI1MjIlMjUzQSUyNTIwNTU1JTI1MkMlMjUwQSUyNTIwJTI1MjAlMjUyMCUyNTIwJTI1MjJ0aXRsZSUyNTIyJTI1M0ElMjUyMCUyNTIydGVzdCUyNTIyJTI1MkMlMjUwQSUyNTIwJTI1MjAlMjUyMCUyNTIwJTI1MjJib2R5JTI1MjIlMjUzQSUyNTIwJTI1MjJ0ZXN0JTI1MjIlMjUwQSUyNTdE",
+        "headers": {}
     }
 }
 ```
 **Ответ:**
 ```sh
 {
-   "status":"Success",
-   "errorCode":200,
-   "errorMessage":"",
-    "data": {
-        "body": "JTI1N0IlMjUwQSUyNTIwJTI1MjAlMjUyMCUyNTIwJTI1MjJOYW1lJTI1MjIlMjUzQSUyNTIwJTI1MjJEaW1hJTI1MjIlMjUyQyUyNTBBJTI1MjAlMjUyMCUyNTIwJTI1MjAlMjUyMkFnZSUyNTIyJTI1M0ElMjUyMDU1NSUyNTJDJTI1MEElMjUyMCUyNTIwJTI1MjAlMjUyMCUyNTIyR2VuZGVyJTI1MjIlMjUzQSUyNTIwdHJ1ZSUyNTJDJTI1MEElMjUyMCUyNTIwJTI1MjAlMjUyMCUyNTIyUmF0aW5nJTI1MjIlMjUzQSUyNTIwNS41JTI1MkMlMjUwQSUyNTIwJTI1MjAlMjUyMCUyNTIwJTI1MjJDcmVhdGVkJTI1MjIlMjUzQSUyNTIwJTI1MjIyMDAwLTEyLTE2VDIxJTI1M0EwMCUyNTNBMDAuMDAwWiUyNTIyJTI1MEElMjU3RA==",
-        "headers": {
-            "Content-Type": "application/json; charset=UTF-8"
-        }
-    }
+  "ErrorMessage" : "",
+  "Status" : "no error",
+  "ErrorCode" : 200,
+  "Data" : {
+    "headers" : {
+      "Content-Type" : "application\/json; charset=utf-8",
+      "Pragma" : "no-cache",
+      "x-powered-by" : "Express",
+      "Via" : "1.1 vegur",
+      "Server" : "cloudflare-nginx",
+      "Content-Encoding" : "gzip",
+      "Expires" : "-1",
+      "Cache-Control" : "no-cache",
+      "Date" : "Thu, 20 Apr 2017 13:48:38 GMT",
+      "access-control-allow-credentials" : "true",
+      "x-content-type-options" : "nosniff",
+      "Etag" : "W\/\"43-PsA+O8XAGFcGfXof\/Wtj7IAtJBA\"",
+      "Vary" : "Origin, Accept-Encoding",
+      "cf-ray" : "35288ff4e95e4e0c-DME"
+    },
+    "body" : "ewogICJ1c2VySWQiOiA2NjYsCiAgImlkIjogMSwKICAidGl0bGUiOiAidGVzdCIsCiAgImJvZHkiOiAidGVzdCIKfQ=="
+  }
+}
+```
+**Тело ответа:**
+```sh
+{
+    "userId": 666,
+    "id": 555,
+    "title": "test",
+    "body": "test"
 }
 ```
 --------------------------
@@ -1664,27 +1767,51 @@ StoryCLM.Presentation.SetComplete();
 {
     "Command": "httpget",
     "Data": {
-        "url": "https://api.storyclm.com/v1/webhooks/58d0dc946e80aa015812ba40/8f6dd154257d4d62bf30d430a3fcbfec",
+        "url": "https://jsonplaceholder.typicode.com/posts/1",
         "headers": {
             "Accept": "application/json",
             "Accept-Language": "en-us,en;q=0.5",
-            "Accept-Charset": "utf-8"
+            "Accept-Charset": "utf-8",
+            "Content-Type": "application/json"
         }
     }
 }
 ```
 **Ответ:**
 ```sh
+ {
+  "ErrorMessage" : "",
+  "Status" : "no error",
+  "ErrorCode" : 200,
+  "Data" : {
+    "headers" : {
+      "Content-Type" : "application\/json; charset=utf-8",
+      "Pragma" : "no-cache",
+      "x-powered-by" : "Express",
+      "Via" : "1.1 vegur",
+      "Server" : "cloudflare-nginx",
+      "Content-Encoding" : "gzip",
+      "Expires" : "Thu, 20 Apr 2017 17:49:25 GMT",
+      "cf-cache-status" : "HIT",
+      "Cache-Control" : "public, max-age=14400",
+      "Date" : "Thu, 20 Apr 2017 13:49:25 GMT",
+      "access-control-allow-credentials" : "true",
+      "x-content-type-options" : "nosniff",
+      "Etag" : "W\/\"124-yiKdLzqO5gfBrJFrcdJ8Yq0LGnU\"",
+      "Vary" : "Accept-Encoding",
+      "cf-ray" : "3528911c8b8c4e0c-DME"
+    },
+    "body" : "ewogICJ1c2VySWQiOiAxLAogICJpZCI6IDEsCiAgInRpdGxlIjogInN1bnQgYXV0IGZhY2VyZSByZXBlbGxhdCBwcm92aWRlbnQgb2NjYWVjYXRpIGV4Y2VwdHVyaSBvcHRpbyByZXByZWhlbmRlcml0IiwKICAiYm9keSI6ICJxdWlhIGV0IHN1c2NpcGl0XG5zdXNjaXBpdCByZWN1c2FuZGFlIGNvbnNlcXV1bnR1ciBleHBlZGl0YSBldCBjdW1cbnJlcHJlaGVuZGVyaXQgbW9sZXN0aWFlIHV0IHV0IHF1YXMgdG90YW1cbm5vc3RydW0gcmVydW0gZXN0IGF1dGVtIHN1bnQgcmVtIGV2ZW5pZXQgYXJjaGl0ZWN0byIKfQ=="
+  }
+}
+```
+**Тело ответа:**
+```sh
 {
-   "status":"Success",
-   "errorCode":200,
-   "errorMessage":"",
-    "data": {
-        "body": "JTI1N0IlMjUwQSUyNTIwJTI1MjAlMjUyMCUyNTIwJTI1MjJOYW1lJTI1MjIlMjUzQSUyNTIwJTI1MjJEaW1hJTI1MjIlMjUyQyUyNTBBJTI1MjAlMjUyMCUyNTIwJTI1MjAlMjUyMkFnZSUyNTIyJTI1M0ElMjUyMDU1NSUyNTJDJTI1MEElMjUyMCUyNTIwJTI1MjAlMjUyMCUyNTIyR2VuZGVyJTI1MjIlMjUzQSUyNTIwdHJ1ZSUyNTJDJTI1MEElMjUyMCUyNTIwJTI1MjAlMjUyMCUyNTIyUmF0aW5nJTI1MjIlMjUzQSUyNTIwNS41JTI1MkMlMjUwQSUyNTIwJTI1MjAlMjUyMCUyNTIwJTI1MjJDcmVhdGVkJTI1MjIlMjUzQSUyNTIwJTI1MjIyMDAwLTEyLTE2VDIxJTI1M0EwMCUyNTNBMDAuMDAwWiUyNTIyJTI1MEElMjU3RA==",
-        "headers": {
-            "Content-Type": "application/json; charset=UTF-8"
-        }
-    }
+	userId: 1,
+	id: 1,
+	title: "sunt aut facere repellat provident occaecati excepturi optio reprehenderit",
+	body: "quia et suscipit suscipit recusandae consequuntur expedita et cum reprehenderit molestiae ut ut quas totam nostrum rerum est autem sunt rem eveniet architecto"
 }
 ```
 --------------------------
@@ -1707,23 +1834,45 @@ StoryCLM.Presentation.SetComplete();
 {
     "Command": "httpget",
     "Data": {
-        "url": "https://api.storyclm.com/v1/webhooks/58d0dc946e80aa015812ba40/8f6dd154257d4d62bf30d430a3fcbfec",
-        "headers": {}
+        "url": "https://jsonplaceholder.typicode.com/posts/1"
     }
 }
 ```
 **Ответ:**
 ```sh
+ {
+  "ErrorMessage" : "",
+  "Status" : "no error",
+  "ErrorCode" : 200,
+  "Data" : {
+    "headers" : {
+      "Content-Type" : "application\/json; charset=utf-8",
+      "Pragma" : "no-cache",
+      "x-powered-by" : "Express",
+      "Via" : "1.1 vegur",
+      "Server" : "cloudflare-nginx",
+      "Content-Encoding" : "gzip",
+      "Expires" : "Thu, 20 Apr 2017 17:49:25 GMT",
+      "cf-cache-status" : "HIT",
+      "Cache-Control" : "public, max-age=14400",
+      "Date" : "Thu, 20 Apr 2017 13:49:25 GMT",
+      "access-control-allow-credentials" : "true",
+      "x-content-type-options" : "nosniff",
+      "Etag" : "W\/\"124-yiKdLzqO5gfBrJFrcdJ8Yq0LGnU\"",
+      "Vary" : "Accept-Encoding",
+      "cf-ray" : "3528911c8b8c4e0c-DME"
+    },
+    "body" : "ewogICJ1c2VySWQiOiAxLAogICJpZCI6IDEsCiAgInRpdGxlIjogInN1bnQgYXV0IGZhY2VyZSByZXBlbGxhdCBwcm92aWRlbnQgb2NjYWVjYXRpIGV4Y2VwdHVyaSBvcHRpbyByZXByZWhlbmRlcml0IiwKICAiYm9keSI6ICJxdWlhIGV0IHN1c2NpcGl0XG5zdXNjaXBpdCByZWN1c2FuZGFlIGNvbnNlcXV1bnR1ciBleHBlZGl0YSBldCBjdW1cbnJlcHJlaGVuZGVyaXQgbW9sZXN0aWFlIHV0IHV0IHF1YXMgdG90YW1cbm5vc3RydW0gcmVydW0gZXN0IGF1dGVtIHN1bnQgcmVtIGV2ZW5pZXQgYXJjaGl0ZWN0byIKfQ=="
+  }
+}
+```
+**Тело ответа:**
+```sh
 {
-   "status":"Success",
-   "errorCode":200,
-   "errorMessage":"",
-    "data": {
-        "body": "JTI1N0IlMjUwQSUyNTIwJTI1MjAlMjUyMCUyNTIwJTI1MjJOYW1lJTI1MjIlMjUzQSUyNTIwJTI1MjJEaW1hJTI1MjIlMjUyQyUyNTBBJTI1MjAlMjUyMCUyNTIwJTI1MjAlMjUyMkFnZSUyNTIyJTI1M0ElMjUyMDU1NSUyNTJDJTI1MEElMjUyMCUyNTIwJTI1MjAlMjUyMCUyNTIyR2VuZGVyJTI1MjIlMjUzQSUyNTIwdHJ1ZSUyNTJDJTI1MEElMjUyMCUyNTIwJTI1MjAlMjUyMCUyNTIyUmF0aW5nJTI1MjIlMjUzQSUyNTIwNS41JTI1MkMlMjUwQSUyNTIwJTI1MjAlMjUyMCUyNTIwJTI1MjJDcmVhdGVkJTI1MjIlMjUzQSUyNTIwJTI1MjIyMDAwLTEyLTE2VDIxJTI1M0EwMCUyNTNBMDAuMDAwWiUyNTIyJTI1MEElMjU3RA==",
-        "headers": {
-            "Content-Type": "application/json; charset=UTF-8"
-        }
-    }
+	userId: 1,
+	id: 1,
+	title: "sunt aut facere repellat provident occaecati excepturi optio reprehenderit",
+	body: "quia et suscipit suscipit recusandae consequuntur expedita et cum reprehenderit molestiae ut ut quas totam nostrum rerum est autem sunt rem eveniet architecto"
 }
 ```
 --------------------------
@@ -1747,28 +1896,47 @@ StoryCLM.Presentation.SetComplete();
 {
     "Command": "httpdelete",
     "Data": {
-        "url": "https://api.storyclm.com/v1/webhooks/58d0dc946e80aa015812ba40/8f6dd154257d4d62bf30d430a3fcbfec",
+        "url": "https://jsonplaceholder.typicode.com/posts/1",
         "headers": {
             "Accept": "application/json",
             "Accept-Language": "en-us,en;q=0.5",
-            "Accept-Charset": "utf-8"
+            "Accept-Charset": "utf-8",
+            "Content-Type": "application/json"
         }
     }
 }
 ```
 **Ответ:**
 ```sh
-{
-   "status":"Success",
-   "errorCode":200,
-   "errorMessage":"",
-    "data": {
-        "body": "JTI1N0IlMjUwQSUyNTIwJTI1MjAlMjUyMCUyNTIwJTI1MjJOYW1lJTI1MjIlMjUzQSUyNTIwJTI1MjJEaW1hJTI1MjIlMjUyQyUyNTBBJTI1MjAlMjUyMCUyNTIwJTI1MjAlMjUyMkFnZSUyNTIyJTI1M0ElMjUyMDU1NSUyNTJDJTI1MEElMjUyMCUyNTIwJTI1MjAlMjUyMCUyNTIyR2VuZGVyJTI1MjIlMjUzQSUyNTIwdHJ1ZSUyNTJDJTI1MEElMjUyMCUyNTIwJTI1MjAlMjUyMCUyNTIyUmF0aW5nJTI1MjIlMjUzQSUyNTIwNS41JTI1MkMlMjUwQSUyNTIwJTI1MjAlMjUyMCUyNTIwJTI1MjJDcmVhdGVkJTI1MjIlMjUzQSUyNTIwJTI1MjIyMDAwLTEyLTE2VDIxJTI1M0EwMCUyNTNBMDAuMDAwWiUyNTIyJTI1MEElMjU3RA==",
-        "headers": {
-            "Content-Type": "application/json; charset=UTF-8"
-        }
-    }
+ {
+  "ErrorMessage" : "",
+  "Status" : "no error",
+  "ErrorCode" : 200,
+  "Data" : {
+    "headers" : {
+      "Content-Type" : "application\/json; charset=utf-8",
+      "Pragma" : "no-cache",
+      "x-powered-by" : "Express",
+      "Via" : "1.1 vegur",
+      "Server" : "cloudflare-nginx",
+      "Content-Encoding" : "gzip",
+      "Expires" : "Thu, 20 Apr 2017 17:49:25 GMT",
+      "cf-cache-status" : "HIT",
+      "Cache-Control" : "public, max-age=14400",
+      "Date" : "Thu, 20 Apr 2017 13:49:25 GMT",
+      "access-control-allow-credentials" : "true",
+      "x-content-type-options" : "nosniff",
+      "Etag" : "W\/\"124-yiKdLzqO5gfBrJFrcdJ8Yq0LGnU\"",
+      "Vary" : "Accept-Encoding",
+      "cf-ray" : "3528911c8b8c4e0c-DME"
+    },
+    "body" : "ewogICJ1c2VySWQiOiAxLAogICJpZCI6IDEsCiAgInRpdGxlIjogInN1bnQgYXV0IGZhY2VyZSByZXBlbGxhdCBwcm92aWRlbnQgb2NjYWVjYXRpIGV4Y2VwdHVyaSBvcHRpbyByZXByZWhlbmRlcml0IiwKICAiYm9keSI6ICJxdWlhIGV0IHN1c2NpcGl0XG5zdXNjaXBpdCByZWN1c2FuZGFlIGNvbnNlcXV1bnR1ciBleHBlZGl0YSBldCBjdW1cbnJlcHJlaGVuZGVyaXQgbW9sZXN0aWFlIHV0IHV0IHF1YXMgdG90YW1cbm5vc3RydW0gcmVydW0gZXN0IGF1dGVtIHN1bnQgcmVtIGV2ZW5pZXQgYXJjaGl0ZWN0byIKfQ=="
+  }
 }
+```
+**Тело ответа:**
+```sh
+{}
 ```
 --------------------------
 #### Method: StoryCLM.Http.Delete
@@ -1790,23 +1958,40 @@ StoryCLM.Presentation.SetComplete();
 {
     "Command": "httpdelete",
     "Data": {
-        "url": "https://api.storyclm.com/v1/webhooks/58d0dc946e80aa015812ba40/8f6dd154257d4d62bf30d430a3fcbfec",
-        "headers": {}
+        "url": "https://jsonplaceholder.typicode.com/posts/1"
     }
 }
 ```
 **Ответ:**
 ```sh
-{
-   "status":"Success",
-   "errorCode":200,
-   "errorMessage":"",
-    "data": {
-        "body": "JTI1N0IlMjUwQSUyNTIwJTI1MjAlMjUyMCUyNTIwJTI1MjJOYW1lJTI1MjIlMjUzQSUyNTIwJTI1MjJEaW1hJTI1MjIlMjUyQyUyNTBBJTI1MjAlMjUyMCUyNTIwJTI1MjAlMjUyMkFnZSUyNTIyJTI1M0ElMjUyMDU1NSUyNTJDJTI1MEElMjUyMCUyNTIwJTI1MjAlMjUyMCUyNTIyR2VuZGVyJTI1MjIlMjUzQSUyNTIwdHJ1ZSUyNTJDJTI1MEElMjUyMCUyNTIwJTI1MjAlMjUyMCUyNTIyUmF0aW5nJTI1MjIlMjUzQSUyNTIwNS41JTI1MkMlMjUwQSUyNTIwJTI1MjAlMjUyMCUyNTIwJTI1MjJDcmVhdGVkJTI1MjIlMjUzQSUyNTIwJTI1MjIyMDAwLTEyLTE2VDIxJTI1M0EwMCUyNTNBMDAuMDAwWiUyNTIyJTI1MEElMjU3RA==",
-        "headers": {
-            "Content-Type": "application/json; charset=UTF-8"
-        }
-    }
+ {
+  "ErrorMessage" : "",
+  "Status" : "no error",
+  "ErrorCode" : 200,
+  "Data" : {
+    "headers" : {
+      "Content-Type" : "application\/json; charset=utf-8",
+      "Pragma" : "no-cache",
+      "x-powered-by" : "Express",
+      "Via" : "1.1 vegur",
+      "Server" : "cloudflare-nginx",
+      "Content-Encoding" : "gzip",
+      "Expires" : "Thu, 20 Apr 2017 17:49:25 GMT",
+      "cf-cache-status" : "HIT",
+      "Cache-Control" : "public, max-age=14400",
+      "Date" : "Thu, 20 Apr 2017 13:49:25 GMT",
+      "access-control-allow-credentials" : "true",
+      "x-content-type-options" : "nosniff",
+      "Etag" : "W\/\"124-yiKdLzqO5gfBrJFrcdJ8Yq0LGnU\"",
+      "Vary" : "Accept-Encoding",
+      "cf-ray" : "3528911c8b8c4e0c-DME"
+    },
+    "body" : "ewogICJ1c2VySWQiOiAxLAogICJpZCI6IDEsCiAgInRpdGxlIjogInN1bnQgYXV0IGZhY2VyZSByZXBlbGxhdCBwcm92aWRlbnQgb2NjYWVjYXRpIGV4Y2VwdHVyaSBvcHRpbyByZXByZWhlbmRlcml0IiwKICAiYm9keSI6ICJxdWlhIGV0IHN1c2NpcGl0XG5zdXNjaXBpdCByZWN1c2FuZGFlIGNvbnNlcXV1bnR1ciBleHBlZGl0YSBldCBjdW1cbnJlcHJlaGVuZGVyaXQgbW9sZXN0aWFlIHV0IHV0IHF1YXMgdG90YW1cbm5vc3RydW0gcmVydW0gZXN0IGF1dGVtIHN1bnQgcmVtIGV2ZW5pZXQgYXJjaGl0ZWN0byIKfQ=="
+  }
 }
+```
+**Тело ответа:**
+```sh
+{}
 ```
 --------------------------
