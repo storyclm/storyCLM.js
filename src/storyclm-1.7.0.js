@@ -1,5 +1,5 @@
 /*!
-* StoryCLM Library v1.6.0
+* StoryCLM Library v1.7.0
 * Copyright(c) 2017, Vladimir Klyuev, Breffi Inc. All rights reserved.
 * License: Licensed under The MIT License.
 */
@@ -349,6 +349,44 @@ StoryCLM.User = (function () {
     };
 })();
 
+StoryCLM.Sessions = (function () {
+
+    function _get(callback) {
+        StoryCLMBridge.Invoke("getsessions", {}, function (data) {
+            if (typeof callback === "function")
+                callback(new StoryCLMApiMessage(data));
+        });
+    }
+
+    function _getById(id, callback) {
+        if (typeof id === "undefined") {
+            StoryCLMparametersErrorMessge(callback);
+            return;
+        }
+        StoryCLMBridge.Invoke("getsessionbyid", { id: id }, function (data) {
+            if (typeof callback === "function")
+                callback(new StoryCLMApiMessage(data));
+        });
+    }
+
+    function _confirm(id, callback) {
+        if (typeof id === "undefined") {
+            StoryCLMparametersErrorMessge(callback);
+            return;
+        }
+        StoryCLMBridge.Invoke("sessionconfirm", { id: id }, function (data) {
+            if (typeof callback === "function")
+                callback(new StoryCLMApiMessage(data));
+        });
+    }
+
+    return {
+        Get: _get,
+        GetById: _getById,
+        Confirm: _confirm
+    };
+})();
+
 StoryCLM.Geolocation = (function () {
 
     function _get(callback) {
@@ -621,13 +659,14 @@ StoryCLM.Tables = (function () {
 StoryCLM.Http = (function () {
 
     function isURL(str) {
-        var pattern = new RegExp('^(https?:\\/\\/)?' + // protocol
-        '((([a-z\\d]([a-z\\d-]*[a-z\\d])*)\\.?)+[a-z]{2,}|' + // domain name
-        '((\\d{1,3}\\.){3}\\d{1,3}))' + // OR ip (v4) address
-        '(\\:\\d+)?(\\/[-a-z\\d%_.~+]*)*' + // port and path
-        '(\\?[;&a-z\\d%_.~+=-]*)?' + // query string
-        '(\\#[-a-z\\d_]*)?$', 'i'); // fragment locator
-        return pattern.test(str);
+        return true;
+        //var pattern = new RegExp('^(https?:\\/\\/)?' + // protocol
+        //'((([a-z\\d]([a-z\\d-]*[a-z\\d])*)\\.?)+[a-z]{2,}|' + // domain name
+        //'((\\d{1,3}\\.){3}\\d{1,3}))' + // OR ip (v4) address
+        //'(\\:\\d+)?(\\/[-a-z\\d%_.~+]*)*' + // port and path
+        //'(\\?[;&a-z\\d%_.~+=-]*)?' + // query string
+        //'(\\#[-a-z\\d_]*)?$', 'i'); // fragment locator
+        //return pattern.test(str);
     }
 
     function _post(url, body, headers, callback) {
