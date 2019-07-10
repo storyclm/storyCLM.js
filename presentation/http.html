@@ -1,0 +1,322 @@
+﻿<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="format-detection" content="telephone=no">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="clm-swipe-next" content="">
+    <meta name="clm-swipe-previous" content="">
+    <meta name="clm" content="">
+    <title>Http</title>
+    <link href="css/main.css" rel="stylesheet" />
+    <link href="css/bootstrap.css" rel="stylesheet">
+    <link href="css/template.css" rel="stylesheet">
+</head>
+<body>
+    <div id="background">
+        <div class="row" style="margin:5px;">
+            <div class="col-md-3">
+                <a class="btn btn-default" style="width:100%;" href="index.html">Назад</a><br /><br />
+                <div class="list-group">
+                    <a href="#" id="Post" class="list-group-item">Post (url, body, headers)</a>
+                    <a href="#" id="Post1" class="list-group-item">Post (url, body)</a>
+                    <a href="#" id="Put" class="list-group-item">Put (url, body, headers)</a>
+                    <a href="#" id="Put1" class="list-group-item">Put (url, body)</a>
+                    <a href="#" id="Get" class="list-group-item">Get (url, headers)</a>
+                    <a href="#" id="Get1" class="list-group-item">Get (url)</a>
+                    <a href="#" id="Delete" class="list-group-item">Delete (url, headers)</a>
+                    <a href="#" id="Delete1" class="list-group-item">Delete (url)</a>
+                </div>
+            </div>
+            <div id="def" style="display:none;">
+                <div data-i="PostBtn">
+                    <div class="request">
+                        <pre>
+{
+    "Command": "httppost",
+    "Data": {
+        "url": "https://jsonplaceholder.typicode.com/posts",
+        "body": "JTI1N0IlMjUwQSUyNTIwJTI1MjAlMjUyMCUyNTIwJTI1MjJ1c2VySWQlMjUyMiUyNTNBJTI1MjA2NjYlMjUyQyUyNTBBJTI1MjAlMjUyMCUyNTIwJTI1MjAlMjUyMmlkJTI1MjIlMjUzQSUyNTIwNTU1JTI1MkMlMjUwQSUyNTIwJTI1MjAlMjUyMCUyNTIwJTI1MjJ0aXRsZSUyNTIyJTI1M0ElMjUyMCUyNTIydGVzdCUyNTIyJTI1MkMlMjUwQSUyNTIwJTI1MjAlMjUyMCUyNTIwJTI1MjJib2R5JTI1MjIlMjUzQSUyNTIwJTI1MjJ0ZXN0JTI1MjIlMjUwQSUyNTdE",
+        "headers": {
+            "Accept": "application/json",
+            "Accept-Language": "en-us,en;q=0.5",
+            "Accept-Charset": "utf-8",
+            "Content-Type": "application/json"
+        }
+    }
+}
+</pre>
+                    </div>
+                    <div class="signa">StoryCLM.Http.Post(url, body, headers, callback);</div>
+                    <div class="text">
+                        Отправляет запрос с методом POST.
+                    </div>
+                </div>
+                <div data-i="Post1Btn">
+                    <div class="request">
+                        <pre>
+{
+    "Command": "httppost",
+    "Data": {
+        "url": "https://jsonplaceholder.typicode.com/posts",
+        "body": "JTI1N0IlMjUwQSUyNTIwJTI1MjAlMjUyMCUyNTIwJTI1MjJ1c2VySWQlMjUyMiUyNTNBJTI1MjA2NjYlMjUyQyUyNTBBJTI1MjAlMjUyMCUyNTIwJTI1MjAlMjUyMmlkJTI1MjIlMjUzQSUyNTIwNTU1JTI1MkMlMjUwQSUyNTIwJTI1MjAlMjUyMCUyNTIwJTI1MjJ0aXRsZSUyNTIyJTI1M0ElMjUyMCUyNTIydGVzdCUyNTIyJTI1MkMlMjUwQSUyNTIwJTI1MjAlMjUyMCUyNTIwJTI1MjJib2R5JTI1MjIlMjUzQSUyNTIwJTI1MjJ0ZXN0JTI1MjIlMjUwQSUyNTdE",
+        "headers": {}
+    }
+}
+</pre>
+                    </div>
+                    <div class="signa">StoryCLM.Http.Post(url, body, callback);</div>
+                    <div class="text">
+                        Отправляет запрос с методом POST.
+                    </div>
+                </div>
+                <div data-i="PutBtn">
+                    <div class="request">
+                        <pre>
+{
+    "Command": "httpput",
+    "Data": {
+        "url": "https://jsonplaceholder.typicode.com/posts/1",
+        "body": "JTI1N0IlMjUwQSUyNTIwJTI1MjAlMjUyMCUyNTIwJTI1MjJ1c2VySWQlMjUyMiUyNTNBJTI1MjA2NjYlMjUyQyUyNTBBJTI1MjAlMjUyMCUyNTIwJTI1MjAlMjUyMmlkJTI1MjIlMjUzQSUyNTIwNTU1JTI1MkMlMjUwQSUyNTIwJTI1MjAlMjUyMCUyNTIwJTI1MjJ0aXRsZSUyNTIyJTI1M0ElMjUyMCUyNTIydGVzdCUyNTIyJTI1MkMlMjUwQSUyNTIwJTI1MjAlMjUyMCUyNTIwJTI1MjJib2R5JTI1MjIlMjUzQSUyNTIwJTI1MjJ0ZXN0JTI1MjIlMjUwQSUyNTdE",
+        "headers": {
+            "Accept": "application/json",
+            "Accept-Language": "en-us,en;q=0.5",
+            "Accept-Charset": "utf-8",
+            "Content-Type": "application/json"
+        }
+    }
+}
+</pre>
+                    </div>
+                    <div class="signa">StoryCLM.Http.Put(url, body, headers, callback);</div>
+                    <div class="text">
+                        Отправляет запрос с методом PUT.
+                    </div>
+                </div>
+                <div data-i="Put1Btn">
+                    <div class="request">
+                        <pre>
+{
+    "Command": "httpput",
+    "Data": {
+        "url": "https://jsonplaceholder.typicode.com/posts/1",
+        "body": "JTI1N0IlMjUwQSUyNTIwJTI1MjAlMjUyMCUyNTIwJTI1MjJ1c2VySWQlMjUyMiUyNTNBJTI1MjA2NjYlMjUyQyUyNTBBJTI1MjAlMjUyMCUyNTIwJTI1MjAlMjUyMmlkJTI1MjIlMjUzQSUyNTIwNTU1JTI1MkMlMjUwQSUyNTIwJTI1MjAlMjUyMCUyNTIwJTI1MjJ0aXRsZSUyNTIyJTI1M0ElMjUyMCUyNTIydGVzdCUyNTIyJTI1MkMlMjUwQSUyNTIwJTI1MjAlMjUyMCUyNTIwJTI1MjJib2R5JTI1MjIlMjUzQSUyNTIwJTI1MjJ0ZXN0JTI1MjIlMjUwQSUyNTdE",
+        "headers": {}
+    }
+}
+</pre>
+                    </div>
+                    <div class="signa">StoryCLM.Http.Put(url, body, callback);</div>
+                    <div class="text">
+                        Отправляет запрос с методом PUT.
+                    </div>
+                </div>
+                <div data-i="GetBtn">
+                    <div class="request">
+                        <pre>
+{
+    "Command": "httpget",
+    "Data": {
+        "url": "https://jsonplaceholder.typicode.com/posts/1",
+        "headers": {
+            "Accept": "application/json",
+            "Accept-Language": "en-us,en;q=0.5",
+            "Accept-Charset": "utf-8",
+            "Content-Type": "application/json"
+        }
+    }
+}
+</pre>
+                    </div>
+                    <div class="signa">StoryCLM.Http.Get(url, headers, callback);</div>
+                    <div class="text">
+                        Отправляет запрос с методом GET.
+                    </div>
+                </div>
+                <div data-i="Get1Btn">
+                    <div class="request">
+                        <pre>
+{
+    "Command": "httpget",
+    "Data": {
+        "url": "https://jsonplaceholder.typicode.com/posts/1"
+    }
+}
+</pre>
+                    </div>
+                    <div class="signa">StoryCLM.Http.Get(url, callback);</div>
+                    <div class="text">
+                        Отправляет запрос с методом GET.
+                    </div>
+                </div>
+                <div data-i="DeleteBtn">
+                    <div class="request">
+                        <pre>
+{
+    "Command": "httpdelete",
+    "Data": {
+        "url": "https://jsonplaceholder.typicode.com/posts/1",
+        "headers": {
+            "Accept": "application/json",
+            "Accept-Language": "en-us,en;q=0.5",
+            "Accept-Charset": "utf-8",
+            "Content-Type": "application/json"
+        }
+    }
+}
+</pre>
+                    </div>
+                    <div class="signa">StoryCLM.Http.Delete(url, headers, callback);</div>
+                    <div class="text">
+                        Отправляет запрос с методом DELETE.
+                    </div>
+                </div>
+                <div data-i="Delete1Btn">
+                    <div class="request">
+                        <pre>
+{
+    "Command": "httpdelete",
+    "Data": {
+        "url": "https://jsonplaceholder.typicode.com/posts/1"
+    }
+}
+</pre>
+                    </div>
+                    <div class="signa">StoryCLM.Http.Delete(url, callback);</div>
+                    <div class="text">
+                        Отправляет запрос с методом DELETE.
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-9">
+                <p class="text-primary">
+                    StoryCLM -> HTTP
+                </p>
+                <input type="text" id="signa" class="form-control">
+                <div class="jumbotron" id="text"></div>
+                <ul class="nav nav-tabs" role="tablist">
+                    <li role="presentation" class="active"><a href="#response" aria-controls="response" role="tab" data-toggle="tab">Response</a></li>
+                    <li role="presentation"><a href="#request" aria-controls="profile" role="tab" data-toggle="tab">Request</a></li>
+                    <li role="presentation"><a href="#responsebody" aria-controls="profile" role="tab" data-toggle="tab">Response Body</a></li>
+                </ul>
+                <div class="tab-content">
+                    <div role="tabpanel" class="tab-pane active" id="response"></div>
+                    <div role="tabpanel" class="tab-pane" id="request"></div>
+                    <div role="tabpanel" class="tab-pane" id="responsebody"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script src="js/jquery-2.1.1.min.js"></script>
+    <script src="js/bootstrap.js"></script>
+    <script src="js/main.js?v=25B7BCB86B5340C8BD423FD7BAB24AF8"></script>
+    <script src="js/storyclm-2.0.1.js"></script>
+    <script>
+
+        function utf8_to_b64(str) {
+            return window.btoa(str);
+        }
+
+        $(function () {
+            $(".list-group a").on(clickEvent, function () {
+
+                var getUrl = "https://jsonplaceholder.typicode.com/posts/1";
+                var deleteUrl = "https://jsonplaceholder.typicode.com/posts/1";
+                var postUrl = "https://jsonplaceholder.typicode.com/posts";
+                var putUrl = "https://jsonplaceholder.typicode.com/posts/1";
+
+                var entry = {
+                    userId: 666,
+                    id: 555,
+                    title: "test",
+                    body: "test"
+                };
+                
+                var body = utf8_to_b64(JSON.stringify(entry, null, 4));
+
+                var headers = {
+                    "Accept": "application/json",
+                    "Accept-Language": "en-us,en;q=0.5",
+                    "Accept-Charset": "utf-8",
+                    "Content-Type": "application/json"
+                };
+
+                $("#response").text("");
+                switch (this.id) {
+                    case "Post":
+                        {
+                            StoryCLM.Http.Post(postUrl, body, headers, function (message) {
+                                setJson("response", message);
+                            });
+                            loadDocData("PostBtn");
+                            return false;
+                        }
+                    case "Post1":
+                        {
+                            StoryCLM.Http.Post(postUrl, body, function (message) {
+                                setJson("response", message);
+                            });
+                            loadDocData("Post1Btn");
+                            return false;
+                        }
+                    case "Put":
+                        {
+                            StoryCLM.Http.Put(putUrl, body, headers, function (message) {
+                                setJson("response", message);
+                            });
+                            loadDocData("PutBtn");
+                            return false;
+                        }
+                    case "Put1":
+                        {
+                            StoryCLM.Http.Put(putUrl, body, function (message) {
+                                setJson("response", message);
+                            });
+                            loadDocData("Put1Btn");
+                            return false;
+                        }
+                    case "Get":
+                        {
+                            StoryCLM.Http.Get(getUrl, headers, function (message) {
+                                setJson("response", message);
+                            });
+                            loadDocData("GetBtn");
+                            return false;
+                        }
+                    case "Get1":
+                        {
+                            StoryCLM.Http.Get(getUrl, function (message) {
+                                setJson("response", message);
+                            });
+                            loadDocData("Get1Btn");
+                            return false;
+                        }
+                    case "Delete":
+                        {
+                            StoryCLM.Http.Delete(deleteUrl, headers, function (message) {
+                                setJson("response", message);
+                            });
+                            loadDocData("DeleteBtn");
+                            return false;
+                        }
+                    case "Delete1":
+                        {
+                            StoryCLM.Http.Delete(deleteUrl, function (message) {
+                                setJson("response", message);
+                            });
+                            loadDocData("Delete1Btn");
+                            return false;
+                        }
+                    default:
+                        {
+                            return false;
+                        }
+                }
+            });
+        });
+    </script>
+</body>
+
+</html>

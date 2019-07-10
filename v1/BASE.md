@@ -124,6 +124,44 @@ StoryCLM.System.GetInfo(callback);
 }
 ```
 --------------------------
+### Method: StoryCLM.CustomEvents.Set
+
+```sh
+StoryCLM.CustomEvents.Set(Key, value, callback);
+```
+**Описание:**
+
+Записывает кастомные данные и отправляет на сервер. Данные в формате key/value.
+
+**Параметры:**
+
+* Key - ключ ("KEY").
+* Value - значени. Значение должно быть типом string ("test").
+* callback - функция, в которую будет передан результат выполнения операции.
+
+**Запрос:**
+```sh
+{
+    "Command": "setCustomEvent",
+    "Data": {
+        "key": "KEY",
+        "value": "test"
+    }
+}
+```
+
+**Ответ:**
+```sh
+{
+   "status":"Success",
+   "errorCode":200,
+   "errorMessage":"",
+   "data":{
+      "KEY":"test"
+   }
+}
+```
+--------------------------
 ### Method: StoryCLM.User.Get
 
 ```sh
@@ -152,8 +190,9 @@ StoryCLM.User.Get(callback);
    "errorCode":200,
    "errorMessage":"",
    "data":{
-      "id":"9769589A-E8B4-47DE-AB91-ADD1CBE2AE37",
-      "username":"rsk-k161@ya.ru"
+      "email":"rsk-k161@ya.ru",
+      "name":"Владимир Клюев",
+      "location":"Ставрополь"
    }
 }
 ```
@@ -181,14 +220,5 @@ StoryCLM.Geolocation.Get(callback);
 
 **Ответ:**
 ```sh
-{
-   "status": "no error",
-   "errorCode": 200,
-   "errorMessage": "",
-   "data": {
-       "longtitude": "41.8989",
-       "address": "Ставрополь,Ставропольский край,Россия,355000",
-       "latitude": "45.01741"
-   }
-}
+
 ```

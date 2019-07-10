@@ -1,0 +1,185 @@
+﻿<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="format-detection" content="telephone=no">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="clm-swipe-next" content="">
+    <meta name="clm-swipe-previous" content="">
+    <meta name="clm" content="">
+    <title>Custom Event</title>
+    <link href="css/main.css" rel="stylesheet" />
+    <link href="css/bootstrap.css" rel="stylesheet">
+    <link href="css/template.css" rel="stylesheet">
+    <style>
+        .list-group-item {
+            padding: 6px 10px;
+        }
+    </style>
+</head>
+<body>
+    <div id="background">
+        <div class="row" style="margin:5px;">
+            <div class="col-md-3">
+                <a class="btn btn-default" style="width:100%;" href="index.html">Назад</a><br /><br />
+                <div class="list-group">
+                    <a href="#" id="set" class="list-group-item">Set (key, value)</a>
+                    <a href="#" id="get" class="list-group-item">Get (key)</a>
+                    <a href="#" id="delete" class="list-group-item">Delete (key)</a>
+                    <a href="#" id="getobject" class="list-group-item">GetObject (sessionId, contentId)</a>
+                </div>
+            </div>
+
+
+            <div id="def" style="display:none;">
+                <div data-i="set">
+                    <div class="request">
+                        <pre>
+{
+    "Command": "setCustomEvent",
+    "Data": {
+        "key": "name",
+        "value": "Vova"
+    }
+}
+</pre>
+                    </div>
+                    <div class="signa">StoryCLM.CustomEvents.Set(key, value, callback);</div>
+                    <div class="text">
+                        Запись кастомного события. Если кастомное событие для этой презентации и сессии существует, то оно перезаписывается. Команда с ответом не требуется.
+                    </div>
+                </div>
+            </div>
+
+
+            <div id="def" style="display:none;">
+                <div data-i="get">
+                    <div class="request">
+                        <pre>
+{
+    "Command": "getCustomEventByKey",
+    "Data": {
+        "key": "name"
+    }
+}
+</pre>
+                    </div>
+                    <div class="signa">StoryCLM.CustomEvents.Get(key, callback);</div>
+                    <div class="text">
+                        Получение кастомного события по ключу для текущей сессии.
+                    </div>
+                </div>
+            </div>
+
+
+            <div id="def" style="display:none;">
+                <div data-i="delete">
+                    <div class="request">
+                        <pre>
+{
+    "Command": "deleteCustomEventByKey",
+    "Data": {
+        "key": "name"
+    }
+}
+</pre>
+                    </div>
+                    <div class="signa">StoryCLM.CustomEvents.Delete(key, callback);</div>
+                    <div class="text">
+                        Удаление кастомного события по ключу для текущей сессии.
+                    </div>
+                </div>
+            </div>
+
+
+            <div id="def" style="display:none;">
+                <div data-i="getobject">
+                    <div class="request">
+                        <pre>
+{
+    "Command": "getCustomEventsObject",
+    "Data": {
+        "sessionId": "AB7B3F4914FC413E914EE39214A31718",
+        "contentId": "2598"
+    }
+}
+</pre>
+                    </div>
+                    <div class="signa">StoryCLM.CustomEvents.GetObject(sessionId, contentId, callback);</div>
+                    <div class="text">
+                        Получение кастомных событий в виде объекта для сессии и презентации, если сессии не указана, то возвращает для текущей сессии, если презентация не указана, то возвращает для текущей презентации.
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-9">
+                <p class="text-primary">
+                    StoryCLM -> Custom Events
+                </p>
+                <input type="text" id="signa" class="form-control">
+                <div class="jumbotron" id="text"></div>
+                <ul class="nav nav-tabs" role="tablist">
+                    <li role="presentation" class="active"><a href="#response" aria-controls="response" role="tab" data-toggle="tab">Response</a></li>
+                    <li role="presentation"><a href="#request" aria-controls="profile" role="tab" data-toggle="tab">Request</a></li>
+                </ul>
+                <div class="tab-content">
+                    <div role="tabpanel" class="tab-pane active" id="response"></div>
+                    <div role="tabpanel" class="tab-pane" id="request"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script src="js/jquery-2.1.1.min.js"></script>
+    <script src="js/bootstrap.js"></script>
+    <script src="js/main.js"></script>
+    <script src="js/storyclm-2.0.1.js"></script>
+    <script>
+        $(function () {
+            $(".list-group a").on(clickEvent, function () {
+                $("#response").text("");
+                switch (this.id) {
+                    case "set":
+                        {
+                            StoryCLM.CustomEvents.Set("name", "Vova", function (message) {
+                                setJson("response", message);
+                            });
+                            loadDocData("set");
+                            return false;
+                        }
+                    case "get":
+                        {
+                            StoryCLM.CustomEvents.Get("name", function (message) {
+                                setJson("response", message);
+                            });
+                            loadDocData("get");
+                            return false;
+                        }
+                    case "delete":
+                        {
+                            StoryCLM.CustomEvents.Delete("name", function (message) {
+                                setJson("response", message);
+                            });
+                            loadDocData("delete");
+                            return false;
+                        }
+                    case "getobject":
+                        {
+                            StoryCLM.CustomEvents.GetObject("AB7B3F4914FC413E914EE39214A31718", "2598", function (message) {
+                                setJson("response", message);
+                            });
+                            loadDocData("getobject");
+                            return false;
+                        }
+                    default:
+                        {
+                            return false;
+                        }
+                }
+            });
+        });
+    </script>
+</body>
+
+</html>

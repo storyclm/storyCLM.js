@@ -1,0 +1,142 @@
+﻿<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="format-detection" content="telephone=no">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="clm-swipe-next" content="">
+    <meta name="clm-swipe-previous" content="">
+    <meta name="clm" content="">
+    <title>Map</title>
+    <link href="css/main.css" rel="stylesheet" />
+    <link href="css/bootstrap.css" rel="stylesheet">
+    <link href="css/template.css" rel="stylesheet">
+    <style>
+        .list-group-item {
+        padding: 6px 10px;
+        }
+    </style>
+</head>
+<body>
+    <div id="background">
+        <div class="row" style="margin:5px;">
+            <div class="col-md-3">
+                <a class="btn btn-default" style="width:100%;" href="index.html">Назад</a><br /><br />
+                <div class="list-group">
+                    <a href="#" id="HideMapBtn" class="list-group-item">Hide Map Button</a>
+                    <a href="#" id="ShowMapBtn" class="list-group-item">Show Map Button</a>
+                    <a href="#" id="GetMap" class="list-group-item">Get Map</a>
+                </div>
+            </div>
+
+            <div id="def" style="display:none;">
+
+                <div data-i="HideMapBtn">
+                    <div class="request">
+                        <pre>
+{
+    "Command": "hideMapBtn",
+    "Data": {}
+}
+</pre>
+                    </div>
+                    <div class="signa">StoryCLM.Map.HideMapBtn(callback);</div>
+                    <div class="text">
+                        Отключает контролл "Системная карта" на слайде. Карту можно будет открыть через API.
+                    </div>
+                </div>
+
+                <div data-i="ShowMapBtn">
+                    <div class="request">
+                        <pre>
+{
+    "Command": "showMapBtn",
+    "Data": {}
+}
+</pre>
+                    </div>
+                    <div class="signa">StoryCLM.Map.ShowMapBtn(callback);</div>
+                    <div class="text">
+                        Включает контролл "Системная карта" на слайде. Карту можно будет открыть через API.
+                    </div>
+                </div>
+
+                <div data-i="GetMap">
+                    <div class="request">
+                        <pre>
+{
+    "Command": "getMap",
+    "Data": {}
+}
+</pre>
+                    </div>
+                    <div class="signa">StoryCLM.Map.GetMap(callback);</div>
+                    <div class="text">
+                        Получает карту презентации (если карта включена).
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-9">
+                <p class="text-primary">
+                    StoryCLM -> Map
+                </p>
+                <input type="text" id="signa" class="form-control">
+                <div class="jumbotron" id="text"></div>
+                <ul class="nav nav-tabs" role="tablist">
+                    <li role="presentation" class="active"><a href="#response" aria-controls="response" role="tab" data-toggle="tab">Response</a></li>
+                    <li role="presentation"><a href="#request" aria-controls="profile" role="tab" data-toggle="tab">Request</a></li>
+                </ul>
+                <div class="tab-content">
+                    <div role="tabpanel" class="tab-pane active" id="response"></div>
+                    <div role="tabpanel" class="tab-pane" id="request"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script src="js/jquery-2.1.1.min.js"></script>
+    <script src="js/bootstrap.js"></script>
+    <script src="js/main.js"></script>
+    <script src="js/storyclm-2.0.1.js"></script>
+    <script>
+        $(function () {
+            $(".list-group a").on(clickEvent, function () {
+                $("#response").text("");
+                switch (this.id) {
+                    case "HideMapBtn":
+                        {
+                            StoryCLM.Map.HideMapBtn(function (message) {
+                                setJson("response", message);
+                            });
+                            loadDocData("HideMapBtn");
+                            return false;
+                        }
+                    case "ShowMapBtn":
+                        {
+                            StoryCLM.Map.ShowMapBtn(function (message) {
+                                setJson("response", message);
+                            });
+                            loadDocData("ShowMapBtn");
+                            return false;
+                        }
+                    case "GetMap":
+                        {
+                            StoryCLM.Map.GetMap(function (message) {
+                                setJson("response", message);
+                            });
+                            loadDocData("GetMap");
+                            return false;
+                        }
+                    default:
+                        {
+                            return false;
+                        }
+                }
+            });
+        });
+    </script>
+</body>
+
+</html>
