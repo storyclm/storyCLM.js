@@ -1,0 +1,169 @@
+﻿<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="format-detection" content="telephone=no">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="clm-swipe-next" content="">
+    <meta name="clm-swipe-previous" content="">
+    <meta name="clm" content="">
+    <title>Sessions</title>
+    <link href="css/main.css" rel="stylesheet" />
+    <link href="css/bootstrap.css" rel="stylesheet">
+    <link href="css/template.css" rel="stylesheet">
+    <style>
+        .list-group-item {
+            padding: 6px 10px;
+        }
+    </style>
+</head>
+<body>
+    <div id="background">
+        <div class="row" style="margin:5px;">
+            <div class="col-md-3">
+                <a class="btn btn-default" style="width:100%;" href="index.html">Назад</a><br /><br />
+                <div class="list-group">
+                    <a href="#" id="Get" class="list-group-item">Get ()</a>
+                    <a href="#" id="GetById" class="list-group-item">GetById (id)</a>
+                    <a href="#" id="GetCurrent" class="list-group-item">GetCurrent</a>
+                    <a href="#" id="Complete" class="list-group-item">Complete</a>
+                </div>
+            </div>
+            <div id="def" style="display:none;">
+                <div data-i="Get">
+                    <div class="request">
+<pre>
+{
+    "Command": "getSessions",
+    "Data": {}
+}
+</pre>
+                    </div>
+                    <div class="signa">StoryCLM.Sessions.Get(callback);</div>
+                    <div class="text">
+                        Получает список сессий для текущего пользователя.
+                    </div>
+                </div>
+            </div>
+            <div id="def" style="display:none;">
+                <div data-i="GetById">
+                    <div class="request">
+<pre>
+{
+    "Command": "getSessionById",
+    "Data": {
+        "id": "AB7B3F4914FC413E914EE39214A31718"
+    }
+}
+</pre>
+                    </div>
+                    <div class="signa">StoryCLM.Sessions.GetById(sessionId, callback);</div>
+                    <div class="text">
+                        Получает сессию по идентификатору.
+                    </div>
+                </div>
+            </div>
+            <div id="def" style="display:none;">
+                <div data-i="GetCurrent">
+                    <div class="request">
+<pre>
+{
+    "Command": "getCurrentSession",
+    "Data": { }
+}
+</pre>
+                    </div>
+                    <div class="signa">StoryCLM.Sessions.GetCurrent(callback);</div>
+                    <div class="text">
+                        Получает текущую сессию.
+                    </div>
+                </div>
+            </div>
+            <div id="def" style="display:none;">
+                <div data-i="Complete">
+                    <div class="request">
+                        <pre>
+{
+    "Command": "setSessionComplete",
+    "Data": {}
+}
+</pre>
+                    </div>
+                    <div class="signa">StoryCLM.Session.SetComplete();</div>
+                    <div class="text">
+                        Указывает что в текущем сеансе презентация полностью показана или были пройдены все ключиывые слайды.
+                        Зависит от бизнес логики презентации. Выставляется разработчиками.
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-9">
+                <p class="text-primary">
+                    StoryCLM -> Sessions
+                </p>
+                <input type="text" id="signa" class="form-control">
+                <div class="jumbotron" id="text"></div>
+                <ul class="nav nav-tabs" role="tablist">
+                    <li role="presentation" class="active"><a href="#response" aria-controls="response" role="tab" data-toggle="tab">Response</a></li>
+                    <li role="presentation"><a href="#request" aria-controls="profile" role="tab" data-toggle="tab">Request</a></li>
+                </ul>
+                <div class="tab-content">
+                    <div role="tabpanel" class="tab-pane active" id="response"></div>
+                    <div role="tabpanel" class="tab-pane" id="request"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script src="js/jquery-2.1.1.min.js"></script>
+    <script src="js/bootstrap.js"></script>
+    <script src="js/main.js"></script>
+    <script src="js/storyclm-2.0.1.js"></script>
+    <script>
+        $(function () {
+            $(".list-group a").on(clickEvent, function () {
+                $("#response").text("");
+                switch (this.id) {
+                    case "Get":
+                        {
+                            StoryCLM.Sessions.Get(function (message) {
+                                setJson("response", message);
+                            });
+                            loadDocData("Get");
+                            return false;
+                        }
+                    case "GetById":
+                        {
+                            StoryCLM.Sessions.Get(function (message) {
+                                StoryCLM.Sessions.GetById(message.data[0].id, function (m) {
+                                    setJson("response", m);
+                                });
+                            });
+                            loadDocData("GetById");
+                            return false;
+                        }
+                    case "GetCurrent":
+                        {
+                            StoryCLM.Sessions.GetCurrent(function (message) {
+                                setJson("response", message);
+                            });
+                            loadDocData("GetCurrent");
+                            return false;
+                        }
+                    case "Complete":
+                        {
+                            StoryCLM.Sessions.SetComplete();
+                            loadDocData("Complete");
+                            return false;
+                        }
+                    default:
+                        {
+                            return false;
+                        }
+                }
+            });
+        });
+    </script>
+</body>
+
+</html>

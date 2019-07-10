@@ -1,0 +1,222 @@
+﻿<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="format-detection" content="telephone=no">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="clm-swipe-next" content="">
+    <meta name="clm-swipe-previous" content="">
+    <meta name="clm" content="">
+    <title>Mediafiles</title>
+    <link href="css/main.css" rel="stylesheet" />
+    <link href="css/bootstrap.css" rel="stylesheet">
+    <link href="css/template.css" rel="stylesheet">
+    <style>
+        .list-group-item {
+        padding: 6px 10px;
+        }
+    </style>
+</head>
+<body>
+    <div id="background">
+        <div class="row" style="margin:5px;">
+            <div class="col-md-3">
+                <a class="btn btn-default" style="width:100%;" href="index.html">Назад</a><br /><br />
+                <div class="list-group">
+                    <a href="#" id="HideMediaLibraryBtn" class="list-group-item">Hide Media Library Button</a>
+                    <a href="#" id="ShowMediaLibraryBtn" class="list-group-item">Show Media Library Button</a>
+                    <a href="#" id="OpenMediaLibrary" class="list-group-item">Open MediaLibrary</a>
+                    <a href="#" id="GetMediaFiles" class="list-group-item">Get Mediafiles</a>
+                    <a href="#" id="OpenMediaFile" class="list-group-item">Open Mediafile (name, id)</a>
+                    <a href="#" id="OpenMediaFile1" class="list-group-item">Open Mediafile (name)</a>
+                </div>
+            </div>
+            <div id="def" style="display:none;">
+
+                <div data-i="HideMediaLibraryBtn">
+                    <div class="request">
+                        <pre>
+{
+    "Command": "hideMediaLibraryBtn",
+    "Data": {}
+}
+</pre>
+                    </div>
+                    <div class="signa">StoryCLM.Mediafiles.HideMediaLibraryBtn(callback);</div>
+                    <div class="text">
+                        Скрывает с экрана кнопку "Библиотека медиафайлов" на слайде.
+                    </div>
+                </div>
+
+                <div data-i="ShowMediaLibraryBtn">
+                    <div class="request">
+                        <pre>
+{
+    "Command": "showMediaLibraryBtn",
+    "Data": {}
+}
+</pre>
+                    </div>
+                    <div class="signa">StoryCLM.Mediafiles.ShowMediaLibraryBtn(callback);</div>
+                    <div class="text">
+                        Показывает кнопку "Библиотека медиафайлов" на слайде.
+                    </div>
+                </div>
+
+                <div data-i="OpenMediaLibrary">
+                    <div class="request">
+                        <pre>
+{
+    "Command": "openMediaLibrary ",
+    "Data": {}
+}
+</pre>
+                    </div>
+                    <div class="signa">StoryCLM.Mediafiles.OpenMediaLibrary(callback);</div>
+                    <div class="text">
+                        Открывает системный контроллер "Медиафайлы".
+                    </div>
+                </div>
+
+                <div data-i="GetMediaFiles">
+                    <div class="request">
+                        <pre>
+{
+    "Command": "getMediaFiles",
+    "Data": {}
+}
+</pre>
+                    </div>
+                    <div class="signa">StoryCLM.Mediafiles.GetMediaFiles(callback);</div>
+                    <div class="text">
+                        Получить список медиафайлов текущей презентации.
+                    </div>
+                </div>
+            </div>
+
+            <div id="def" style="display:none;">
+                <div data-i="OpenMediaFile">
+                    <div class="request">
+                        <pre>
+{
+    "Command": "openMediaFile",
+    "Data": {
+        "id": 5,
+        "name": "mediafile1.pdf"
+    }
+}
+</pre>
+                    </div>
+                    <div class="signa">StoryCLM.Mediafiles.OpenMediaFile("mediafile1.pdf", 5, callback);</div>
+                    <div class="text">
+                        Открыть медиафайл по имени и иднедификатору презентации.
+                    </div>
+                </div>
+            </div>
+
+            <div id="def" style="display:none;">
+                <div data-i="OpenMediaFile1">
+                    <div class="request">
+                        <pre>
+{
+    "Command": "openMediaFile",
+    "Data": {
+        "id": -1,
+        "name": "mediafile1.pdf"
+    }
+}
+</pre>
+                    </div>
+                    <div class="signa">StoryCLM.Mediafiles.OpenMediaFile("mediafile1.pdf", callback);</div>
+                    <div class="text">
+                        Открыть медиафайл по имени в текущей презентации.
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-9">
+                <p class="text-primary">
+                    StoryCLM -> Mediafiles
+                </p>
+                <input type="text" id="signa" class="form-control">
+                <div class="jumbotron" id="text"></div>
+                <ul class="nav nav-tabs" role="tablist">
+                    <li role="presentation" class="active"><a href="#response" aria-controls="response" role="tab" data-toggle="tab">Response</a></li>
+                    <li role="presentation"><a href="#request" aria-controls="profile" role="tab" data-toggle="tab">Request</a></li>
+                </ul>
+                <div class="tab-content">
+                    <div role="tabpanel" class="tab-pane active" id="response"></div>
+                    <div role="tabpanel" class="tab-pane" id="request"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script src="js/jquery-2.1.1.min.js"></script>
+    <script src="js/bootstrap.js"></script>
+    <script src="js/main.js"></script>
+    <script src="js/storyclm-2.0.1.js"></script>
+    <script>
+        $(function () {
+            $(".list-group a").on(clickEvent, function () {
+                $("#response").text("");
+                switch (this.id) {
+                    case "HideMediaLibraryBtn":
+                        {
+                            StoryCLM.Mediafiles.HideMediaLibraryBtn(function (message) {
+                                setJson("response", message);
+                            });
+                            loadDocData("HideMediaLibraryBtn");
+                            return false;
+                        }
+                    case "ShowMediaLibraryBtn":
+                        {
+                            StoryCLM.Mediafiles.ShowMediaLibraryBtn(function (message) {
+                                setJson("response", message);
+                            });
+                            loadDocData("ShowMediaLibraryBtn");
+                            return false;
+                        }
+                    case "OpenMediaLibrary":
+                        {
+                            StoryCLM.Mediafiles.OpenMediaLibrary(function (message) {
+                                setJson("response", message);
+                            });
+                            loadDocData("OpenMediaLibrary");
+                            return false;
+                        }
+                    case "GetMediaFiles":
+                        {
+                            StoryCLM.Mediafiles.GetMediaFiles(function (message) {
+                                setJson("response", message);
+                            });
+                            loadDocData("GetMediaFiles");
+                            return false;
+                        }
+                    case "OpenMediaFile":
+                        {
+                            StoryCLM.Mediafiles.OpenMediaFile("mediafile1.pdf", 5, function (message) {
+                                setJson("response", message);
+                            });
+                            loadDocData("OpenMediaFile");
+                            return false;
+                        }
+                    case "OpenMediaFile1":
+                        {
+                            StoryCLM.Mediafiles.OpenMediaFile("mediafile1.pdf", function (message) {
+                                setJson("response", message);
+                            });
+                            loadDocData("OpenMediaFile1");
+                            return false;
+                        }
+                    default:
+                        {
+                            return false;
+                        }
+                }
+            });
+        });
+    </script>
+</body>
+
+</html>

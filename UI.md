@@ -1,13 +1,13 @@
 ## UI
 
-### Method: StoryCLM.UI.OpenMediaLibrary
+### Method: StoryCLM.UI.HideCloseBtn
 
 ```sh
- StoryCLM.UI.OpenMediaLibrary(callback);
+ StoryCLM.UI.HideCloseBtn(callback);
 ```
 **Описание:**
 
-Открывает системный контроллер "Медиафайлы".
+Скрывает системную кнопку закрытия презентации.
 
 **Параметры:**
 
@@ -16,64 +16,19 @@
 **Запрос:**
 ```sh
 {
-    "Command": "openMediaLibrary ",
+    "Command": "hideCloseBtn",
     "Data": {}
 }
 ```
 
 **Ответ:**
-```sh
-
-```
-### Method: StoryCLM.UI.HideMediaLibraryBtn
-
-```sh
- StoryCLM.UI.HideMediaLibraryBtn(callback);
-```
-**Описание:**
-
-Скрывает с экрана кнопку "Библиотека медиафайлов" на слайде.
-
-**Параметры:**
-
-* callback - функция, в которую будет передан результат выполнения операции.
-
-**Запрос:**
 ```sh
 {
-    "Command": "hideMediaLibraryBtn",
-    "Data": {}
+   "status":"Success",
+   "errorCode":200,
+   "errorMessage":"",
+   "data":{}
 }
-```
-
-**Ответ:**
-```sh
-
-```
-### Method: StoryCLM.UI.HideMapBtn
-
-```sh
- StoryCLM.UI.HideMapBtn(callback);
-```
-**Описание:**
-
-Отключает контролл "Системная карта" на слайде. Карту можно будет открыть через API.
-
-**Параметры:**
-
-* callback - функция, в которую будет передан результат выполнения операции.
-
-**Запрос:**
-```sh
-{
-    "Command": "hideMapBtn",
-    "Data": {}
-}
-```
-
-**Ответ:**
-```sh
-
 ```
 ### Method: StoryCLM.UI.HideSystemBtns
 
@@ -98,30 +53,10 @@
 
 **Ответ:**
 ```sh
-
-```
-### Method: StoryCLM.UI.OpenMediaLibrary
-
-```sh
- StoryCLM.UI.OpenMediaLibrary(callback);
-```
-**Описание:**
-
-Открывает системный контроллер "Медиафайлы".
-
-**Параметры:**
-
-* callback - функция, в которую будет передан результат выполнения операции.
-
-**Запрос:**
-```sh
 {
-    "Command": "openMediaLibrary ",
-    "Data": {}
+   "status":"Success",
+   "errorCode":200,
+   "errorMessage":"",
+   "data":{}
 }
-```
-
-**Ответ:**
-```sh
-
 ```

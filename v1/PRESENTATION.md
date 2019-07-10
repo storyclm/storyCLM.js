@@ -181,6 +181,30 @@ StoryCLM.Presentation.Close(2);
     }
 }
 ```
+### Method: StoryCLM.Presentation.SetComplete
+
+```sh
+StoryCLM.Presentation.SetComplete();
+```
+**Описание:**
+
+Указывает что в текущем сеансе презентация полность показана или были пройдены все ключиывые слайды. Зависит от бизнес логики презентации. Выставляется разработчиками.
+
+**Параметры:**
+
+
+**Запрос:**
+```sh
+{
+    "Command": "setPresentationComplete",
+    "Data": {}
+}
+```
+
+**Ответ:**
+```sh
+{}
+```
 ### Method: StoryCLM.Presentation.GetInfo
 
 ```sh
@@ -276,14 +300,7 @@ StoryCLM.Presentation.Close(2);
 
 **Ответ:**
 ```sh
-{
-   "status":"Success",
-   "errorCode":200,
-   "errorMessage":"",
-   "data":{
-      "slide":"slide1.html"
-   }
-}
+
 ```
 ### Method:  StoryCLM.Presentation.GetBackForwardList
 
@@ -314,7 +331,42 @@ StoryCLM.Presentation.Close(2);
    "errorMessage":"",
    "data":[
       "index.html",
-      "slide1.html"
+      "index.html"
+   ]
+}
+```
+### Method:  StoryCLM.Presentation.GetMediaFiles
+
+```sh
+ StoryCLM.Presentation.GetMediaFiles(callback);
+```
+**Описание:**
+
+Получить список медиафайлов текущей презентации.
+
+**Параметры:**
+
+* callback - функция, в которую будет передан результат выполнения операции.
+
+**Запрос:**
+```sh
+{
+    "Command": "getMediaFiles",
+    "Data": {}
+}
+```
+
+**Ответ:**
+```sh
+{
+   "status":"Success",
+   "errorCode":200,
+   "errorMessage":"",
+   "data":[
+      {
+         "title":"mediafile1.pdf",
+         "fileName":"mediafile1.pdf"
+      }
    ]
 }
 ```
@@ -357,6 +409,81 @@ StoryCLM.Presentation.Close(2);
    ]
 }
 ```
+### Method: StoryCLM.Presentation.OpenMediaFile(name, id)
+
+```sh
+ StoryCLM.Presentation.OpenMediaFile(name, id, callback);
+```
+**Описание:**
+
+Открыть медиафайл по имени и иднедификатору презентации.
+
+**Параметры:**
+
+* name - название медиафайла ("mediafile1.pdf").
+* id - идентификатор презентации в которой этот медиафайл находится. Презентация должжна быть доступна (5).
+* callback - функция, в которую будет передан результат выполнения операции.
+
+**Запрос:**
+```sh
+{
+    "Command": "openMediaFile",
+    "Data": {
+        "id": 5,
+        "name": "mediafile1.pdf"
+    }
+}
+```
+
+**Ответ:**
+```sh
+{
+   "status":"Success",
+   "errorCode":200,
+   "errorMessage":"",
+   "data":{
+      "name":"mediafile1.pdf",
+      "status":"close"
+   }
+}
+```
+### Method: StoryCLM.Presentation.OpenMediaFile(name)
+
+```sh
+ StoryCLM.Presentation.OpenMediaFile(name, callback);
+```
+**Описание:**
+
+Открыть медиафайл по имени в текущей презентации.
+
+**Параметры:**
+
+* name - название медиафайла ("mediafile1.pdf").
+* callback - функция, в которую будет передан результат выполнения операции.
+
+**Запрос:**
+```sh
+{
+    "Command": "openMediaFile",
+    "Data": {
+        "id": -1,
+        "name": "mediafile1.pdf"
+    }
+}
+```
+
+**Ответ:**
+```sh
+{
+   "status":"Success",
+   "errorCode":200,
+   "errorMessage":"",
+   "data":{
+      "name":"mediafile1.pdf",
+      "status":"close"
+   }
+}
+```
 ### Method: StoryCLM.Presentation.GetBackForwardPresList
 
 ```sh
@@ -380,17 +507,32 @@ StoryCLM.Presentation.Close(2);
 
 **Ответ:**
 ```sh
+
+```
+### Method: StoryCLM.Presentation.GetMap
+
+```sh
+ StoryCLM.Presentation.GetMap(callback);
+```
+**Описание:**
+
+Получает карту презентации (если карта включена).
+
+**Параметры:**
+
+* callback - функция, в которую будет передан результат выполнения операции.
+
+**Запрос:**
+```sh
 {
-   "status":"Success",
-   "errorCode":200,
-   "errorMessage":"",
-   "data":[
-      {
-         "name":"TestPresentation",
-         "presId":55
-      }
-   ]
+    "Command": "getMap",
+    "Data": {}
 }
+```
+
+**Ответ:**
+```sh
+
 ```
 ### Method: StoryCLM.Presentation.GetCurrentSlideName
 
@@ -420,7 +562,7 @@ StoryCLM.Presentation.Close(2);
    "errorCode":200,
    "errorMessage":"",
    "data":{
-      "slide":"index.html"
+      "slide":"presentation.html"
    }
 }
 ```
