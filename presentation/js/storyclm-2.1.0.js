@@ -1,5 +1,5 @@
 /*!
-* StoryCLM Library v2.0.1
+* StoryCLM Library v2.1.0
 * Copyright(c) 2019, Vladimir Klyuev, Breffi Inc. All rights reserved.
 * License: Licensed under The MIT License.
 */
