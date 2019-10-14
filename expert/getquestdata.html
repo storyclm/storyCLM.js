@@ -1,0 +1,80 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="format-detection" content="telephone=no">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="clm-swipe-next" content="">
+    <meta name="clm-swipe-previous" content="">
+    <meta name="clm" content="">
+    <title> Get Quest Data</title>
+    <link href="css/main.css" rel="stylesheet" />
+    <link href="css/bootstrap.css" rel="stylesheet">
+    <link href="css/template.css" rel="stylesheet">
+</head>
+<body>
+    <div id="background">
+        <div class="row" style="margin:5px;">
+            <div class="col-md-3">
+                <a class="btn btn-default" style="width:100%;" href="index.html">Назад</a><br /><br />
+                <div class="list-group">
+                    <a href="#" id="send" class="list-group-item">Send</a>
+                </div>
+            </div>
+            <div class="col-md-9">
+                <p class="text-primary">
+                    StoryCLM -> Get Quest Data
+                </p>
+                <ul class="nav nav-tabs" role="tablist">
+                    <li role="presentation" class="active"><a href="#request" aria-controls="profile" role="tab" data-toggle="tab">Request</a></li>
+                    <li role="presentation"><a href="#response" aria-controls="response" role="tab" data-toggle="tab">Response</a></li>
+                </ul>
+                <div class="tab-content">
+                    <div role="tabpanel" class="tab-pane active" id="request">
+                        <label style="margin-top: 15px;">Command name:</label>
+                        <input id="commandName" value="get" style="width:100%; border:solid 1px #56c7d6; margin: 5px 0; padding:3px;" />
+                        <label style="margin-top: 15px;">Key:</label>
+                        <input id="key" value="" style="width:100%; border:solid 1px #56c7d6; margin: 5px 0; padding:3px;" />
+                    </div>
+                    <div role="tabpanel" class="tab-pane" id="response" style="overflow:scroll; height:600px;">
+                       
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script src="js/jquery-2.1.1.min.js"></script>
+    <script src="js/bootstrap.js"></script>
+    <script src="js/main.js"></script>
+    <script src="js/storyclm-2.1.0.js"></script>
+    <script>
+        $(function () {
+            $(".list-group a").on(clickEvent, function () {
+                $("#response").text("");
+                switch (this.id) {
+                    case "send":
+                        {
+                            let command = $("#commandName").val();
+                            let data =
+                            {
+                                key: $("#key").val()
+                            };
+                            console.log(data);
+                            StoryCLM.SendCommand(command, data, function (message) {
+                                setJson("response", message);
+                            });
+                            return false;
+                        }
+                    default:
+                        {
+                            return false;
+                        }
+                }
+            });
+        });
+    </script>
+</body>
+
+</html>

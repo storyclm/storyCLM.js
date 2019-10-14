@@ -1,5 +1,5 @@
 /*!
-* StoryCLM Library v2.0.1
+* StoryCLM Library v2.2.0
 * Copyright(c) 2019, Vladimir Klyuev, Breffi Inc. All rights reserved.
 * License: Licensed under The MIT License.
 */
@@ -155,9 +155,19 @@ StoryCLM.Go = function (name, data, callback) {
     });
 };
 
+
+StoryCLM.SendCommand = function (command, data, callback) {
+    StoryCLMBridge.Invoke(command, data, function (data) {
+        if (typeof callback === "function")
+            callback(new StoryCLMApiMessage(data));
+    });
+};
+
+
 StoryCLM.GetNavigationData = function () {
     return window.StoryCLMNavigationData || {};
 };
+
 
 StoryCLM.System = (function () {
     function _getInfo(callback)
@@ -171,6 +181,7 @@ StoryCLM.System = (function () {
         GetInfo: _getInfo
     };
 })();
+
 
 StoryCLM.Presentation = (function () {
 
@@ -284,6 +295,7 @@ StoryCLM.Presentation = (function () {
     };
 })();
 
+
 StoryCLM.Mediafiles = (function () {
 
     function _getMediaFiles(callback) {
@@ -355,6 +367,7 @@ StoryCLM.Mediafiles = (function () {
     };
 })();
 
+
 StoryCLM.Map = (function () {
 
 
@@ -386,6 +399,7 @@ StoryCLM.Map = (function () {
     };
 })();
 
+
 StoryCLM.User = (function () {
 
     function _get(callback) {
@@ -398,6 +412,7 @@ StoryCLM.User = (function () {
         Get: _get
     };
 })();
+
 
 StoryCLM.Sessions = (function () {
 
@@ -438,6 +453,7 @@ StoryCLM.Sessions = (function () {
     };
 })();
 
+
 StoryCLM.Geolocation = (function () {
 
     function _get(callback) {
@@ -450,6 +466,7 @@ StoryCLM.Geolocation = (function () {
         Get: _get
     };
 })();
+
 
 StoryCLM.CustomEvents = (function () {
 
@@ -493,6 +510,80 @@ StoryCLM.CustomEvents = (function () {
     };
 })();
 
+
+StoryCLM.DeepLinking = {};
+
+
+StoryCLM.DeepLinking.Inbound = (function () {
+
+    function _getData(callback) {
+        StoryCLMBridge.Invoke("getDeepLinkingInboundData", {}, function (data) {
+            if (typeof callback === "function")
+                callback(new StoryCLMApiMessage(data));
+        });
+    }
+
+    return {
+        GetData: _getData
+    };
+
+})();
+
+
+StoryCLM.DeepLinking.Outbound = (function () {
+
+
+    function _getData(callback) {
+        StoryCLMBridge.Invoke("getDeepLinkingOutboundData", {}, function (data) {
+            if (typeof callback === "function")
+                callback(new StoryCLMApiMessage(data));
+        });
+    }
+
+    function _setScheme(scheme, callback) {
+        if (typeof scheme !== "string") return;
+        StoryCLMBridge.Invoke("setDeepLinkingOutboundScheme", { scheme: scheme }, function (data) {
+            if (typeof callback === "function")
+                callback(new StoryCLMApiMessage(data));
+        });
+    }
+
+    function _set(key, value, callback) {
+        if (typeof key !== "string") return;
+        StoryCLMBridge.Invoke("setDeepLinkingOutboundParameter", { key: key, value: value + "" }, function (data) {
+            if (typeof callback === "function")
+                callback(new StoryCLMApiMessage(data));
+        });
+    }
+
+    function _get(key, callback) {
+        if (typeof key !== "string") return;
+        StoryCLMBridge.Invoke("getDeepLinkingOutboundParameter", { key: key }, function (data) {
+            if (typeof callback === "function")
+                callback(new StoryCLMApiMessage(data));
+        });
+    }
+
+    function _delete(key, callback) {
+        if (typeof key !== "string") return;
+        StoryCLMBridge.Invoke("deleteDeepLinkingOutboundParameter", { key: key }, function (data) {
+            if (typeof callback === "function")
+                callback(new StoryCLMApiMessage(data));
+        });
+    }
+
+    return {
+        GetData: _getData,
+        SetScheme: _setScheme,
+        Set: _set,
+        Get: _get,
+        Delete: _delete,
+    };
+})();
+
+
+
+
 StoryCLM.UI = (function () {
 
     function _hideCloseBtn() {
@@ -524,6 +615,7 @@ StoryCLM.UI = (function () {
     };
 })();
 
+
 function TablesQuery() {
     if (this instanceof TablesQuery) {
 
@@ -536,6 +628,7 @@ function TablesQuery() {
     }
     else return new TablesQuery();
 }
+
 
 TablesQuery.prototype = {
    
@@ -558,6 +651,7 @@ TablesQuery.prototype = {
     }
 
 };
+
 
 StoryCLM.Tables = (function () {
 
@@ -719,6 +813,7 @@ StoryCLM.Tables = (function () {
         Count: _count
     };
 })();
+
 
 StoryCLM.Http = (function () {
 
