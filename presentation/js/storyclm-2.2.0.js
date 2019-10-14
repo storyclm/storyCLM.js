@@ -511,6 +511,79 @@ StoryCLM.CustomEvents = (function () {
 })();
 
 
+StoryCLM.DeepLinking = {};
+
+
+StoryCLM.DeepLinking.Inbound = (function () {
+
+    function _getData(callback) {
+        StoryCLMBridge.Invoke("getDeepLinkingInboundData", {}, function (data) {
+            if (typeof callback === "function")
+                callback(new StoryCLMApiMessage(data));
+        });
+    }
+
+    return {
+        GetData: _getData
+    };
+
+})();
+
+
+StoryCLM.DeepLinking.Outbound = (function () {
+
+
+    function _getData(callback) {
+        StoryCLMBridge.Invoke("getDeepLinkingOutboundData", {}, function (data) {
+            if (typeof callback === "function")
+                callback(new StoryCLMApiMessage(data));
+        });
+    }
+
+    function _setScheme(scheme, callback) {
+        if (typeof scheme !== "string") return;
+        StoryCLMBridge.Invoke("setDeepLinkingOutboundScheme", { scheme: scheme }, function (data) {
+            if (typeof callback === "function")
+                callback(new StoryCLMApiMessage(data));
+        });
+    }
+
+    function _set(key, value, callback) {
+        if (typeof key !== "string") return;
+        StoryCLMBridge.Invoke("setDeepLinkingOutboundParameter", { key: key, value: value + "" }, function (data) {
+            if (typeof callback === "function")
+                callback(new StoryCLMApiMessage(data));
+        });
+    }
+
+    function _get(key, callback) {
+        if (typeof key !== "string") return;
+        StoryCLMBridge.Invoke("getDeepLinkingOutboundParameter", { key: key }, function (data) {
+            if (typeof callback === "function")
+                callback(new StoryCLMApiMessage(data));
+        });
+    }
+
+    function _delete(key, callback) {
+        if (typeof key !== "string") return;
+        StoryCLMBridge.Invoke("deleteDeepLinkingOutboundParameter", { key: key }, function (data) {
+            if (typeof callback === "function")
+                callback(new StoryCLMApiMessage(data));
+        });
+    }
+
+    return {
+        GetData: _getData,
+        SetScheme: _setScheme,
+        Set: _set,
+        Get: _get,
+        Delete: _delete,
+    };
+})();
+
+
+
+
 StoryCLM.UI = (function () {
 
     function _hideCloseBtn() {

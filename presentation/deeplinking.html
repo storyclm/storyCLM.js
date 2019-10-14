@@ -13,6 +13,11 @@
     <link href="css/main.css" rel="stylesheet" />
     <link href="css/bootstrap.css" rel="stylesheet">
     <link href="css/template.css" rel="stylesheet">
+    <style>
+        .list-group-item {
+            padding: 6px 10px;
+        }
+    </style>
 </head>
 <body>
     <div id="background">
@@ -20,106 +25,140 @@
             <div class="col-md-3">
                 <a class="btn btn-default" style="width:100%;" href="index.html">Назад</a><br /><br />
                 <div class="list-group">
-                    <a href="#" id="Go" class="list-group-item">Go (name, data)</a>
-                    <a href="#" id="Go1" class="list-group-item">Go (name)</a>
-                    <a href="#" id="GetNavigationData" class="list-group-item">Get Navigation Data</a>
-                    <a href="#" id="GetInfo" class="list-group-item">Get Info</a>
-                    <a href="#" id="GetUserInfo" class="list-group-item">Get User Info</a>
-                    <a href="#" id="GetGeoLocationInfo" class="list-group-item">Get GeoLocation Info</a>
+                    <a href="#" id="getinbound" class="list-group-item">GetInboundData</a>
+                    <a href="#" id="getoutbound" class="list-group-item">GetOutboundData</a>
+                    <a href="#" id="setscheme" class="list-group-item">SetScheme</a>
+                    <a href="#" id="set" class="list-group-item">Set</a>
+                    <a href="#" id="get" class="list-group-item">Get</a>
+                    <a href="#" id="delete" class="list-group-item">Delete</a>
                 </div>
             </div>
+
+
             <div id="def" style="display:none;">
-                <div data-i="Go">
+                <div data-i="getinbound">
                     <div class="request">
                         <pre>
 {
-    "Command": "go",
-    "Data": {
-        "slideName": "index.html",
-        "data": {
-            "test": "test"
-        }
-    }
-}
-</pre>
-                    </div>
-                    <div class="signa">StoryCLM.Go("index.html", { test: "test" }, callback);</div>
-                    <div class="text">
-                        Переходит указанный слайд и передает ему данные.
-                    </div>
-                </div>
-                <div data-i="Go1">
-                    <div class="request">
-                        <pre>
-{
-    "Command": "go",
-    "Data": {
-        "slideName": "index.html",
-        "data": {}
-    }
-}
-</pre>
-                    </div>
-                    <div class="signa">StoryCLM.Go("index.html", callback);</div>
-                    <div class="text">
-                        Переходит указанный слайд.
-                    </div>
-                </div>
-                <div data-i="GetNavigationData">
-                    <div class="request">
-                        <pre></pre>
-                    </div>
-                    <div class="signa">StoryCLM.GetNavigationData();</div>
-                    <div class="text">
-                        Получает данные, которые были переданы в слайд при вызове метода Open или Go.
-                    </div>
-                </div>
-                <div data-i="GetInfo">
-                    <div class="request">
-                        <pre>
-{
-    "Command": "getAppInfo",
+    "Command": "getDeepLinkingInboundData",
     "Data": {}
 }
 </pre>
                     </div>
-                    <div class="signa">StoryCLM.System.GetInfo(callback);</div>
+                    <div class="signa">StoryCLM.DeepLinking.Inbound.GetData(callback);</div>
                     <div class="text">
-                        Получает системную информацию.
-                    </div>
-                </div>
-                <div data-i="GetUserInfo">
-                    <div class="request">
-                        <pre>
-{
-    "Command": "getUserInfo",
-    "Data": {}
-}
-</pre>
-                    </div>
-                    <div class="signa">StoryCLM.User.Get(callback);</div>
-                    <div class="text">
-                        Получает информацию о текущем пользователе.
-                    </div>
-                </div>
-                <div data-i="GetGeoLocationInfo">
-                    <div class="request">
-                        <pre>
-{
-    "Command": "getGeoLocationInfo",
-    "Data": {}
-}
-</pre>
-                    </div>
-                    <div class="signa">StoryCLM.Geolocation.Get(callback);</div>
-                    <div class="text">
-                        Получает данные геолокации.
+                        Получает входящий объект данных. Если приложение не было открыто через Deep Linking то errorCode - 404.
                     </div>
                 </div>
             </div>
+
+
+            <div id="def" style="display:none;">
+                <div data-i="getoutbound">
+                    <div class="request">
+                        <pre>
+{
+    "Command": "getDeepLinkingOutboundData",
+    "Data": {
+        "scheme": "whatsapp://send"
+    }
+}
+</pre>
+                    </div>
+                    <div class="signa">StoryCLM.DeepLinking.Outbound.GetData(callback);</div>
+                    <div class="text">
+                        Получает объект Outbound. Если объект не был создан внешним приложением или через API то errorCode 404.
+                    </div>
+                </div>
+            </div>
+
+
+            <div id="def" style="display:none;">
+                <div data-i="setscheme">
+                    <div class="request">
+                        <pre>
+{
+    "Command": "setDeepLinkingOutboundScheme",
+    "Data": {
+        "scheme": "whatsapp://send"
+    }
+}
+</pre>
+                    </div>
+                    <div class="signa">StoryCLM.DeepLinking.Outbound.SetScheme(scheme, callback);</div>
+                    <div class="text">
+                        Задает схему обратного вызова. Формат URI. Если объект Outbound не был создан, то данный обхект создается с новой схемой. Если объект существует то схема будет заменена.
+                        Если схема невалидна то будет возвращен errorCode 400 и описание ошибки.
+                        Если объект Outbound существует то после завершения показа будет прделожено перейти по схеме и отпрвить данные в приложение.
+                    </div>
+                </div>
+            </div>
+
+
+            <div id="def" style="display:none;">
+                <div data-i="set">
+                    <div class="request">
+                        <pre>
+{
+    "Command": "setDeepLinkingOutboundParameter",
+    "Data": {
+        "key": "phone",
+        "value": "+70000000000"
+    }
+}
+</pre>
+                    </div>
+                    <div class="signa">StoryCLM.DeepLinking.Outbound.Set(key, value, callback);</div>
+                    <div class="text">
+                        Запись или изменение параметра. Ключ регистронезависимый. Если объект Outbound не создан то errorCode 400 с сообщением об ошибке. Если параметр не существует то он будет создан иначе будет изменен. Если значение ключа совпадает с названием системного параметра, то парметр будет замещен при отправки даннх значеним системного параметра.
+                    </div>
+                </div>
+            </div>
+
+
+            <div id="def" style="display:none;">
+                <div data-i="get">
+                    <div class="request">
+                        <pre>
+{
+    "Command": "getDeepLinkingOutboundParameter",
+    "Data": {
+        "key": "phone"
+    }
+}
+</pre>
+                    </div>
+                    <div class="signa">StoryCLM.DeepLinking.Outbound.Get(key, callback);</div>
+                    <div class="text">
+                        Получение параметра по ключу. Ключ регистронезависимый. Если объект Outbound не создан то errorCode 400 с сообщением об ошибке. Если параметр не существует value - null.
+                    </div>
+                </div>
+            </div>
+
+
+            <div id="def" style="display:none;">
+                <div data-i="delete">
+                    <div class="request">
+                        <pre>
+{
+    "Command": "deleteDeepLinkingOutboundParameter",
+    "Data": {
+        "key": "phone"
+    }
+}
+</pre>
+                    </div>
+                    <div class="signa">StoryCLM.DeepLinking.Outbound.Delete(key, callback);</div>
+                    <div class="text">
+                        Удаление параметра по ключу. Ключ регистронезависимый. Если объект Outbound не создан то errorCode 400 с сообщением об ошибке. Системный параметр удалить нельзя.
+                    </div>
+                </div>
+            </div>
+
+
             <div class="col-md-9">
                 <p class="text-primary">
-                    StoryCLM
+                    StoryCLM -> Deep Linking
                 </p>
                 <input type="text" id="signa" class="form-control">
                 <div class="jumbotron" id="text"></div>
@@ -143,50 +182,52 @@
             $(".list-group a").on(clickEvent, function () {
                 $("#response").text("");
                 switch (this.id) {
-                    case "Go":
+                    case "getinbound":
                         {
-                            StoryCLM.Go("index.html", { test: "test" }, function (message) {
+                            StoryCLM.DeepLinking.Inbound.GetData(function (message) {
                                 setJson("response", message);
                             });
-                            loadDocData("Go");
+                            loadDocData("getinbound");
                             return false;
                         }
-                    case "Go1":
+                    case "getoutbound":
                         {
-                            StoryCLM.Go("index.html", function (message) {
+                            StoryCLM.DeepLinking.Outbound.GetData(function (message) {
                                 setJson("response", message);
                             });
-                            loadDocData("Go1");
+                            loadDocData("getoutbound");
                             return false;
                         }
-                    case "GetNavigationData":
+                    case "setscheme":
                         {
-                            setJson("response", StoryCLM.GetNavigationData());
-                            loadDocData("GetNavigationData");
-                            return false;
-                        }
-                    case "GetInfo":
-                        {
-                            StoryCLM.System.GetInfo(function (message) {
+                            StoryCLM.DeepLinking.Outbound.SetScheme("whatsapp://send", function (message) {
                                 setJson("response", message);
                             });
-                            loadDocData("GetInfo");
+                            loadDocData("setscheme");
                             return false;
                         }
-                    case "GetUserInfo":
+                    case "set":
                         {
-                            StoryCLM.User.Get(function (message) {
+                            StoryCLM.DeepLinking.Outbound.Set("phone", "+70000000000", function (message) {
                                 setJson("response", message);
                             });
-                            loadDocData("GetUserInfo");
+                            loadDocData("set");
                             return false;
                         }
-                    case "GetGeoLocationInfo":
+                    case "get":
                         {
-                            StoryCLM.Geolocation.Get(function (message) {
+                            StoryCLM.DeepLinking.Outbound.Get("phone", function (message) {
                                 setJson("response", message);
                             });
-                            loadDocData("GetGeoLocationInfo");
+                            loadDocData("get");
+                            return false;
+                        }
+                    case "delete":
+                        {
+                            StoryCLM.DeepLinking.Outbound.Delete("phone", function (message) {
+                                setJson("response", message);
+                            });
+                            loadDocData("delete");
                             return false;
                         }
                     default:

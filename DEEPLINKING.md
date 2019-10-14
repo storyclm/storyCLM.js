@@ -1,13 +1,13 @@
-## Sessions
+## Deep Linking
 
-### Method: StoryCLM.Sessions.Get
+### Method: StoryCLM.DeepLinking.Inbound.GetData
 
 ```sh
- StoryCLM.Sessions.Get(callback);
+ StoryCLM.DeepLinking.Inbound.GetData(callback);
 ```
 **Описание:**
 
-Получает список сессий для текущего пользователя на устройстве.
+Получает входящий объект данных. Если приложение не было открыто через Deep Linking то errorCode - 404.
 
 **Параметры:**
 
@@ -16,7 +16,7 @@
 **Запрос:**
 ```sh
 {
-    "Command": "getSessions",
+    "Command": "getDeepLinkingInboundData",
     "Data": {}
 }
 ```
@@ -26,40 +26,114 @@
    "status": "no error",
    "errorCode": 200,
    "errorMessage": "",
-   "data": [
-       {
-           "created": "2019-07-10T12:21:12Z",
-           "sessionId": "FE859C7B-192D-4E3D-B2FD-2B0583381504",
-           "presentationId": "70"
-       },
-       {
-           "sessionId": "EEF1E4D2-A2E9-4801-A81A-85037B7A8ABB",
-           "created": "2019-07-10T12:23:52Z",
-           "presentationId": "70"
-       }
-   ]
+   "data": {
+           "source": "whatsapp",
+           "uri": "storyclm://content?contentId=34&slide=slide_user.html&Name=Boris&Age=19",
+           "parameters": {
+                         "contentId": "3565",
+                         "slide": "slide_user.html",
+                         "name": "Boris",
+                         "age": "19",
+                         "visitId": "35656",
+           }
+	}
 }
 ```
-### Method: StoryCLM.Sessions.GetById
+### Method: StoryCLM.DeepLinking.Outbound.GetData
 
 ```sh
- StoryCLM.Sessions.GetById(sessionId, callback);
+ StoryCLM.DeepLinking.Outbound.GetData(callback);
 ```
 **Описание:**
 
-Получает сессию по идентификатору, включая слайды в порядке их демонстрации.
+Получает объект Outbound. Если объект не был создан внешним приложением или через API то errorCode 404.
 
 **Параметры:**
 
-* sessionId - идентификатор сессии.
 * callback - функция, в которую будет передан результат выполнения операции.
 
 **Запрос:**
 ```sh
 {
-    "Command": "getSessionById",
+    "Command": "getDeepLinkingOutboundData",
     "Data": {
-        "id": "FE859C7B-192D-4E3D-B2FD-2B0583381504"
+        "scheme": "whatsapp://send"
+    }
+}
+```
+**Ответ:**
+```sh
+   "status": "no error",
+   "errorCode": 200,
+   "errorMessage": "",
+   "data": {
+           "source": "whatsapp://send",
+           "parameters": {
+                         "text": "Hello World!",
+                         "phone": "+70000000000"
+           }
+	}
+```
+### Method: StoryCLM.DeepLinking.Outbound.SetScheme
+
+```sh
+ StoryCLM.DeepLinking.Outbound.SetScheme(scheme, callback);
+```
+**Описание:**
+
+Задает схему обратного вызова. Формат URI. Если объект Outbound не был создан, то данный обхект создается с новой схемой. Если объект существует то схема будет заменена.
+Если схема невалидна то будет возвращен errorCode 400 и описание ошибки.
+Если объект Outbound существует то после завершения показа будет прделожено перейти по схеме и отпрвить данные в приложение.
+
+**Параметры:**
+
+* scheme - схема. Адрес обратного вызова; В формате URI.
+* callback - функция, в которую будет передан результат выполнения операции.
+
+**Запрос:**
+```sh
+{
+    "Command": "setDeepLinkingOutboundScheme",
+    "Data": {
+        "scheme": "whatsapp://send"
+    }
+}
+```
+**Ответ:**
+```sh
+   "status": "no error",
+   "errorCode": 200,
+   "errorMessage": "",
+   "data": {
+           "source": "whatsapp://send",
+           "parameters": {
+                         "text": "Hello World!",
+                         "phone": "+70000000000"
+           }
+	}
+```
+### Method: StoryCLM.DeepLinking.Outbound.Set
+
+```sh
+ StoryCLM.DeepLinking.Outbound.Set(key, value, callback);
+```
+**Описание:**
+
+Запись или изменение параметра. Ключ регистронезависимый. Если объект Outbound не создан то errorCode 400 с сообщением об ошибке. Если параметр не существует то он будет создан иначе будет изменен. Если значение ключа совпадает с названием системного параметра, то парметр будет замещен при отправки даннх значеним системного параметра.
+
+**Параметры:**
+
+* key - ключ;
+* value - значение.
+* callback - функция, в которую будет передан результат выполнения операции.
+
+**Запрос:**
+```sh
+{
+    "Command": "setDeepLinkingOutboundParameter",
+    "Data": {
+        "key": "phone",
+        "value": "+70000000000"
     }
 }
 ```
@@ -69,47 +143,31 @@
    "status": "no error",
    "errorCode": 200,
    "errorMessage": "",
-   "data":  {
-           "timeZone": 3,
-           "created": "2019-07-10T12:21:12Z",
-           "state": 2,
-           "sessionId": "FE859C7B-192D-4E3D-B2FD-2B0583381504",
-           "presentationId": "70",
-           "latitude": 45.01693344116211,
-           "longitude": 41.89881896972656,
-           "duration": 129,
-           "userId": "b3505adf-cc45-4d9b-b1ab-3bd881c6abe3",
-           "complete": false,
-           "slidesCount": 3,
-			"slides": [
-					{
-					   "id": "FE859C7B",
-				 	   "name": "index.html",
-					   "duration": 36,
-					   "created": "2019-07-10T12:21:12Z"
-					}					
-			]
-       }
-}
+   "data": {
+            "key": "phone",
+            "value": "+70000000000"
+   }
 ```
-### Method: StoryCLM.Sessions.GetCurrent
+### Method: StoryCLM.DeepLinking.Outbound.Get
 
 ```sh
- StoryCLM.Sessions.GetCurrent(callback);
+ StoryCLM.DeepLinking.Outbound.Get(key, callback);
 ```
 **Описание:**
 
-Получает текущую сессию, включая слайды в порядке их демонстрации.
+Получение параметра по ключу. Ключ регистронезависимый. Если объект Outbound не создан то errorCode 400 с сообщением об ошибке. Если параметр не существует value - null.
 
 **Параметры:**
 
-* callback - функция, в которую будет передан результат выполнения операции.
+* key - ключ;
 
 **Запрос:**
 ```sh
 {
-    "Command": "getCurrentSession",
-    "Data": {}
+    "Command": "getDeepLinkingOutboundParameter",
+    "Data": {
+        "key": "phone"
+    }
 }
 ```
 **Ответ:**
@@ -118,55 +176,41 @@
    "status": "no error",
    "errorCode": 200,
    "errorMessage": "",
-   "data":  {
-           "timeZone": 3,
-           "created": "2019-07-10T12:21:12Z",
-           "state": 1,
-           "sessionId": "FE859C7B-192D-4E3D-B2FD-2B0583381504",
-           "presentationId": "70",
-           "latitude": 45.01693344116211,
-           "longitude": 41.89881896972656,
-           "duration": 129,
-           "userId": "b3505adf-cc45-4d9b-b1ab-3bd881c6abe3",
-           "complete": false,
-           "slidesCount": 3,
-			"slides": [
-					{
-					   "id": "FE859C7B",
-				 	   "name": "index.html",
-					   "duration": 36,
-					   "created": "2019-07-10T12:21:12Z"
-					}					
-			]
-       }
+   "data": {
+       "value": "70000000000"
+   }
 }
 ```
-### Method: StoryCLM.Sessions.SetComplete
+### Method: StoryCLM.DeepLinking.Outbound.Delete
 
 ```sh
-StoryCLM.Sessions.SetComplete();
+ StoryCLM.DeepLinking.Outbound.Delete(key, callback);
 ```
 **Описание:**
 
-Указывает что в текущем сеансе презентация полность показана или были пройдены все ключиывые слайды. Зависит от бизнес логики презентации. Выставляется разработчиками.
+Удаление параметра по ключу. Ключ регистронезависимый. Если объект Outbound не создан то errorCode 400 с сообщением об ошибке. Системный параметр удалить нельзя.
 
 **Параметры:**
 
+* key - ключ;
 
 **Запрос:**
 ```sh
 {
-    "Command": "setSessionComplete",
-    "Data": {}
+    "Command": "deleteDeepLinkingOutboundParameter",
+    "Data": {
+        "key": "phone"
+    }
 }
 ```
-
 **Ответ:**
 ```sh
 {
    "status": "no error",
    "errorCode": 200,
    "errorMessage": "",
-   "data":  {}
+   "data": {
+       "key": "phone"
+   }
 }
 ```
