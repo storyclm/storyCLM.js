@@ -9,15 +9,10 @@
     <meta name="clm-swipe-next" content="">
     <meta name="clm-swipe-previous" content="">
     <meta name="clm" content="">
-    <title>Custom Events</title>
+    <title>Deep Linking</title>
     <link href="css/main.css" rel="stylesheet" />
     <link href="css/bootstrap.css" rel="stylesheet">
     <link href="css/template.css" rel="stylesheet">
-    <style>
-        .list-group-item {
-            padding: 6px 10px;
-        }
-    </style>
 </head>
 <body>
     <div id="background">
@@ -25,98 +20,106 @@
             <div class="col-md-3">
                 <a class="btn btn-default" style="width:100%;" href="index.html">Назад</a><br /><br />
                 <div class="list-group">
-                    <a href="#" id="set" class="list-group-item">Set (key, value)</a>
-                    <a href="#" id="get" class="list-group-item">Get (key)</a>
-                    <a href="#" id="delete" class="list-group-item">Delete (key)</a>
-                    <a href="#" id="getobject" class="list-group-item">GetObject (sessionId, contentId)</a>
+                    <a href="#" id="Go" class="list-group-item">Go (name, data)</a>
+                    <a href="#" id="Go1" class="list-group-item">Go (name)</a>
+                    <a href="#" id="GetNavigationData" class="list-group-item">Get Navigation Data</a>
+                    <a href="#" id="GetInfo" class="list-group-item">Get Info</a>
+                    <a href="#" id="GetUserInfo" class="list-group-item">Get User Info</a>
+                    <a href="#" id="GetGeoLocationInfo" class="list-group-item">Get GeoLocation Info</a>
                 </div>
             </div>
-
-
             <div id="def" style="display:none;">
-                <div data-i="set">
+                <div data-i="Go">
                     <div class="request">
                         <pre>
 {
-    "Command": "setCustomEvent",
+    "Command": "go",
     "Data": {
-        "key": "name",
-        "value": "Vova"
+        "slideName": "index.html",
+        "data": {
+            "test": "test"
+        }
     }
 }
 </pre>
                     </div>
-                    <div class="signa">StoryCLM.CustomEvents.Set(key, value, callback);</div>
+                    <div class="signa">StoryCLM.Go("index.html", { test: "test" }, callback);</div>
                     <div class="text">
-                        Запись кастомного события. Если кастомное событие для этой презентации и сессии существует, то оно перезаписывается. Команда с ответом не требуется.
+                        Переходит указанный слайд и передает ему данные.
                     </div>
                 </div>
-            </div>
-
-
-            <div id="def" style="display:none;">
-                <div data-i="get">
+                <div data-i="Go1">
                     <div class="request">
                         <pre>
 {
-    "Command": "getCustomEventByKey",
+    "Command": "go",
     "Data": {
-        "key": "name"
+        "slideName": "index.html",
+        "data": {}
     }
 }
 </pre>
                     </div>
-                    <div class="signa">StoryCLM.CustomEvents.Get(key, callback);</div>
+                    <div class="signa">StoryCLM.Go("index.html", callback);</div>
                     <div class="text">
-                        Получение кастомного события по ключу для текущей сессии.
+                        Переходит указанный слайд.
                     </div>
                 </div>
-            </div>
-
-
-            <div id="def" style="display:none;">
-                <div data-i="delete">
+                <div data-i="GetNavigationData">
+                    <div class="request">
+                        <pre></pre>
+                    </div>
+                    <div class="signa">StoryCLM.GetNavigationData();</div>
+                    <div class="text">
+                        Получает данные, которые были переданы в слайд при вызове метода Open или Go.
+                    </div>
+                </div>
+                <div data-i="GetInfo">
                     <div class="request">
                         <pre>
 {
-    "Command": "deleteCustomEventByKey",
-    "Data": {
-        "key": "name"
-    }
+    "Command": "getAppInfo",
+    "Data": {}
 }
 </pre>
                     </div>
-                    <div class="signa">StoryCLM.CustomEvents.Delete(key, callback);</div>
+                    <div class="signa">StoryCLM.System.GetInfo(callback);</div>
                     <div class="text">
-                        Удаление кастомного события по ключу для текущей сессии.
+                        Получает системную информацию.
                     </div>
                 </div>
-            </div>
-
-
-            <div id="def" style="display:none;">
-                <div data-i="getobject">
+                <div data-i="GetUserInfo">
                     <div class="request">
                         <pre>
 {
-    "Command": "getCustomEventsObject",
-    "Data": {
-        "sessionId": "AB7B3F4914FC413E914EE39214A31718",
-        "contentId": "2598"
-    }
+    "Command": "getUserInfo",
+    "Data": {}
 }
 </pre>
                     </div>
-                    <div class="signa">StoryCLM.CustomEvents.GetObject(sessionId, contentId, callback);</div>
+                    <div class="signa">StoryCLM.User.Get(callback);</div>
                     <div class="text">
-                        Получение кастомных событий в виде объекта для сессии и презентации, если сессии не указана, то возвращает для текущей сессии, если презентация не указана, то возвращает для текущей презентации.
+                        Получает информацию о текущем пользователе.
+                    </div>
+                </div>
+                <div data-i="GetGeoLocationInfo">
+                    <div class="request">
+                        <pre>
+{
+    "Command": "getGeoLocationInfo",
+    "Data": {}
+}
+</pre>
+                    </div>
+                    <div class="signa">StoryCLM.Geolocation.Get(callback);</div>
+                    <div class="text">
+                        Получает данные геолокации.
                     </div>
                 </div>
             </div>
-
             <div class="col-md-9">
                 <p class="text-primary">
-                    StoryCLM -> Custom Events
+                    StoryCLM
                 </p>
                 <input type="text" id="signa" class="form-control">
                 <div class="jumbotron" id="text"></div>
@@ -140,36 +143,50 @@
             $(".list-group a").on(clickEvent, function () {
                 $("#response").text("");
                 switch (this.id) {
-                    case "set":
+                    case "Go":
                         {
-                            StoryCLM.CustomEvents.Set("name", "Vova", function (message) {
+                            StoryCLM.Go("index.html", { test: "test" }, function (message) {
                                 setJson("response", message);
                             });
-                            loadDocData("set");
+                            loadDocData("Go");
                             return false;
                         }
-                    case "get":
+                    case "Go1":
                         {
-                            StoryCLM.CustomEvents.Get("name", function (message) {
+                            StoryCLM.Go("index.html", function (message) {
                                 setJson("response", message);
                             });
-                            loadDocData("get");
+                            loadDocData("Go1");
                             return false;
                         }
-                    case "delete":
+                    case "GetNavigationData":
                         {
-                            StoryCLM.CustomEvents.Delete("name", function (message) {
-                                setJson("response", message);
-                            });
-                            loadDocData("delete");
+                            setJson("response", StoryCLM.GetNavigationData());
+                            loadDocData("GetNavigationData");
                             return false;
                         }
-                    case "getobject":
+                    case "GetInfo":
                         {
-                            StoryCLM.CustomEvents.GetObject("AB7B3F4914FC413E914EE39214A31718", "2598", function (message) {
+                            StoryCLM.System.GetInfo(function (message) {
                                 setJson("response", message);
                             });
-                            loadDocData("getobject");
+                            loadDocData("GetInfo");
+                            return false;
+                        }
+                    case "GetUserInfo":
+                        {
+                            StoryCLM.User.Get(function (message) {
+                                setJson("response", message);
+                            });
+                            loadDocData("GetUserInfo");
+                            return false;
+                        }
+                    case "GetGeoLocationInfo":
+                        {
+                            StoryCLM.Geolocation.Get(function (message) {
+                                setJson("response", message);
+                            });
+                            loadDocData("GetGeoLocationInfo");
                             return false;
                         }
                     default:
