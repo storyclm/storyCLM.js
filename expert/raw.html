@@ -9,7 +9,7 @@
     <meta name="clm-swipe-next" content="">
     <meta name="clm-swipe-previous" content="">
     <meta name="clm" content="">
-    <title>Bridge</title>
+    <title>Raw</title>
     <link href="css/main.css" rel="stylesheet" />
     <link href="css/bootstrap.css" rel="stylesheet">
     <link href="css/template.css" rel="stylesheet">
@@ -25,7 +25,7 @@
             </div>
             <div class="col-md-9">
                 <p class="text-primary">
-                    StoryCLM -> Bridge
+                    StoryCLM -> Send Raw Command
                 </p>
                 <div class="jumbotron" id="text">Отправка кастомной команды</div>
                 <ul class="nav nav-tabs" role="tablist">
@@ -43,7 +43,7 @@
 }
 </textarea>
                     </div>
-                    <div role="tabpanel" class="tab-pane" id="response"></div>
+                    <div role="tabpanel" class="tab-pane" id="response" style="overflow:scroll; height:600px;"></div>
                 </div>
             </div>
         </div>
@@ -51,7 +51,7 @@
     <script src="js/jquery-2.1.1.min.js"></script>
     <script src="js/bootstrap.js"></script>
     <script src="js/main.js"></script>
-    <script src="js/storyclm-2.2.0.js"></script>
+    <script src="js/storyclm-2.1.0.js"></script>
     <script>
         $(function () {
             $(".list-group a").on(clickEvent, function () {

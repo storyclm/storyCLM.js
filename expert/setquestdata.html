@@ -9,7 +9,7 @@
     <meta name="clm-swipe-next" content="">
     <meta name="clm-swipe-previous" content="">
     <meta name="clm" content="">
-    <title>Bridge</title>
+    <title>Set Quest Data</title>
     <link href="css/main.css" rel="stylesheet" />
     <link href="css/bootstrap.css" rel="stylesheet">
     <link href="css/template.css" rel="stylesheet">
@@ -25,9 +25,8 @@
             </div>
             <div class="col-md-9">
                 <p class="text-primary">
-                    StoryCLM -> Bridge
+                    StoryCLM -> Set Quest Data
                 </p>
-                <div class="jumbotron" id="text">Отправка кастомной команды</div>
                 <ul class="nav nav-tabs" role="tablist">
                     <li role="presentation" class="active"><a href="#request" aria-controls="profile" role="tab" data-toggle="tab">Request</a></li>
                     <li role="presentation"><a href="#response" aria-controls="response" role="tab" data-toggle="tab">Response</a></li>
@@ -35,15 +34,13 @@
                 <div class="tab-content">
                     <div role="tabpanel" class="tab-pane active" id="request">
                         <label style="margin-top: 15px;">Command name:</label>
-                        <input id="commandName" value="getAppInfo" style="width:100%; border:solid 1px #56c7d6; margin: 5px 0; padding:3px;" />
-                        <label style="margin-top: 15px;">Command data:</label>
-                        <textarea id="commandData" rows="15" style="width:100%; border:solid 1px #56c7d6; margin: 5px 0; padding:3px;">
-{
-
-}
-</textarea>
+                        <input id="commandName" value="set" style="width:100%; border:solid 1px #56c7d6; margin: 5px 0; padding:3px;" />
+                        <label style="margin-top: 15px;">Key:</label>
+                        <input id="key" value="" style="width:100%; border:solid 1px #56c7d6; margin: 5px 0; padding:3px;" />
+                        <label style="margin-top: 15px;">Value:</label>
+                        <input id="value" value="" style="width:100%; border:solid 1px #56c7d6; margin: 5px 0; padding:3px;" />
                     </div>
-                    <div role="tabpanel" class="tab-pane" id="response"></div>
+                    <div role="tabpanel" class="tab-pane" id="response" style="overflow:scroll; height:600px;"></div>
                 </div>
             </div>
         </div>
@@ -51,7 +48,7 @@
     <script src="js/jquery-2.1.1.min.js"></script>
     <script src="js/bootstrap.js"></script>
     <script src="js/main.js"></script>
-    <script src="js/storyclm-2.2.0.js"></script>
+    <script src="js/storyclm-2.1.0.js"></script>
     <script>
         $(function () {
             $(".list-group a").on(clickEvent, function () {
@@ -60,8 +57,12 @@
                     case "send":
                         {
                             let command = $("#commandName").val();
-                            var data = JSON.parse($("#commandData").val());
-                                                            console.log(data);
+                            let data =
+                            {
+                                key: $("#key").val(),
+                                value: $("#value").val(),
+                            };
+                            console.log(data);
                             StoryCLM.SendCommand(command, data, function (message) {
                                 setJson("response", message);
                             });
