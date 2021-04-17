@@ -1,0 +1,123 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="format-detection" content="telephone=yes">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <title>Index</title>
+    <link href="css/bootstrap.css" rel="stylesheet">
+</head>
+
+<body>
+    <div class="container-fluid">
+        <div class="row m-3">
+            <div class="col col-2">
+                <div class="d-flex align-items-center" style="height:100%;">
+                    <span>Status*:</span>
+                </div>
+            </div>
+            <div class="col col-10">
+                <div class="btn-group btn-group-toggle" data-toggle="buttons">
+                    <label id="quest-status-label-inprogress" class="btn btn-secondary">
+                        <input type="radio" name="quest-status" value="inprogress"> In progress
+                    </label>
+                    <label id="quest-status-label-success" class="btn btn-secondary">
+                        <input type="radio" name="quest-status" value="success"> Success
+                    </label>
+                    <label id="quest-status-label-fail" class="btn btn-secondary">
+                        <input type="radio" name="quest-status" value="fail"> Fail
+                    </label>
+                </div>
+            </div>
+        </div>
+        <div class="row m-3">
+            <div class="col col-2">
+                <label for="points">Points:</label>
+            </div>
+            <div class="col col-10">
+                <select class="form-control" id="points">
+                    <option>0</option>
+                    <option>1</option>
+                    <option>5</option>
+                    <option>10</option>
+                    <option>50</option>
+                </select>
+            </div>
+        </div>
+        <div class="row m-3">
+            <div class="col col-2">
+                <label for="goal">Goal:</label>
+            </div>
+            <div class="col col-10">
+                <div class="form-check">
+                    <input class="form-check-input position-static" type="checkbox" id="goal">
+                </div>
+            </div>
+        </div>
+        <div class="row m-3">
+            <div class="col">
+                <button id="addFlowEvent" type="button" class="btn btn-primary btn-block" disabled>Send</button>
+            </div>
+        </div>
+        <div class="row m-3">
+            <span id="result"></span>
+        </div>
+    </div>
+    <script src="js/jquery-3.6.0.js"></script>
+    <script src="js/storyclm-2.2.0.js"></script>
+    <script>
+        $(function () {
+            $("#addFlowEvent").click(function () {
+                disableForm();
+
+                let data = {
+                    status: $("input[name='quest-status']:checked").val(),
+                    points: $("#points").val(),
+                    goal: $("#goal").prop("checked")
+                };
+                console.log(data);
+
+                setTimeout(function () {
+                    enableForm();
+                }, 5000);
+
+                // StoryCLM.SendCommand("addFlowEvent", data, function (message) {
+                //     setJson("response", message);
+                // });
+            });
+
+            $("input[name='quest-status']").change(function (e) {
+                if (e.target.value) {
+                    enableForm();
+                } else {
+                    disableForm();
+                }
+                $(`input[name='quest-status']`).prop('checked', false);
+                $("[id^='quest-status-label-'").removeClass('active')
+
+                $(`input[name='quest-status'][value='${e.target.value}']`).prop('checked', true);
+                $(`#quest-status-label-${e.target.value}`).addClass('active')
+            });
+        });
+
+        var disableForm = function () {
+            $("input[name='quest-status']").prop('disabled', true);
+            $("[id^='quest-status-label-'").addClass('disabled')
+            $("#addFlowEvent").prop('disabled', true);
+        }
+        var enableForm = function () {
+            $("input[name='quest-status']").prop('disabled', false);
+            $("[id^='quest-status-label-'").removeClass('disabled')
+            $("#addFlowEvent").prop('disabled', false);
+        }
+
+        var resetForm = function () {
+
+        }
+    </script>
+</body>
+
+</html>
