@@ -1,0 +1,186 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="format-detection" content="telephone=yes">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <title>Index</title>
+    <link href="css/bootstrap.css" rel="stylesheet">
+</head>
+
+<body>
+    <div class="container-fluid">
+        <div style="height: 100px;"></div>
+        <div class="row mt-3">
+            <div class="col col-3">
+                <div class="d-flex align-items-center" style="height:100%;">
+                    <span>Status*:</span>
+                </div>
+            </div>
+            <div class="col col-9">
+                <div class="btn-group btn-group-sm btn-group-toggle" data-toggle="buttons">
+                    <label id="quest-status-label-inprogress" class="btn btn-secondary">
+                        <input type="radio" name="quest-status" value="inprogress"> In progress
+                    </label>
+                    <label id="quest-status-label-success" class="btn btn-success">
+                        <input type="radio" name="quest-status" value="success"> Success
+                    </label>
+                    <label id="quest-status-label-fail" class="btn btn-danger">
+                        <input type="radio" name="quest-status" value="fail"> Fail
+                    </label>
+                </div>
+            </div>
+        </div>
+        <div class="row mt-3">
+            <div class="col col-3">
+                <div class="d-flex align-items-center" style="height:100%;">
+                    <span>Points:</span>
+                </div>
+            </div>
+            <div class="col col-9">
+                <select class="form-control form-control-sm" id="points">
+                    <option>0</option>
+                    <option>1</option>
+                    <option>5</option>
+                    <option>10</option>
+                    <option>50</option>
+                </select>
+            </div>
+        </div>
+        <div class="row mt-3">
+            <div class="col col-3">
+                <div class="d-flex align-items-center" style="height:100%;">
+                    <span>Message:</span>
+                </div>
+            </div>
+            <div class="col col-9">
+                <input id="message" class="form-control form-control-sm" type="text">
+            </div>
+        </div>
+        <div class="row mt-3">
+            <div class="col col-3">
+                <div class="d-flex align-items-center" style="height:100%;">
+                    <span>Value:</span>
+                </div>
+            </div>
+            <div class="col col-9">
+                <input id="value" class="form-control form-control-sm" type="text">
+            </div>
+        </div>
+        <div class="row mt-3">
+            <div class="col col-3">
+                <div class="d-flex align-items-center" style="height:100%;">
+                    <span>Goal:</span>
+                </div>
+            </div>
+            <div class="col col-9">
+                <div class="form-check">
+                    <input class="form-check-input position-static" type="checkbox" id="goal">
+                </div>
+            </div>
+        </div>
+        <div class="row mt-3">
+            <div class="col col-6">
+                <button id="addFlowEvent" type="button" class="btn btn-primary btn-block" disabled>Send</button>
+            </div>
+            <div class="col col-6">
+                <button id="resetForm" type="button" class="btn secondary btn-block">Reset</button>
+            </div>
+        </div>
+        <div class="row">
+            <div id="response" role="tabpanel" class="tab-pane"></div>
+        </div>
+    </div>
+    <script src="js/jquery-3.6.0.js"></script>
+    <script src="js/storyclm-2.2.0.js"></script>
+    <script>
+
+        var messages = {
+            inprogress: "Сообщение события inprogress",
+            success: "Сообщение события success",
+            fail: "Сообщение события fail"
+        }
+
+        var values = {
+            inprogress: "Значениие события inprogress",
+            success: "Значениие события success",
+            fail: "Значениие события fail"
+        }
+
+        $("input[name='quest-status']").change(function (e) {
+            disableSendButton(!e.target.value);
+
+            $(`input[name='quest-status']`).prop('checked', false);
+            $("[id^='quest-status-label-'").removeClass('active')
+
+            $(`input[name='quest-status'][value='${e.target.value}']`).prop('checked', true);
+            $(`#quest-status-label-${e.target.value}`).addClass('active')
+
+            $("#message").val(messages[e.target.value]);
+            $("#value").val(values[e.target.value]);
+        });
+
+        $(function () {
+            $("#addFlowEvent").click(function () {
+                disableForm();
+
+                let data = {
+                    status: $("input[name='quest-status']:checked").val(),
+                    points: $("#points").val(),
+                    message: $("#message").val(),
+                    value: $("#value").val(),
+                    goal: $("#goal").prop("checked")
+                };
+
+                StoryCLM.SendCommand("addFlowEvent", data, function (message) {
+                    $("#response").html("<pre>" + JSON.stringify(message, null, 4) + "</pre>");
+                    resetForm();
+                    enableForm();
+                });
+            });
+
+            $("#resetForm").click(function () {
+                resetForm();
+            });
+
+        });
+
+        var disableSendButton = function (disabled) {
+            $("#addFlowEvent").prop('disabled', disabled);
+
+        }
+
+        var disableForm = function () {
+            $("input[name='quest-status']").prop('disabled', true);
+            $("[id^='quest-status-label-'").addClass('disabled')
+            $("#points").prop('disabled', true);
+            $("#message").prop('disabled', true);
+            $("#value").prop('disabled', true);
+            $("#goal").prop('disabled', true);
+        }
+        var enableForm = function () {
+            $("input[name='quest-status']").prop('disabled', false);
+            $("[id^='quest-status-label-'").removeClass('disabled')
+            $("#points").prop('disabled', false);
+            $("#message").prop('disabled', false);
+            $("#value").prop('disabled', false);
+            $("#goal").prop('disabled', false);
+        }
+
+        var resetForm = function () {
+            $(`input[name='quest-status']:checked`).prop('checked', false);
+            $("[id^='quest-status-label-'").removeClass('active')
+            $("#message").val("");
+            $("#value").val("");
+            $("#points").val(0);
+            $("#goal").prop("checked", false);
+            enableForm();
+            disableSendButton(true);
+        }
+    </script>
+</body>
+
+</html>
