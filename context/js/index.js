@@ -60,6 +60,7 @@
 // LAB FINISh
 
 var storyContext = window.story;
+console.log(window.Native);
 
 if (!storyContext) {
     storyContext = {
@@ -94,3 +95,11 @@ var TestFunc2 = function () {
 
     return result;
 }
+
+var Native = {
+    TestCall1: function () {
+        return 123;
+    }
+}
+
+Native.TestCall1();
