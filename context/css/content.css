@@ -5,6 +5,8 @@ span {
     background: transparent;
     padding: 0;
     margin: 0;
+    font-family: Roboto;
+    font-style: normal;
 }
 
 html,
@@ -15,19 +17,11 @@ body {
 
 body {
     min-width: 380px;
-    background-color: #17AFB9
 }
 
-.button-close {
+.btn-clear {
     border-width: 0;
     background-color: transparent;
-}
-
-span,
-h1,
-h2 {
-    font-family: Roboto;
-    font-style: normal;
 }
 
 h1,
@@ -35,6 +29,8 @@ h2 {
 
     color: #000;
     line-height: 20px;
+    opacity: 60%;
+
 }
 
 h1 {
@@ -47,6 +43,11 @@ h2 {
     font-weight: 400;
 }
 
+.cont {
+    display: flex;
+    flex-direction: column;
+    align-self: stretch;
+}
 
 .title {
     margin-right: -150px;
@@ -56,24 +57,100 @@ h2 {
     line-height: 41px;
 }
 
-/* .logo {
-     position: absolute; 
-     padding-left: 100px; 
-}
-
-.content {
-     min-height: 100%;
-    padding-bottom: 500px; 
-}
-*/
-
 .header {
-    /* min-height: 40vh; */
+    background-color: #17AFB9;
+    padding-bottom: 40px;
 }
 
 .panel {
     background-color: #FFF;
     border-radius: 24px 24px 0px 0px;
-    /* min-height: 70vh; */
+    margin-top: -24px;
 
+}
+
+.footer {
+    background-color: #FFF;
+
+}
+
+.panel {
+    overflow-y: auto;
+}
+
+.input-title {
+    font-size: 11px;
+    line-height: 13px;
+    opacity: 60%;
+}
+
+.input-contol {
+    padding: 0;
+    border-width: 0px 0px 1px 0px;
+    border-color: #C3C3C3;
+    font-weight: 500;
+    font-size: 15px;
+    line-height: 20px;
+}
+
+.input-contol:focus-visible {
+    outline: none;
+}
+
+.add-remove-wrapper {
+    display: flex;
+    justify-content: flex-end;
+    margin-top: 12px;
+}
+
+.btn-add-remove {
+    background-color: #FFF;
+    border: 1px solid #D9D9D9;
+    border-radius: 6px;
+    padding: 0;
+    height: 24px;
+    width: 24px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+}
+
+.btn-add-remove:first-of-type {
+    margin-right: 12px;
+}
+
+.rating-wrapper {
+    display: flex;
+    margin-top: 12px;
+}
+
+.rating-star {
+    margin-right: 18px;
+}
+
+.rating-star>label {
+    cursor: pointer;
+}
+
+
+input[name='rate'] {
+    opacity: 0;
+    width: 0;
+    height: 0;
+}
+
+.btn-close-bottom {
+    border: 1px solid #848484;
+    border-radius: 12px;
+    height: 64px;
+    font-weight: 700;
+    font-size: 15px;
+}
+
+.hidden {
+    position: absolute;
+    top: -9999px;
+    height: 0;
+    width: 0;
 }
