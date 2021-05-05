@@ -1,61 +1,72 @@
-console.log("context.js");
+var debugData = {
+    id: "1",
+    field1: 'Hello World',
+    field2: '2 field',
+    field3: true,
+    field4: 123,
+    objField5: {
+        id: "2",
+        field51: '5 field',
+        field52: false,
+        field53: null,
+        objField54: {
+            id: "3",
+            field541: '541_field1',
+            field542: 22345,
+            field543: undefined
 
-var StateRaw = {
-    setField: function (parentId, key, value) {
-        console.log(`Current state: ${JSON.stringify(window.State)}`);
-        console.log(`Setter: ${parentId}, ${key}, ${value}`);
-    },
-    data: {
-        id: "1",
-        field1: "Hello World",
-        field2: "2 field",
-        field3: true,
-        field4: 123,
-        objField5: {
-            id: "2",
-            field51: "5 field",
-            field52: false,
-            field53: null,
-            objField54: {
-                id: "3",
-                field541: "541_field",
-                field542: 22345,
-                field543: undefined
-
-            }
         }
     }
 };
-console.log("context.js");
 
-var wrap = function (obj) {
-
-    var result = {};
-
-    for (propName in obj) {
-
-        if (typeof StateRaw[propName] === 'object') {
-            result[propName] = wrap(StateRaw[propName]);
-            continue;
-        }
-
-        Object.defineProperty(result, propName, {
-            get: function () {
-                return this[propName];
-            },
-            set: function (value) {
-                StateRaw.setField(this.id, propName, value)
-                this[propName] = value;
-            }
-        });
-        result[propName] = obj[propName];
+var StateRaw = {
+    setState: function (parentId, key, value) {
+        console.log(`Current state is setField: ${JSON.stringify(window.State)}`);
+        console.log(`Setter: ${parentId}, ${key}, ${value}`);
+    },
+    onStateChange: undefined,
+    get data() {
+        return debugData;
     }
+};
+
+var proxify = function (obj) {
+
+    let newObj = {};
+    Object.assign(newObj, obj);
+
+    let getter = function (target, property, receiver) {
+        return target[property];
+    };
+    let setter = function (target, property, value, receiver) {
+        target[property] = value;
+        $('#state').text(JSON.stringify(window.State, null, 4));
+        return true;
+    };
+
+    for (prop in newObj) {
+        console.log(prop);
+        if (newObj[prop] !== null && typeof newObj[prop] === 'object') {
+            newObj[prop] = proxify(newObj[prop]);
+        }
+    }
+
+    let result = new Proxy(newObj, {
+        get: getter,
+        set: setter
+    });
+
     return result;
 };
 
 ; (function () {
-    window.State = wrap(StateRaw);
-    console.log(`Current state: ${JSON.stringify(window.State)}`);
+    window.State = proxify(StateRaw.data);
+    console.log(window.State);
+    console.log(`Current state in IIFE: ${JSON.stringify(window.State)}`);
 
-    window.State.field1 = "test Hello World";
+    window.State.field1 = 'test Hello World';
+    window.State.objField5.field51 = 'test Hello World';
+    window.State.objField5.field55 = 'test field555';
+
+    console.log(window.State);
 })();
