@@ -1,27 +1,37 @@
-var debugData = {
-    id: "1",
-    field1: 'Hello World',
-    field2: '2 field',
-    field3: true,
-    field4: 123,
-    objField5: {
-        id: "2",
-        field51: '5 field',
-        field52: false,
-        field53: null,
-        objField54: {
-            id: "3",
-            field541: '541_field1',
-            field542: 22345,
-            field543: undefined
+var story = {
+    app: {
+        // ...
+    },
+    // ...
+    questProgress: {
+        id: "1",
+        field1: 'Hello World',
+        field2: '2 field',
+        field3: true,
+        field4: 123,
+        objField5: {
+            id: "2",
+            field51: '5 field',
+            field52: false,
+            field53: null,
+            objField54: {
+                id: "3",
+                field541: '541_field1',
+                field542: 22345,
+                field543: undefined
 
+            }
         }
     }
 };
 
+var onStateChange = function () {
+    // ...
+}
+
 var StateRaw = {
     setState: function (parentId, key, value) {
-        console.log(`Current state is setField: ${JSON.stringify(window.State)}`);
+        console.log(`Current state in setField: ${JSON.stringify(window.State)}`);
         console.log(`Setter: ${parentId}, ${key}, ${value}`);
     },
     onStateChange: undefined,
@@ -39,6 +49,7 @@ var proxify = function (obj) {
         return target[property];
     };
     let setter = function (target, property, value, receiver) {
+        console.log(`setter ${property}`);
         target[property] = value;
         $('#state').text(JSON.stringify(window.State, null, 4));
         return true;
