@@ -1,3 +1,4 @@
+<script src="js/context.js"></script>
 <!DOCTYPE html>
 <html lang="en">
 
@@ -12,7 +13,7 @@
     <div class="container-fluid">
         <div class="row m-1">
             <div class="col col-12 p-1">
-                <button class="btn btn-primary btn-block btn-sm" onclick="onStoryChange();">LOG STATE</button>
+                <button name="log1" class="btn btn-primary btn-block btn-sm">LOG STATE</button>
             </div>
 
         </div>
@@ -21,7 +22,8 @@
                 <input type="text" class="form-control form-control-sm" name="testInput2" placeholder="test value 2">
             </div>
             <div class="col col-4 p-1">
-                <button class="btn btn-secondary btn-block btn-sm" onclick="onStoryChange();">LOG STATE</button>
+                <!-- <button name="log2" class="btn btn-secondary btn-block btn-sm">LOG -->
+                STATE</button>
             </div>
             <div class="col col-4 p-1">
                 <div class="d-flex align-items-center" style="height:100%;">
@@ -36,6 +38,19 @@
             <div>
                 <pre id="state"></pre>
             </div>
+        </div>
+        <div class="row m-1">
+            <button name="test1" class="btn btn-primary btn-block btn-sm">1. set f1 = "v3"</button>
+            <button name="test2" class="btn btn-primary btn-block btn-sm">2. delete "fToDelete"</button>
+            <button name="test3" class="btn btn-primary btn-block btn-sm">3. set f2 = undefined</button>
+            <button name="test4" class="btn btn-primary btn-block btn-sm">4. set new f4 = "new f4"</button>
+            <button name="test5" class="btn btn-primary btn-block btn-sm">5. define f5 = "definded f5"</button>
+            <button name="test6" class="btn btn-primary btn-block btn-sm">6. set defined f5 = "updated definded f5"</button>
+            <button name="test7" class="btn btn-primary btn-block btn-sm">7. throw on set window.story"</button>
+            <button name="test8" class="btn btn-primary btn-block btn-sm">8. set f10.f101 = "value of f101 - 1"</button>
+            <button name="test9" class="btn btn-primary btn-block btn-sm">9. set f11 = {f111: "value of new object field f111"}</button>
+            <button name="test10" class="btn btn-primary btn-block btn-sm">10. set f11.f111 = "updated value of new object field f111"</button>
+            <button name="test11" class="btn btn-primary btn-block btn-sm">10. set f11.f112 = "field f112"</button>
         </div>
     </div>
     <script src="js/jquery-3.6.0.js"></script>

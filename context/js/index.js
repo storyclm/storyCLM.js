@@ -1,111 +1,70 @@
 $('#state').text(JSON.stringify(window.story, null, 4));
 
 var onStoryChange = function () {
-    // console.log('onStoryChange');
-    // console.log(JSON.stringify(window.story));
     $('#state').text(JSON.stringify(window.story, null, 4));
 }
 
-// ; (function () {
-//     let getter = function (target, property, receiver) {
+$("button[name='test1'").click(function () {
+    story.debugAppState.f1 = "v3";
+    $('#state').text(JSON.stringify(window.story, null, 4));
+});
 
-//         // TODO: some logic
+$("button[name='test2'").click(function () {
+    delete story.debugAppState.fToDelete;
+    $('#state').text(JSON.stringify(window.story, null, 4));
+});
 
-//         console.log("getter: " + property);
-//         console.log("getter path: " + target.path);
-//         return target[property];
-//     };
-//     let setter = function (target, property, value, receiver) {
+$("button[name='test3'").click(function () {
+    story.debugAppState.f2 = undefined;
+    $('#state').text(JSON.stringify(window.story, null, 4));
+});
 
-//         // TODO: some logic
+$("button[name='test4'").click(function () {
+    story.debugAppState.f4 = "new f4";
+    $('#state').text(JSON.stringify(window.story, null, 4));
+});
 
-//         console.log("setter of: " + property + " value: " + value);
-//         console.log("setter path: " + target.path);
-//         target[property] = value;
-//         return true;
-//     };
+$("button[name='test5'").click(function () {
+    Object.defineProperty(window.story.debugAppState, "f5", {
+        value: "definded f5",
+        enumerable: true,
+        writable: true
+    });
+    $('#state').text(JSON.stringify(window.story, null, 4));
+});
 
-//     let nestedProxy = function (target, path = []) {
-//         console.log(path);
-//         for (targetProp in target) {
-//             if (typeof target[targetProp] === 'object') {
-//                 path.push(targetProp);
-//                 target[targetProp] = nestedProxy(target[targetProp], path);
+$("button[name='test6'").click(function () {
+    story.debugAppState.f5 = "updated definded f5";
+    $('#state').text(JSON.stringify(window.story, null, 4));
+});
 
-//             }
-//         }
+$("button[name='test7'").click(function () {
+    try {
+        window.story.debugAppState = {};
+        console.log(JSON.stringify(window.story, null, 4));
+    } catch (error) {
+        $('#state').text(error);
+        return;
+    }
+    $('#state').text('No exception was thrown');
+});
 
-//         let result = new Proxy(target, {
-//             get: getter,
-//             set: setter
-//         });
-//         result.path = path.join(".");
-//         return result;
-//     }
+$("button[name='test8'").click(function () {
+    story.debugAppState.f10.f101 = "value of f101 - 1";
+    $('#state').text(JSON.stringify(window.story, null, 4));
+});
 
-//     let proxyTarget = {
-//         prop1: "val1",
-//         prop2: {
-//             prop3: "val2",
-//             prop4: "val3"
-//         }
-//     };
+$("button[name='test9'").click(function () {
+    story.debugAppState.f11 = { f111: "value of new object field f111" };
+    $('#state').text(JSON.stringify(window.story, null, 4));
+});
 
-//     let proxy = new nestedProxy(proxyTarget, ["root"]);
-//     var v = proxy.prop1; // getter test
-//     var v1 = proxy.prop2.prop3; // getter test
+$("button[name='test10'").click(function () {
+    story.debugAppState.f11.f111 = "updated value of new object field f111";
+    $('#state').text(JSON.stringify(window.story, null, 4));
+});
 
-//     proxy.prop1 = "set1"; // setter test
-//     proxy.prop2.prop3 = "set2"; //setter test
-//     proxy.prop5 = "val4"; //setter test
-
-//     console.log(proxy);
-
-// })();
-
-// // LAB FINISh
-
-// var storyContext = window.story;
-// console.log(window.Native);
-
-// if (!storyContext) {
-//     storyContext = {
-//         accentColor: {
-//             color: "blue"
-//         }
-
-//     }
-// }
-
-// var logState = function () {
-//     if (!storyContext) {
-//         console.log("no storyContext");
-//         return
-//     }
-//     $("body").css("background-color", storyContext.accentColor.color);
-//     console.log(JSON.stringify(storyContext.State, 4));
-// }
-
-// var TestFunc2 = function () {
-//     if (!storyContext) {
-//         console.log("no context");
-//         return
-//     }
-//     let val = $("input[name='testInput2']").val();
-//     console.log(val);
-
-//     if (storyContext != undefined) {
-//         var result = context.TestMethod2(val);
-//         $("#result").val(result);
-//     }
-
-//     return result;
-// }
-
-// var Native = {
-//     TestCall1: function () {
-//         return 123;
-//     }
-// }
-
-// Native.TestCall1();
+$("button[name='test11'").click(function () {
+    story.debugAppState.f11.f112 = "field f112";
+    $('#state').text(JSON.stringify(window.story, null, 4));
+});
