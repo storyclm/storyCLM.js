@@ -1,89 +1,153 @@
-// rev:13
+// rev:38
 
-if (typeof _onStoryChange !== 'function') {
-    Object.defineProperty(window, '_onStoryChange', {
-        value: function () {
-            let state = JSON.parse(JSON.stringify(_story.state));
-            story.state = state;
+; (function () {
+    if (window._story === undefined) {
+        window._story = {};
+    }
 
-            if (typeof window.story.onStoryChange === 'function') {
-                story.onStoryChange();
-            }
-        },
-        configurable: false,
-        enumerable: false,
-        writable: false
-    });
-}
+    let getType = function (value) {
+        let type;
+        switch (typeof value) {
+            case 'boolean':
+                type = 'boolean';
+                break;
+            case 'number':
+                if (!Number.isFinite(value)) {
+                    throw new TypeError('story: infinite numbers and NaN\'s are not supported');
+                }
 
-Object.defineProperty(window, '_proxifyStoryState', {
-    value: function (scheme, state) {
+                if (Number.isInteger(value)) {
+                    type = 'integer';
+                } else {
+                    type = 'float';
+                }
 
-        let validateAndProxifyProperty = function (valueToProxify) {
-            if (typeof valueToProxify === 'undefined') {
-                return null;
-            }
+                break;
+            case 'string':
+                type = 'string';
+                break;
+            case 'undefined':
+                type = 'undefined';
+                break;
+            case 'object':
+                if (value === null) {
+                    type = 'null';
+                }
+                break;
+            default:
+                throw new TypeError(`story: type ${typeof value} is not supported`);
 
-            if (typeof valueToProxify === 'object') {
-                return _proxifyStoryState(valueToProxify);
-            }
-
-            if (typeof valueToProxify === 'bigint' ||
-                typeof valueToProxify === 'boolean' ||
-                typeof valueToProxify === 'number' ||
-                typeof valueToProxify === 'string') {
-                return valueToProxify;
-            }
-
-            throw new Error(`window.story: ${typeof valueToProxify} is not supported`)
         }
+
+        return type;
+    }
+
+    let notifyApp = function (operation, objectName, keyPath, value) {
+
+        let type = getType(value);
+
+        // android
+        if (typeof window.nativeStory?.setStoryProp === 'function') {
+            if (operation === 'set') {
+                window.nativeStory.setStoryProp(objectName, keyPath, type, value);
+            }
+            if (operation === 'delete') {
+                window.nativeStory.deleteStoryProp(objectName, keyPath);
+            }
+        }
+
+        // ios
+        logToDiv(window.webkit === undefined);
+        if (window.webkit !== undefined) {
+            logToDiv(window.webkit.messageHandlers === undefined);
+            logToDiv(window.webkit.messageHandlers?.setStoryProp === undefined);
+            logToDiv(window.webkit.messageHandlers?.setStoryProp?.postMessage === undefined);
+        }
+        if (window.webkit !== undefined && typeof webkit.messageHandlers?.setStoryProp?.postMessage === 'function') {
+            if (operation === 'set') {
+                let model = { objectName, keyPath, type, value };
+                webkit.messageHandlers.setStoryProp.postMessage(JSON.stringify(model));
+            } else {
+                let model = { objectName, keyPath };
+                webkit.messageHandlers.deleteStoryProp.postMessage(JSON.stringify(model));
+            }
+        }
+
+    }
+
+    let pushKeyPathPart = function (keyPathParts, part) {
+        let newKeyPathParts = keyPathParts.slice();
+        newKeyPathParts.push(part);
+        return newKeyPathParts;
+    }
+
+    let validateAndNotify = function (objectName, keyPathParts, property, value) {
+
+        try {
+            let newKeyPathParts = pushKeyPathPart(keyPathParts, property);
+            let keyPath = newKeyPathParts.join('.');
+            if (typeof value === 'undefined') {
+                notifyApp('delete', objectName, keyPath, value);
+            } else if (typeof value === 'object' && value !== null) {
+                notifyApp('set', objectName, keyPath, null);
+                for (prop in value) {
+                    validateAndNotify(objectName, newKeyPathParts, prop, value[prop]);
+                }
+            } else if (value === null ||
+                typeof value === 'boolean' ||
+                typeof value === 'number' ||
+                typeof value === 'string') {
+                notifyApp('set', objectName, keyPath, value);
+            } else {
+                throw new Error(`story: ${typeof value} is not supported`);
+            }
+        } catch (e) {
+            logToDiv(e);
+        }
+    }
+
+    let proxifyState = function (objectName, keyPathParts, state, mutable) {
 
         let getter = function (target, property) {
             return target[property];
         };
 
         let setter = function (target, property, value) {
-            let newValue = validateAndProxifyProperty(value);
-            target[property] = newValue;
+            if (!mutable) {
+                throw new Error(`story: property ${property} is immutable`);
+            }
 
-            window.notifyApp('set', property, newValue);
+            validateAndNotify(objectName, keyPathParts, property, value);
             return true;
         };
 
         let definer = function (target, property, attributes) {
-            var newAttributes = {};
-            Object.assign(newAttributes, attributes);
-            newAttributes.value = validateAndProxifyProperty(attributes.value);
-            Object.defineProperty(target, property, newAttributes);
+            if (!mutable) {
+                throw new Error(`story: property ${property} is immutable`);
+            }
 
-            window.notifyApp('set', property, newAttributes.value);
+            if (attributes === undefined) {
+                throw new Error('story: property attributes must be set');
+            }
+
+            validateAndNotify(objectName, keyPathParts, property, attributes.value);
             return true;
         };
 
         let deleter = function (target, property) {
-            delete target[property];
-            window.notifyApp('delete', property);
+            if (!mutable) {
+                throw new Error(`story: property ${property} is immutable`);
+            }
+
+            validateAndNotify(objectName, keyPathParts, property);
             return true;
         };
 
         let newState = {};
         for (stateProp in state) {
-
-            if (state[stateProp] === null || typeof state[stateProp] !== 'object') {
-                throw new Error(`window._story: shallow properies must be an object`);
-            }
-
-            if (!stateProp in scheme.propsToProxify) {
-                newState[stateProp] = JSON.parse(JSON.stringify(state[stateProp]));
-                Object.freeze(newState[stateProp]);
-            } else {
-                newState[stateProp] = {};
-                for (fieldProp in state[stateProp]) {
-                    newState[stateProp][fieldProp] = state[stateProp][fieldProp] !== null && typeof state[stateProp][fieldProp] === 'object'
-                        ? _proxifyStoryState(state[stateProp][fieldProp])
-                        : state[stateProp][fieldProp];
-                }
-            }
+            newState[stateProp] = state[stateProp] !== null && typeof state[stateProp] === 'object'
+                ? proxifyState(objectName, pushKeyPathPart(keyPathParts, stateProp), state[stateProp], mutable)
+                : state[stateProp];
         }
 
         let result = new Proxy(newState, {
@@ -94,68 +158,43 @@ Object.defineProperty(window, '_proxifyStoryState', {
         });
 
         return result;
-    },
-    configurable: false,
-    enumerable: false,
-    writable: false
-});
-
-; (function () {
-    window.story = JSON.parse(JSON.stringify(window._story));
-    //let state = JSON.parse(JSON.stringify(window._story.state));
-    // Object.freeze(state);
-
-    let notifyApp = function (operation, property, value) {
-
-        // android
-        if (typeof window.nativeStory?.setStoryProp === 'function') {
-            if (operation === 'set') {
-                window.nativeStory.setStoryProp(property, value);
-            }
-            if (operation === 'delete') {
-                window.nativeStory.deleteStoryProp(property);
-            }
-        }
-
-        // ios
-        if (typeof webkit !== 'undefined' && typeof webkit.messageHandlers?.setStoryProp?.postMessage === 'function') {
-            if (operation === 'set') {
-                webkit.messageHandlers.setStoryProp.postMessage(operation, property, value);
-            } else {
-                webkit.messageHandlers.deleteStoryProp.postMessage(operation, property, value);
-            }
-        }
-
     }
 
-    let setStateDeep = function (path, newState) {
-        for (let newStateProp in newState) {
-            var newPath = `${path}.${newStateProp}`;
-            if (typeof newState[newStateProp] === 'object' && newState[newStateProp] !== null) {
-                // if (state[newStateProp] === undefined) {
-                //     notifyApp('set', newPath, newState[newStateProp]);
-
-                // } else {
-                //     setStateDeep(newPath, newState[newStateProp])
-                // }
-                setStateDeep(newPath, newState[newStateProp]);
-            } else {
-                let operation = newState[newStateProp] === undefined ? 'delete' : 'set';
-                notifyApp(operation, newPath, newState[newStateProp]);
+    let proxifyStory = function (newStory) {
+        let newState = {};
+        for (newStoryProp in newStory) {
+            if (!newStoryProp in newStory.scheme || newStoryProp === 'scheme') {
+                continue;
             }
-        }
-    }
 
-    let setState = function (newState) {
-        for (let newStateProp in newState) {
-            if (newState[newStateProp] === null || typeof newState[newStateProp] !== 'object') {
-                throw new Error('setState: newState shallow properties must be an object')
-            }
-            setStateDeep(newStateProp, newState[newStateProp])
+            newState[newStoryProp] = proxifyState(newStoryProp, [], newStory[newStoryProp], newStory.scheme[newStoryProp].contentMutable);
 
         }
+        let onStoryChange = window.story?.onStoryChange;
+        window.story = newState;
+        window.story.onStoryChange = onStoryChange;
     }
 
-    window.story.setState = setState;
+    proxifyStory(_story);
+
+    if (window._onStoryChange === undefined) {
+        Object.defineProperty(window, '_onStoryChange', {
+            value: function () {
+                logToDiv('_onStoryChange enter');
+                try {
+                    proxifyStory(_story);
+                    if (typeof window.story.onStoryChange === 'function') {
+                        story.onStoryChange();
+                    }
+                } catch (e) {
+                    logToDiv(e);
+                }
+
+            },
+            configurable: false,
+            enumerable: false,
+            writable: false
+        });
+    }
 
 })();
