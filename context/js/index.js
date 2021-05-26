@@ -66,7 +66,7 @@ $("button[name='test8'").click(function () {
 // });
 
 $("button[name='test9'").click(function () {
-    story.debugAppState.f9 = { f91: "value of f91 - 1" };
+    story.debugAppState.f9 = { f91: 'value of f91 - 1' };
 });
 
 $("button[name='test10'").click(function () {
@@ -79,4 +79,8 @@ $("button[name='test11'").click(function () {
 
 $("button[name='test12'").click(function () {
     story.debugAppState.f11.f112 = "value of new object field f112";
+});
+
+$("button[name='test13'").click(function () {
+    story.setStory({ debugAppState: { f13: 'setStory value f13' } });
 });

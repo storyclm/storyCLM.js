@@ -1,4 +1,4 @@
-// rev:38
+// rev:39
 
 ; (function () {
     if (window._story === undefined) {
@@ -46,6 +46,7 @@
 
         let type = getType(value);
 
+        console.log({ objectName, keyPath, type, value });
         // android
         if (typeof window.nativeStory?.setStoryProp === 'function') {
             if (operation === 'set') {
@@ -82,28 +83,41 @@
     }
 
     let validateAndNotify = function (objectName, keyPathParts, property, value) {
-
-        try {
-            let newKeyPathParts = pushKeyPathPart(keyPathParts, property);
-            let keyPath = newKeyPathParts.join('.');
-            if (typeof value === 'undefined') {
-                notifyApp('delete', objectName, keyPath, value);
-            } else if (typeof value === 'object' && value !== null) {
-                notifyApp('set', objectName, keyPath, null);
-                for (prop in value) {
-                    validateAndNotify(objectName, newKeyPathParts, prop, value[prop]);
+        setTimeout(function () {
+            try {
+                let newKeyPathParts = pushKeyPathPart(keyPathParts, property);
+                let keyPath = newKeyPathParts.join('.');
+                if (typeof value === 'undefined') {
+                    notifyApp('delete', objectName, keyPath, value);
+                } else if (typeof value === 'object' && value !== null) {
+                    for (prop in value) {
+                        validateAndNotify(objectName, newKeyPathParts, prop, value[prop]);
+                    }
+                } else if (value === null ||
+                    typeof value === 'boolean' ||
+                    typeof value === 'number' ||
+                    typeof value === 'string') {
+                    notifyApp('set', objectName, keyPath, value);
+                } else {
+                    throw new Error(`story: ${typeof value} is not supported`);
                 }
-            } else if (value === null ||
-                typeof value === 'boolean' ||
-                typeof value === 'number' ||
-                typeof value === 'string') {
-                notifyApp('set', objectName, keyPath, value);
-            } else {
-                throw new Error(`story: ${typeof value} is not supported`);
+            } catch (e) {
+                logToDiv(e);
             }
-        } catch (e) {
-            logToDiv(e);
+        }, 500);
+    }
+
+    let setStory = function (newStory) {
+        for (objectName in newStory) {
+            var state = newStory[objectName];
+            for (prop in state) {
+                validateAndNotify(objectName, [], prop, state[prop]);
+            }
         }
+    }
+
+    let removeStoryProp = function (prop) {
+        let parts
     }
 
     let proxifyState = function (objectName, keyPathParts, state, mutable) {
@@ -168,11 +182,13 @@
             }
 
             newState[newStoryProp] = proxifyState(newStoryProp, [], newStory[newStoryProp], newStory.scheme[newStoryProp].contentMutable);
-
         }
+
         let onStoryChange = window.story?.onStoryChange;
         window.story = newState;
         window.story.onStoryChange = onStoryChange;
+
+        window.story.setStory = setStory;
     }
 
     proxifyStory(_story);
