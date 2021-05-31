@@ -46,7 +46,6 @@
 
         let type = getType(value);
 
-        console.log({ objectName, keyPath, type, value });
         // android
         if (typeof window.nativeStory?.setStoryProp === 'function') {
             if (operation === 'set') {
@@ -104,7 +103,7 @@
             } catch (e) {
                 logToDiv(e);
             }
-        }, 500);
+        }, 5);
     }
 
     let setStory = function (newStory) {
@@ -117,7 +116,9 @@
     }
 
     let removeStoryProp = function (prop) {
-        let parts
+        let parts = prop.split('.');
+        let objectName = parts.shift();
+        notifyApp('delete', objectName, parts.join('.'));
     }
 
     let proxifyState = function (objectName, keyPathParts, state, mutable) {
@@ -189,6 +190,7 @@
         window.story.onStoryChange = onStoryChange;
 
         window.story.setStory = setStory;
+        window.story.removeStoryProp = removeStoryProp;
     }
 
     proxifyStory(_story);

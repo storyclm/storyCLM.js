@@ -1,9 +1,24 @@
 window.logToDiv = function (value) {
     $('#logs').append(`<div>${value}</div>`);
 }
+// _set_story();
+// logToDiv(window.story.app.name);
 
 story.onStoryChange = function () {
     $('#story').text(JSON.stringify(window.story, null, 4));
+
+    if (window.story.debugAppState.f50) {
+        test50.push(window.story.debugAppState.f50);
+        let sum = test50.reduce((total, curr) => total + curr);
+        let expected = test50.length * (test50.length + 1) / 2;
+        test50passed = sum === expected;
+        if (test50.length === 100) {
+            logToDiv(`test50passed: ${test50passed}`);
+            window.test50passed = undefined;
+            window.test50 = undefined;
+            story.removeStoryProp('debugAppState.f50');
+        }
+    }
 }
 
 $('#story').text(JSON.stringify(window.story, null, 4));
@@ -82,5 +97,17 @@ $("button[name='test12'").click(function () {
 });
 
 $("button[name='test13'").click(function () {
-    story.setStory({ debugAppState: { f13: 'setStory value f13' } });
+    story.setStory({ debugAppState: { f13: "setStory value f13" } });
+});
+
+$("button[name='test14'").click(function () {
+    story.removeStoryProp('debugAppState.f14');
+});
+
+$("button[name='test50'").click(function () {
+    window.test50 = [];
+    window.test50passed = true;
+    for (let i = 1; i <= 100; i++) {
+        story.setStory({ debugAppState: { f50: i } });
+    }
 });

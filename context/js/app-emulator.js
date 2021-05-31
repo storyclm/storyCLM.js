@@ -37,6 +37,18 @@ window._storyTemplate = {
         "state": "Success"
     },
     "debugAppState": {
+        "presentation": {
+            "items": {
+
+            },
+            "rating": {
+                "visible": true,
+                "parameters": {
+                    "color": "#000000",
+                    "fontSize": 12
+                }
+            }
+        },
         "f1": 0,
         "f2": "v2",
         "f3": true,
@@ -44,7 +56,8 @@ window._storyTemplate = {
         "f8": "f8 value",
         "f10": {
             "f101": "value of f101"
-        }
+        },
+        "f14": "f14 to removeStoryProp"
     }
 };
 
