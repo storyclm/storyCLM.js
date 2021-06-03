@@ -46,7 +46,9 @@ window._storyTemplate = {
                 "parameters": {
                     "color": "#000000",
                     "fontSize": 12
-                }
+                },
+                "value": 2
+
             }
         },
         "f1": 0,

@@ -132,6 +132,11 @@
                 throw new Error(`story: property ${property} is immutable`);
             }
 
+            // let obj = story[objectName];
+            // for (keyPart of keyPathParts) {
+            //     ogj = obj[keyPart];
+            // }
+            target[property] = value;
             validateAndNotify(objectName, keyPathParts, property, value);
             return true;
         };

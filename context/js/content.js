@@ -24,18 +24,43 @@ $(document).ready(function () {
 
     var fields = Object.keys(story.debugAppState.presentation.items);
 
+    let onChange = function (event) {
+        console.log(event.target.value);
+    }
+
+    let addFieldAndChangeListener = function (name) {
+        var input = $("#input-wrapper-container");
+        input.find("div span").text(`Name ${name}`);
+        input.find("input").attr("name", name);
+        $("#text-input-list").append(input.html());
+        $(`input[name='${name}'`).change(onChange);
+        // $("input[name='field_2'").val();
+    }
+
+    for (field in story.debugAppState.presentation.items) {
+        addFieldAndChangeListener(field);
+    }
+
     $("#btn-close").click(function () {
         StoryCLM.Presentation.Close(2);
     });
 
-    $("input[name='rate']").change(function (e) {
+    let setStars = function (value) {
         for (let i = 1; i < 6; i++) {
-            $(`label[for='star${i}'] img`).attr("src", i <= e.target.value ? "svg/star-filled.svg" : "svg/star-outlined.svg")
+            $(`label[for='star${i}'] img`).attr("src", i <= value ? "svg/star-filled.svg" : "svg/star-outlined.svg")
         }
-    });
-    let onChange = function (event) {
-        console.log(event.target.value);
     }
+
+    if (story.debugAppState.presentation.rating.visible) {
+        $('#rating-root').removeClass('hidden');
+        setStars(story.debugAppState.presentation.rating.value);
+    }
+
+    $("input[name='rate']").change(function (e) {
+        story.debugAppState.presentation.rating.value = e.target.value;
+        setStars(e.target.value);
+    });
+
 
     $("#btn-add").click(function () {
         let name = `field_${fields.length + 1}`;
@@ -44,13 +69,13 @@ $(document).ready(function () {
             value: "",
             order: fields.length
         };
-        var input = $("#input-wrapper-container");
-        input.find("div span").text(`Name ${name}`);
-        input.find("input").attr("name", name);
-        $("#text-input-list").append(input.html());
-        $(`input[name='${name}'`).change(onChange);
-        $("input[name='field_2'").val()
-
+        addFieldAndChangeListener(name);
+        // var input = $("#input-wrapper-container");
+        // input.find("div span").text(`Name ${name}`);
+        // input.find("input").attr("name", name);
+        // $("#text-input-list").append(input.html());
+        // $(`input[name='${name}'`).change(onChange);
+        // $("input[name='field_2'").val();
     });
 
     $("#btn-remove").click(function () {

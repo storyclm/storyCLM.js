@@ -37,12 +37,12 @@
                     <h2>Тут большое или маленькое предложение, которое можно задать в конфигураторе</h2>
                     <h1 class="pt-3">Укажите, что вам не понравилось (в каждом пункте свое замечание)</h1>
                     <div id="text-input-list">
-                        <div class="pt-3 input-wrapper">
+                        <!-- <div class="pt-3 input-wrapper">
                             <div class="input-title">
                                 <span>Name field_1</span>
                             </div>
                             <input name="field_1" class="w-100 pt-1 input-contol" placeholder="Text">
-                        </div>
+                        </div> -->
                     </div>
                     <div class="add-remove-wrapper">
                         <button id="btn-remove" class="btn-add-remove">
@@ -52,37 +52,39 @@
                             <img src="svg/plus-sign.svg" />
                         </button>
                     </div>
-                    <h1 class="pt-3">Поставьте нам оценку</h1>
-                    <div class="rating-wrapper">
-                        <div class="rating-star">
-                            <input type="radio" id="star1" name="rate" value="1">
-                            <label for="star1" title="text">
-                                <img class="svg" src="svg/star-outlined.svg" />
-                            </label>
-                        </div>
-                        <div class="rating-star">
-                            <input type="radio" id="star2" name="rate" value="2">
-                            <label for="star2" title="text">
-                                <img class="svg" src="svg/star-outlined.svg" />
-                            </label>
-                        </div>
-                        <div class="rating-star">
-                            <input type="radio" id="star3" name="rate" value="3">
-                            <label for="star3" title="text">
-                                <img class="svg" src="svg/star-outlined.svg" />
-                            </label>
-                        </div>
-                        <div class="rating-star">
-                            <input type="radio" id="star4" name="rate" value="4">
-                            <label for="star4" title="text">
-                                <img class="svg" src="svg/star-outlined.svg" />
-                            </label>
-                        </div>
-                        <div class="rating-star">
-                            <input type="radio" id="star5" name="rate" value="5">
-                            <label for="star5" title="text">
-                                <img class="svg" src="svg/star-outlined.svg" />
-                            </label>
+                    <div id="rating-root" class="hidden">
+                        <h1 class="pt-3">Поставьте нам оценку</h1>
+                        <div class="rating-wrapper">
+                            <div class="rating-star">
+                                <input type="radio" id="star1" name="rate" value="1">
+                                <label for="star1" title="text">
+                                    <img class="svg" src="svg/star-outlined.svg" />
+                                </label>
+                            </div>
+                            <div class="rating-star">
+                                <input type="radio" id="star2" name="rate" value="2">
+                                <label for="star2" title="text">
+                                    <img class="svg" src="svg/star-outlined.svg" />
+                                </label>
+                            </div>
+                            <div class="rating-star">
+                                <input type="radio" id="star3" name="rate" value="3">
+                                <label for="star3" title="text">
+                                    <img class="svg" src="svg/star-outlined.svg" />
+                                </label>
+                            </div>
+                            <div class="rating-star">
+                                <input type="radio" id="star4" name="rate" value="4">
+                                <label for="star4" title="text">
+                                    <img class="svg" src="svg/star-outlined.svg" />
+                                </label>
+                            </div>
+                            <div class="rating-star">
+                                <input type="radio" id="star5" name="rate" value="5">
+                                <label for="star5" title="text">
+                                    <img class="svg" src="svg/star-outlined.svg" />
+                                </label>
+                            </div>
                         </div>
                     </div>
                     <div>
