@@ -38,8 +38,22 @@ window._storyTemplate = {
     },
     "debugAppState": {
         "presentation": {
+            "notes": {
+                "text": "Тут большое или маленькое предложение, которое можно задать в конфигураторе"
+            },
             "items": {
-
+                "field_1": {
+                    "value": "field_1 val",
+                    "order": 1
+                },
+                "field_3": {
+                    "value": "field_3 val 3",
+                    "order": 3
+                },
+                "field_2": {
+                    "value": "field_2 val 2",
+                    "order": 2
+                }
             },
             "rating": {
                 "visible": true,
@@ -47,7 +61,7 @@ window._storyTemplate = {
                     "color": "#000000",
                     "fontSize": 12
                 },
-                "value": 2
+                "value": 3
 
             }
         },

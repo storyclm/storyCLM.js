@@ -1,20 +1,31 @@
 window.logToDiv = function (value) {
     $('#logs').append(`<div>${value}</div>`);
 }
+window.syncWait = ms => {
+    let start = Date.now();
+    let finish = start + ms;
+    while (Date.now() < finish) {
+        continue;
+    }
+}
 // _set_story();
-// logToDiv(window.story.app.name);
+logToDiv(window.story?.app?.name);
 
 story.onStoryChange = function () {
     $('#story').text(JSON.stringify(window.story, null, 4));
 
-    if (window.story.debugAppState.f50) {
+    if (window.story.debugAppState.f50 !== undefined) {
+        logToDiv(window.story.debugAppState.f50);
+        syncWait(500);
         test50.push(window.story.debugAppState.f50);
-        let sum = test50.reduce((total, curr) => total + curr);
-        let expected = test50.length * (test50.length + 1) / 2;
-        test50passed = sum === expected;
-        if (test50.length === 100) {
+        // console.log(test50.join());
+        if (test50.length === 5) {
+            let test50passed = true;
+            for (let i = 0; i < 5; i++) {
+                test50passed = test50passed && test50[i] === i;
+            }
+            logToDiv(test50.join());
             logToDiv(`test50passed: ${test50passed}`);
-            window.test50passed = undefined;
             window.test50 = undefined;
             story.removeStoryProp('debugAppState.f50');
         }
@@ -106,8 +117,7 @@ $("button[name='test14'").click(function () {
 
 $("button[name='test50'").click(function () {
     window.test50 = [];
-    window.test50passed = true;
-    for (let i = 1; i <= 100; i++) {
+    for (let i = 0; i < 5; i++) {
         story.setStory({ debugAppState: { f50: i } });
     }
 });

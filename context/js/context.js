@@ -1,11 +1,11 @@
-// rev:39
+// rev:42
 
 ; (function () {
     if (window._story === undefined) {
         window._story = {};
     }
 
-    let getType = function (value) {
+    const getType = function (value) {
         let type;
         switch (typeof value) {
             case 'boolean':
@@ -42,7 +42,7 @@
         return type;
     }
 
-    let notifyApp = function (operation, objectName, keyPath, value) {
+    const notifyApp = function (operation, objectName, keyPath, value) {
 
         let type = getType(value);
 
@@ -57,7 +57,7 @@
         }
 
         // ios
-        logToDiv(window.webkit === undefined);
+        // logToDiv(window.webkit === undefined);
         if (window.webkit !== undefined) {
             logToDiv(window.webkit.messageHandlers === undefined);
             logToDiv(window.webkit.messageHandlers?.setStoryProp === undefined);
@@ -81,7 +81,7 @@
         return newKeyPathParts;
     }
 
-    let validateAndNotify = function (objectName, keyPathParts, property, value) {
+    const validateAndNotify = function (objectName, keyPathParts, property, value) {
         setTimeout(function () {
             try {
                 let newKeyPathParts = pushKeyPathPart(keyPathParts, property);
@@ -106,22 +106,22 @@
         }, 5);
     }
 
-    let setStory = function (newStory) {
+    const setStory = newStory => {
         for (objectName in newStory) {
             var state = newStory[objectName];
             for (prop in state) {
                 validateAndNotify(objectName, [], prop, state[prop]);
             }
         }
-    }
+    };
 
-    let removeStoryProp = function (prop) {
+    const removeStoryProp = function (prop) {
         let parts = prop.split('.');
         let objectName = parts.shift();
         notifyApp('delete', objectName, parts.join('.'));
     }
 
-    let proxifyState = function (objectName, keyPathParts, state, mutable) {
+    const proxifyState = function (objectName, keyPathParts, state, mutable) {
 
         let getter = function (target, property) {
             return target[property];
@@ -180,7 +180,7 @@
         return result;
     }
 
-    let proxifyStory = function (newStory) {
+    const proxifyStory = function (newStory) {
         let newState = {};
         for (newStoryProp in newStory) {
             if (!newStoryProp in newStory.scheme || newStoryProp === 'scheme') {
@@ -203,7 +203,7 @@
     if (window._onStoryChange === undefined) {
         Object.defineProperty(window, '_onStoryChange', {
             value: function () {
-                logToDiv('_onStoryChange enter');
+                // logToDiv('_onStoryChange enter');
                 try {
                     proxifyStory(_story);
                     if (typeof window.story.onStoryChange === 'function') {
