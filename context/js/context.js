@@ -1,4 +1,4 @@
-// rev:42
+// rev:43
 
 ; (function () {
     if (window._story === undefined) {
@@ -128,6 +128,7 @@
         };
 
         let setter = function (target, property, value) {
+            logToDiv('setter');
             if (!mutable) {
                 throw new Error(`story: property ${property} is immutable`);
             }
@@ -142,6 +143,7 @@
         };
 
         let definer = function (target, property, attributes) {
+            logToDiv('setter');
             if (!mutable) {
                 throw new Error(`story: property ${property} is immutable`);
             }
@@ -203,7 +205,7 @@
     if (window._onStoryChange === undefined) {
         Object.defineProperty(window, '_onStoryChange', {
             value: function () {
-                // logToDiv('_onStoryChange enter');
+                logToDiv('_onStoryChange enter');
                 try {
                     proxifyStory(_story);
                     if (typeof window.story.onStoryChange === 'function') {

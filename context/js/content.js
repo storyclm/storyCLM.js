@@ -1,28 +1,28 @@
-$(document).ready(function () {
+; (function () {
 
     window.logToDiv = function (value) {
         $('#logs').append(`<div>${value}</div>`);
     }
     logToDiv(window.story);
-    // _set_story();
+    _set_story();
 
     // Заголовок (notes)
     const setNotesText = () => {
-        $('#notes').text(story.debugAppState.presentation?.notes?.text);
+        $('#notes').text(story.presentation?.form?.notes?.text);
     }
 
     // Поля ввода (items)
     const getFields = () => {
         let fields = [];
-        for (let itemName in story.debugAppState.presentation.items) {
-            var item = story.debugAppState.presentation.items[itemName];
-            fields.push({ name: itemName, value: item.value, order: item.order });
+        for (let itemName in story.presentation.form.items) {
+            var item = story.presentation.form.items[itemName];
+            fields.push({ name: itemName, inputValue: item.inputValue, order: item.order });
         }
         return fields.sort((a, b) => a.order - b.order);
     }
 
     let onChange = function (event) {
-        story.debugAppState.presentation.items[event.target.name].value = event.target.value;
+        story.presentation.items[event.target.name].inputValue = event.target.value;
     }
 
     let addFieldAndChangeListener = function (fieldName, value) {
@@ -39,9 +39,9 @@ $(document).ready(function () {
     });
 
     // Рейтинг
-    let setStars = function (value) {
-        for (let i = 1; i < 6; i++) {
-            $(`label[for='star${i}'] img`).attr("src", i <= value ? "svg/star-filled.svg" : "svg/star-outlined.svg")
+    let setStars = function (quantity, progress) {
+        for (let i = 1; i < quantity + 1; i++) {
+            $(`label[for='star${i}'] img`).attr("src", i <= progress ? "svg/star-filled.svg" : "svg/star-outlined.svg")
         }
     }
 
@@ -50,11 +50,11 @@ $(document).ready(function () {
         let name = `field_${fields.length + 1}`;
         fields.push({
             name: name,
-            value: '',
+            inputValue: '',
             order: fields.length
         });
-        story.debugAppState.presentation.items[name] = {
-            value: '',
+        story.presentation.form.items[name] = {
+            inputValue: '',
             order: fields.length
         };
         addFieldAndChangeListener(name);
@@ -68,7 +68,7 @@ $(document).ready(function () {
         }
 
         var name = fields[fields.length - 1].name;
-        delete story.debugAppState.presentation.items[name];
+        delete story.presentation.form.items[name];
         $("#text-input-list div:last-child").remove();
         fields.pop();
     });
@@ -76,21 +76,21 @@ $(document).ready(function () {
     const init = () => {
 
         // story init
-        if (story.debugAppState.presentation === undefined) {
-            story.debugAppState.presentation = {};
+        if (story.presentation === undefined) {
+            story.presentation = {};
         }
 
-        if (story.debugAppState.presentation.items === undefined ||
-            story.debugAppState.presentation.items === null) {
-            story.debugAppState.presentation.items = {};
+        if (story.presentation.form.items === undefined ||
+            story.presentation.form.items === null) {
+            story.presentation.form.items = {};
 
         }
 
         setNotesText();
 
-        if (Object.keys(story.debugAppState.presentation.items).length === 0) {
-            story.debugAppState.presentation.items.field_1 = {
-                value: "",
+        if (Object.keys(story.presentation.form.items).length === 0) {
+            story.presentation.items.field_1 = {
+                inputValue: "",
                 order: 1
             }
         }
@@ -98,18 +98,18 @@ $(document).ready(function () {
         // items
         var fields = getFields();
         for (field of fields) {
-            addFieldAndChangeListener(field.name, field.value);
+            addFieldAndChangeListener(field.name, field.inputValue);
         }
 
         // rating
-        if (story.debugAppState.presentation.rating?.visible) {
+        if (story.presentation.rating?.ratingVisible) {
             $('#rating-root').removeClass('hidden');
-            setStars(story.debugAppState.presentation.rating.value);
+            setStars(story.presentation.rating.parameters.quantity, story.presentation.rating.parameters.progress);
         }
 
         $("input[name='rate']").change(function (e) {
-            story.debugAppState.presentation.rating.value = e.target.value;
-            setStars(e.target.value);
+            story.presentation.rating.parameters.progress = e.target.value;
+            setStars(story.presentation.rating.parameters.quantity, e.target.value);
         });
     }
 
@@ -118,4 +118,4 @@ $(document).ready(function () {
     story.onStoryChange = () => {
         setNotesText();
     }
-});
+})();

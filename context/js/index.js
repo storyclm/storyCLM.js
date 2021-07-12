@@ -14,11 +14,11 @@ logToDiv(window.story?.app?.name);
 story.onStoryChange = function () {
     $('#story').text(JSON.stringify(window.story, null, 4));
 
-    if (window.story.debugAppState.f50 !== undefined) {
+    if (window.story.debugAppState.f50 !== undefined && window.story.debugAppState.f50 !== null) {
         logToDiv(window.story.debugAppState.f50);
-        syncWait(500);
-        test50.push(window.story.debugAppState.f50);
-        // console.log(test50.join());
+        // syncWait(500);
+        window.test50.push(window.story.debugAppState.f50);
+        console.log(test50.join());
         if (test50.length === 5) {
             let test50passed = true;
             for (let i = 0; i < 5; i++) {
@@ -28,7 +28,13 @@ story.onStoryChange = function () {
             logToDiv(`test50passed: ${test50passed}`);
             window.test50 = undefined;
             story.removeStoryProp('debugAppState.f50');
+            $("button[name='test50'").prop('disabled', false);
         }
+    }
+
+    if (window.test51running) {
+        logToDiv(JSON.stringify(window.test51func()));
+        window.test51running = false;
     }
 }
 
@@ -116,8 +122,21 @@ $("button[name='test14'").click(function () {
 });
 
 $("button[name='test50'").click(function () {
+    $("button[name='test50'").prop('disabled', true);
     window.test50 = [];
     for (let i = 0; i < 5; i++) {
         story.setStory({ debugAppState: { f50: i } });
     }
 });
+
+$("button[name='test51'").click(function () {
+    window.test51running = true;
+    window.test51func = test51closureFunc();
+    story.setStory({ debugAppState: { f51: { "f51_test": "updated value" } } });
+
+});
+
+let test51closureFunc = () => {
+    let result = story.debugAppState.f51;
+    return () => result;
+}

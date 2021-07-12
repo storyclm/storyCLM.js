@@ -73,7 +73,65 @@ window._storyTemplate = {
         "f10": {
             "f101": "value of f101"
         },
-        "f14": "f14 to removeStoryProp"
+        "f14": "f14 to removeStoryProp",
+        "f51": {
+            "f51_test": "initial value"
+        }
+    }
+};
+
+window._storyTemplate = {
+    "scheme": {
+        "presentation": {
+            "appMutable": true,
+            "contentMutable": true
+        }
+    },
+    "presentation": {
+        "accentColor": {
+            "accentColorVisible": true,
+            "parameters": {
+                "color": "#000000",
+                "transparent": "32"
+            }
+        },
+        "form": {
+            "formVisible": false,
+            "items": {
+                "input_1": {
+                    "backgroundColor": "#ffffff",
+                    "fontColor": "#000000",
+                    "fontSize": 15,
+                    "inputValue": "some value",
+                    "name": "input name",
+                    "order": 1
+                },
+                "input_2": {
+                    "backgroundColor": "#123334",
+                    "fontColor": "#344445",
+                    "fontSize": 12,
+                    "inputValue": "",
+                    "name": "knanfoaf",
+                    "order": 2
+                }
+            }
+        },
+        "notes": {
+            "notesVisible": false,
+            "parameters": {
+                "color": "#000000",
+                "fontSize": 12,
+                "text": "Hello world!"
+            }
+        },
+        "rating": {
+            "parameters": {
+                "color": "#000000",
+                "progress": 1,
+                "quantity": 6
+            },
+            "ratingVisible": true
+        }
     }
 };
 
