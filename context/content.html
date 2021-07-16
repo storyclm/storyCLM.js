@@ -1,5 +1,5 @@
-<script src="js/app-emulator.js"></script>
-<script src="js/context.js"></script>
+<!-- <script src="js/app-emulator.js"></script>
+<script src="js/context.js"></script> -->
 <!DOCTYPE html>
 <html lang="ru">
 
@@ -14,7 +14,7 @@
 
 <body>
     <div class="container-fluid p-0 h-100 cont">
-        <div class="row mx-0 pt-3 header">
+        <div id="header" class="row mx-0 pt-3 header">
             <div class="col p-0">
                 <button id="btn-close" class="btn-clear p-3 pt-4">
                     <img src="svg/close-button.svg" />
@@ -33,51 +33,45 @@
         <div class="row mx-0 panel .bc-white">
             <div class="col pt-3">
                 <div class="page-1">
-                    <h1 class="pt-3">Приветствуем</h1>
-                    <h2 id="notes"></h2>
-                    <h1 class="pt-3">Укажите, что вам не понравилось (в каждом пункте свое замечание)</h1>
-                    <div id="text-input-list">
+                    <div id="notes-wrapper">
+                        <h1 class="pt-3">Приветствуем</h1>
+                        <h2 id="notes" class="notes"></h2>
                     </div>
-                    <div class="add-remove-wrapper">
-                        <button id="btn-remove" class="btn-add-remove">
-                            <img src="svg/minus-sign.svg" />
-                        </button>
-                        <button id="btn-add" class="btn-add-remove">
-                            <img src="svg/plus-sign.svg" />
-                        </button>
+                    <div id="form-wrapper">
+                        <h1 class="pt-3">Укажите, что вам не понравилось (в каждом пункте свое замечание)</h1>
+                        <div id="text-input-list">
+                        </div>
+                        <div class="add-remove-wrapper">
+                            <button id="btn-remove" class="btn-add-remove">
+                                <img src="svg/minus-sign.svg" />
+                            </button>
+                            <button id="btn-add" class="btn-add-remove">
+                                <img src="svg/plus-sign.svg" />
+                            </button>
+                        </div>
                     </div>
                     <div id="rating-root" class="hidden">
                         <h1 class="pt-3">Поставьте нам оценку</h1>
                         <div class="rating-wrapper">
-                            <div class="rating-star">
+                            <div id="rating-star-1" class="rating-star hidden">
                                 <input type="radio" id="star1" name="rate" value="1">
-                                <label for="star1" title="text">
-                                    <img class="svg" src="svg/star-outlined.svg" />
-                                </label>
+                                <label for="star1" title="star1"> </label>
                             </div>
-                            <div class="rating-star">
+                            <div id="rating-star-2" class="rating-star hidden">
                                 <input type="radio" id="star2" name="rate" value="2">
-                                <label for="star2" title="text">
-                                    <img class="svg" src="svg/star-outlined.svg" />
-                                </label>
+                                <label for="star2" title="star2"> </label>
                             </div>
-                            <div class="rating-star">
+                            <div id="rating-star-3" class="rating-star hidden">
                                 <input type="radio" id="star3" name="rate" value="3">
-                                <label for="star3" title="text">
-                                    <img class="svg" src="svg/star-outlined.svg" />
-                                </label>
+                                <label for="star3" title="star3"> </label>
                             </div>
-                            <div class="rating-star">
+                            <div id="rating-star-4" class="rating-star hidden">
                                 <input type="radio" id="star4" name="rate" value="4">
-                                <label for="star4" title="text">
-                                    <img class="svg" src="svg/star-outlined.svg" />
-                                </label>
+                                <label for="star4" title="star4"> </label>
                             </div>
-                            <div class="rating-star">
+                            <div id="rating-star-5" class="rating-star hidden">
                                 <input type="radio" id="star5" name="rate" value="5">
-                                <label for="star5" title="text">
-                                    <img class="svg" src="svg/star-outlined.svg" />
-                                </label>
+                                <label for="star5" title="star5"> </label>
                             </div>
                         </div>
                     </div>
@@ -93,10 +87,6 @@
                 </div>
             </div>
         </div>
-        <!-- <div class="row m-0 h-100 footer .bc-white">
-            <div class="col p-0"></div>
-        </div> -->
-        <!-- <div class="row fixed-bottom footer vh-50"></div> -->
         <div id="input-wrapper-container" class="hidden">
             <div class="pt-3 input-wrapper">
                 <div class="input-title">
@@ -104,6 +94,11 @@
                 </div>
                 <input name="field_1" class="w-100 pt-1 input-contol" placeholder="Text">
             </div>
+        </div>
+        <div id="star-wrapper" class="hidden">
+            <svg id="star" class="svg" width="48" height="46" viewBox="0 0 48 46" xmlns="http://www.w3.org/2000/svg">
+                <path d="M46.75 18.125H29.2812L24 1.875L18.7188 18.125H1.25L15.4688 27.875L9.98438 44.125L24 33.9688L38.0156 44.125L32.5312 27.875L46.75 18.125Z" stroke-width="2" stroke-linejoin="round" />
+            </svg>
         </div>
 
     </div>

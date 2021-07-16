@@ -4,11 +4,33 @@
         $('#logs').append(`<div>${value}</div>`);
     }
     logToDiv(window.story);
-    _set_story();
+    //_set_story();
 
-    // Заголовок (notes)
-    const setNotesText = () => {
-        $('#notes').text(story.presentation?.form?.notes?.text);
+    // Заголовок (header)
+    const renderHeader = () => {
+        if (window.story.presentation?.accentColor?.accentColorVisible) {
+            $("#header").removeClass('hidden');
+        } else {
+            $("#header").addClass('hidden');
+        }
+
+        if (window.story?.presentation?.accentColor?.accentColorVisible) {
+            var params = story.presentation.accentColor.parameters;
+            $("#header").css('background-color', params.color + params.transparent.substring(1));
+        }
+    }
+
+    // Текст (notes)
+    const renderNotes = () => {
+        if (window.story.presentation?.notes?.notesVisible) {
+            $("#notes-wrapper").removeClass('hidden');
+        } else {
+            $("#notes-wrapper").addClass('hidden');
+        }
+        let params = story.presentation.notes.parameters;
+        $('#notes').text(params.text);
+        $('#notes').css('font-size', params.fontSize);
+        $('#notes').css('color', params.color);
     }
 
     // Поля ввода (items)
@@ -16,22 +38,65 @@
         let fields = [];
         for (let itemName in story.presentation.form.items) {
             var item = story.presentation.form.items[itemName];
-            fields.push({ name: itemName, inputValue: item.inputValue, order: item.order });
+            fields.push({
+                backgroundColor: item.backgroundColor,
+                fontColor: item.fontColor,
+                fontSize: item.fontSize,
+                name: itemName,
+                inputTitle: item.name,
+                inputValue: item.inputValue,
+                order: item.order
+            });
         }
         return fields.sort((a, b) => a.order - b.order);
     }
 
     let onChange = function (event) {
-        story.presentation.items[event.target.name].inputValue = event.target.value;
+        story.presentation.form.items[event.target.name].inputValue = event.target.value;
     }
 
-    let addFieldAndChangeListener = function (fieldName, value) {
+    const updateField = (field) => {
+        $(`input[name='${field.name}'`).css('background-color', field.backgroundColor);
+        $(`input[name='${field.name}'`).css('color', field.fontColor);
+        $(`input[name='${field.name}'`).css('font-size', field.fontSize);
+        $(`input[name='${field.name}'`).change(onChange);
+        $(`input[name='${field.name}'`).val(field.inputValue);
+    }
+    let addFieldAndChangeListener = function (field) {
         var input = $("#input-wrapper-container");
-        input.find("div span").text(`Name ${fieldName}`);
-        input.find("input").attr("name", fieldName);
+        input.find("div span").text(field.inputTitle);
+        input.find("input").attr("name", field.name);
         $("#text-input-list").append(input.html());
-        $(`input[name='${fieldName}'`).change(onChange);
-        $(`input[name='${fieldName}'`).val(value);
+        updateField(field)
+    }
+
+    const renderFields = () => {
+        if (window.story.presentation?.form?.formVisible) {
+            $("#form-wrapper").removeClass('hidden');
+        } else {
+            $("#form-wrapper").addClass('hidden');
+        }
+
+        var fields = getFields();
+        var currentFieldsCount = $("#text-input-list").children().length;
+
+        for (let i = 1; i <= Math.min(currentFieldsCount, fields.length); i++) {
+            let field = fields[i - 1];
+            updateField(field);
+        }
+
+        if (currentFieldsCount > fields.length) {
+            $("#text-input-list div:last-child").remove();
+        }
+
+        if (currentFieldsCount < fields.length) {
+            for (let i = 1; i <= fields.length; i++) {
+                let field = fields[i - 1];
+                if (i > currentFieldsCount) {
+                    addFieldAndChangeListener(field);
+                }
+            }
+        }
     }
 
     $("#btn-close").click(function () {
@@ -40,24 +105,51 @@
 
     // Рейтинг
     let setStars = function (quantity, progress) {
-        for (let i = 1; i < quantity + 1; i++) {
-            $(`label[for='star${i}'] img`).attr("src", i <= progress ? "svg/star-filled.svg" : "svg/star-outlined.svg")
+        let color = window.story.presentation?.rating?.parameters?.color;
+        for (let i = 1; i <= 5; i++) {
+            if (i <= quantity) {
+                $(`#rating-star-${i}`).removeClass('hidden');
+            } else {
+                $(`#rating-star-${i}`).addClass('hidden');
+            }
+            $("#star-wrapper svg path").attr('stroke', color);
+            $("#star-wrapper svg").attr('fill', i <= progress ? color : 'none');
+            $(`label[for='star${i}']`).html($("#star-wrapper").html());
         }
+    }
+
+    const renderRating = () => {
+        if (story.presentation.rating?.ratingVisible) {
+            $('#rating-root').removeClass('hidden');
+        } else {
+            $('#rating-root').addClass('hidden');
+        }
+
+        setStars(story.presentation.rating.parameters.quantity, story.presentation.rating.parameters.progress);
+
+        $("input[name='rate']").unbind('change');
+        $("input[name='rate']").change(function (e) {
+            story.presentation.rating.parameters.progress = e.target.value;
+        });
     }
 
     $("#btn-add").click(function () {
         let fields = getFields();
-        let name = `field_${fields.length + 1}`;
-        fields.push({
+        let next = fields[fields.length - 1].order + 1;
+        let name = `input_${next}`;
+        var field = {
+            backgroundColor: '#FFF',
+            fontColor: '#000',
+            fontSize: 15,
             name: name,
             inputValue: '',
-            order: fields.length
-        });
-        story.presentation.form.items[name] = {
-            inputValue: '',
-            order: fields.length
+            order: next
         };
-        addFieldAndChangeListener(name);
+        story.presentation.form.items[name] = field;
+
+        field.inputTitle = name;
+        fields.push(field);
+        addFieldAndChangeListener(field);
     });
 
     $("#btn-remove").click(function () {
@@ -73,6 +165,13 @@
         fields.pop();
     });
 
+    const render = () => {
+        renderHeader();
+        renderNotes();
+        renderFields();
+        renderRating();
+    }
+
     const init = () => {
 
         // story init
@@ -86,8 +185,6 @@
 
         }
 
-        setNotesText();
-
         if (Object.keys(story.presentation.form.items).length === 0) {
             story.presentation.items.field_1 = {
                 inputValue: "",
@@ -95,27 +192,12 @@
             }
         }
 
-        // items
-        var fields = getFields();
-        for (field of fields) {
-            addFieldAndChangeListener(field.name, field.inputValue);
-        }
-
-        // rating
-        if (story.presentation.rating?.ratingVisible) {
-            $('#rating-root').removeClass('hidden');
-            setStars(story.presentation.rating.parameters.quantity, story.presentation.rating.parameters.progress);
-        }
-
-        $("input[name='rate']").change(function (e) {
-            story.presentation.rating.parameters.progress = e.target.value;
-            setStars(story.presentation.rating.parameters.quantity, e.target.value);
-        });
+        render();
     }
 
     init();
 
     story.onStoryChange = () => {
-        setNotesText();
+        render();
     }
 })();

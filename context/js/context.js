@@ -1,4 +1,4 @@
-// rev:43
+// rev:45
 
 ; (function () {
     if (window._story === undefined) {
@@ -32,6 +32,8 @@
             case 'object':
                 if (value === null) {
                     type = 'null';
+                } else {
+                    type = 'object'
                 }
                 break;
             default:
@@ -133,12 +135,9 @@
                 throw new Error(`story: property ${property} is immutable`);
             }
 
-            // let obj = story[objectName];
-            // for (keyPart of keyPathParts) {
-            //     ogj = obj[keyPart];
-            // }
-            target[property] = value;
-            validateAndNotify(objectName, keyPathParts, property, value);
+            var type = getType(value);
+            target[property] = type === 'object' ? { ...value } : value;
+            validateAndNotify(objectName, keyPathParts, property, target[property]);
             return true;
         };
 
@@ -152,7 +151,9 @@
                 throw new Error('story: property attributes must be set');
             }
 
-            validateAndNotify(objectName, keyPathParts, property, attributes.value);
+            var type = getType(attributes.value);
+            let value = type === 'object' ? { ...attributes.value } : attributes.value;
+            validateAndNotify(objectName, keyPathParts, property, value);
             return true;
         };
 

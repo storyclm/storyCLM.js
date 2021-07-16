@@ -78,6 +78,10 @@ h2 {
     overflow-y: auto;
 }
 
+.notes {
+    line-height: normal;
+}
+
 .input-title {
     font-size: 11px;
     line-height: 13px;

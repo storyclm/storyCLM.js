@@ -91,19 +91,19 @@ window._storyTemplate = {
         "accentColor": {
             "accentColorVisible": true,
             "parameters": {
-                "color": "#000000",
-                "transparent": "32"
+                "color": "#555555",
+                "transparent": "#FF"
             }
         },
         "form": {
-            "formVisible": false,
+            "formVisible": true,
             "items": {
                 "input_1": {
                     "backgroundColor": "#ffffff",
                     "fontColor": "#000000",
                     "fontSize": 15,
                     "inputValue": "some value",
-                    "name": "input name",
+                    "name": "input name 1",
                     "order": 1
                 },
                 "input_2": {
@@ -111,24 +111,24 @@ window._storyTemplate = {
                     "fontColor": "#344445",
                     "fontSize": 12,
                     "inputValue": "",
-                    "name": "knanfoaf",
+                    "name": "inputTitle 2",
                     "order": 2
                 }
             }
         },
         "notes": {
-            "notesVisible": false,
+            "notesVisible": true,
             "parameters": {
-                "color": "#000000",
-                "fontSize": 12,
-                "text": "Hello world!"
+                "color": "#992222",
+                "fontSize": 40,
+                "text": "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum."
             }
         },
         "rating": {
             "parameters": {
-                "color": "#000000",
-                "progress": 1,
-                "quantity": 6
+                "color": "#6E4BD9",
+                "progress": 2,
+                "quantity": 4
             },
             "ratingVisible": true
         }
