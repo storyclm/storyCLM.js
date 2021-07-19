@@ -1,0 +1,72 @@
+<script src="js/app-emulator.js"></script>
+<script src="js/context.js"></script>
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+    <title>Document</title>
+    <link href="css/bootstrap.css" rel="stylesheet">
+</head>
+
+<body>
+    <div class="container-fluid" style="overflow-y: scroll; max-height: 100vh;">
+        <div class="row m-1">
+            <div class="col col-12 p-1">
+                <button name="log1" class="btn btn-primary btn-block btn-sm">LOG STATE</button>
+            </div>
+
+        </div>
+        <div class="row m-1 mt-3">
+            <div class="col col-4 p-1">
+                <input type="text" class="form-control form-control-sm" name="testInput2" placeholder="test value 2">
+            </div>
+            <div class="col col-4 p-1">
+                <!-- <button name="log2" class="btn btn-secondary btn-block btn-sm">LOG -->
+                STATE</button>
+            </div>
+            <div class="col col-4 p-1">
+                <div class="d-flex align-items-center" style="height:100%;">
+                    <span id="result"></span>
+                </div>
+            </div>
+        </div>
+        <div class="row m-1">
+            <a href="content.html">Content</a>
+        </div>
+        <div class="row m-1">
+            <div>
+                <pre id="story" style="min-height: 650px;"></pre>
+            </div>
+        </div>
+        <div class="row m-1">
+            <button name="set_story" class="btn btn-primary btn-block btn-sm">set_story</button>
+            <button name="clear-logs" class="btn btn-primary btn-block btn-sm">clear logs</button>
+            <button name="test1" class="btn btn-primary btn-block btn-sm">1. increment f1</button>
+            <button name="test2" class="btn btn-primary btn-block btn-sm">2. append f2</button>
+            <button name="test3" class="btn btn-primary btn-block btn-sm">3. toggle f3</button>
+            <button name="test4" class="btn btn-primary btn-block btn-sm">4. set f2 = null</button>
+            <button name="test5" class="btn btn-primary btn-block btn-sm">5. set f5 = 1.23</button>
+            <button name="test6" class="btn btn-primary btn-block btn-sm">6. set f6 = undefined</button>
+            <button name="test7" class="btn btn-primary btn-block btn-sm">7. define f7 = "defined f7"</button>
+            <button name="test8" class="btn btn-primary btn-block btn-sm">8. delete f8"</button>
+            <button name="test9" class="btn btn-primary btn-block btn-sm">9. set f9 = { f91: 'value of f91 - 1' }</button>
+            <button name="test10" class="btn btn-primary btn-block btn-sm">10. set f10 = {f101: "updated value of f101"}</button>
+            <button name="test11" class="btn btn-primary btn-block btn-sm">11. set f11.f111 = "value of new object field f111"</button>
+            <button name="test12" class="btn btn-primary btn-block btn-sm">12. set f11.f112 = "field f112"</button>
+            <button name="test13" class="btn btn-primary btn-block btn-sm">13. setStory {f13: "setStory value f13"}</button>
+            <button name="test14" class="btn btn-primary btn-block btn-sm">14. removeStoryProp f14</button>
+            <button name="test50" class="btn btn-primary btn-block btn-sm">50. requests queue test</button>
+            <button name="test51" class="btn btn-primary btn-block btn-sm">51. object closure test</button>
+        </div>
+        <div class="row m-1">
+            <div id="logs">
+            </div>
+        </div>
+    </div>
+    <script src="js/jquery-3.6.0.js"></script>
+    <script src="js/index.js"></script>
+</body>
+
+</html>
