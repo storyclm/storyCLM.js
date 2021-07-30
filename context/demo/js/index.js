@@ -45,7 +45,7 @@
                 name: itemName,
                 inputTitle: item.name,
                 inputValue: item.inputValue,
-                order: item.order
+                order: item.order || 0
             });
         }
         return fields.sort((a, b) => a.order - b.order);
@@ -61,10 +61,12 @@
         $(`input[name='${field.name}'`).css('font-size', field.fontSize);
         $(`input[name='${field.name}'`).change(onChange);
         $(`input[name='${field.name}'`).val(field.inputValue);
+        $(`#input-wrapper-${field.name}`).find("div span").text(field.inputTitle);
+
     }
     let addFieldAndChangeListener = function (field) {
         var input = $("#input-wrapper-container");
-        input.find("div span").text(field.inputTitle);
+        input.find("div").attr("id", "input-wrapper-" + field.name);
         input.find("input").attr("name", field.name);
         $("#text-input-list").append(input.html());
         updateField(field)
