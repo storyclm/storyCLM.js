@@ -38,7 +38,6 @@
                 break;
             default:
                 throw new TypeError(`story: type ${typeof value} is not supported`);
-
         }
 
         return type;
@@ -59,12 +58,6 @@
         }
 
         // ios
-        // logToDiv(window.webkit === undefined);
-        if (window.webkit !== undefined) {
-            logToDiv(window.webkit.messageHandlers === undefined);
-            logToDiv(window.webkit.messageHandlers?.setStoryProp === undefined);
-            logToDiv(window.webkit.messageHandlers?.setStoryProp?.postMessage === undefined);
-        }
         if (window.webkit !== undefined && typeof webkit.messageHandlers?.setStoryProp?.postMessage === 'function') {
             if (operation === 'set') {
                 let model = { objectName, keyPath, type, value };
@@ -77,7 +70,7 @@
 
     }
 
-    let pushKeyPathPart = function (keyPathParts, part) {
+    const pushKeyPathPart = function (keyPathParts, part) {
         let newKeyPathParts = keyPathParts.slice();
         newKeyPathParts.push(part);
         return newKeyPathParts;
@@ -103,7 +96,7 @@
                     throw new Error(`story: ${typeof value} is not supported`);
                 }
             } catch (e) {
-                logToDiv(e);
+                console.error(e);
             }
         }, 5);
     }
@@ -130,7 +123,6 @@
         };
 
         let setter = function (target, property, value) {
-            logToDiv('setter');
             if (!mutable) {
                 throw new Error(`story: property ${property} is immutable`);
             }
@@ -141,8 +133,7 @@
             return true;
         };
 
-        let definer = function (target, property, attributes) {
-            logToDiv('setter');
+        let definer = function (_, property, attributes) {
             if (!mutable) {
                 throw new Error(`story: property ${property} is immutable`);
             }
@@ -157,7 +148,7 @@
             return true;
         };
 
-        let deleter = function (target, property) {
+        let deleter = function (_, property) {
             if (!mutable) {
                 throw new Error(`story: property ${property} is immutable`);
             }
@@ -206,14 +197,13 @@
     if (window._onStoryChange === undefined) {
         Object.defineProperty(window, '_onStoryChange', {
             value: function () {
-                logToDiv('_onStoryChange enter');
                 try {
                     proxifyStory(_story);
                     if (typeof window.story.onStoryChange === 'function') {
                         story.onStoryChange();
                     }
                 } catch (e) {
-                    logToDiv(e);
+                    console.error(e);
                 }
 
             },

@@ -53,6 +53,16 @@
         <div class="row mt-3">
             <div class="col col-3">
                 <div class="d-flex align-items-center" style="height:100%;">
+                    <span>Title:</span>
+                </div>
+            </div>
+            <div class="col col-9">
+                <input id="title" class="form-control form-control-sm" type="text">
+            </div>
+        </div>
+        <div class="row mt-3">
+            <div class="col col-3">
+                <div class="d-flex align-items-center" style="height:100%;">
                     <span>Message:</span>
                 </div>
             </div>
@@ -98,6 +108,12 @@
     <script src="js/storyclm-2.2.0.js"></script>
     <script>
 
+        var titles = {
+            inprogress: "Заголовок события inprogress",
+            success: "Заголовок события success",
+            fail: "Заголовок события fail"
+        }
+
         var messages = {
             inprogress: "Сообщение события inprogress",
             success: "Сообщение события success",
@@ -105,7 +121,7 @@
         }
 
         var values = {
-            inprogress: "Значениие события inprogress",
+            inprogress: "Значение события inprogress",
             success: "Значениие события success",
             fail: "Значениие события fail"
         }
@@ -119,6 +135,7 @@
             $(`input[name='quest-status'][value='${e.target.value}']`).prop('checked', true);
             $(`#quest-status-label-${e.target.value}`).addClass('active')
 
+            $("#title").val(titles[e.target.value]);
             $("#message").val(messages[e.target.value]);
             $("#value").val(values[e.target.value]);
         });
@@ -130,13 +147,14 @@
                 let data = {
                     status: $("input[name='quest-status']:checked").val(),
                     points: $("#points").val(),
+                    title: $("#title").val(),
                     message: $("#message").val(),
                     value: $("#value").val(),
                     goal: $("#goal").prop("checked")
                 };
 
-                StoryCLM.SendCommand("addFlowEvent", data, function (message) {
-                    $("#response").html("<pre>" + JSON.stringify(message, null, 4) + "</pre>");
+                StoryCLM.SendCommand("addFlowEvent", data, function (msg) {
+                    $("#response").html("<pre>" + JSON.stringify(msg, null, 4) + "</pre>");
                     resetForm();
                     enableForm();
                 });
@@ -157,6 +175,7 @@
             $("input[name='quest-status']").prop('disabled', true);
             $("[id^='quest-status-label-'").addClass('disabled')
             $("#points").prop('disabled', true);
+            $("#title").prop('disabled', true);
             $("#message").prop('disabled', true);
             $("#value").prop('disabled', true);
             $("#goal").prop('disabled', true);
@@ -165,6 +184,7 @@
             $("input[name='quest-status']").prop('disabled', false);
             $("[id^='quest-status-label-'").removeClass('disabled')
             $("#points").prop('disabled', false);
+            $("#title").prop('disabled', false);
             $("#message").prop('disabled', false);
             $("#value").prop('disabled', false);
             $("#goal").prop('disabled', false);
@@ -173,6 +193,7 @@
         var resetForm = function () {
             $(`input[name='quest-status']:checked`).prop('checked', false);
             $("[id^='quest-status-label-'").removeClass('active')
+            $("#title").val("");
             $("#message").val("");
             $("#value").val("");
             $("#points").val(0);

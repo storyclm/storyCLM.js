@@ -4,7 +4,7 @@
         $('#logs').append(`<div>${value}</div>`);
     }
     logToDiv(window.story);
-    //_set_story();
+    _set_story();
 
     // Заголовок (header)
     const renderHeader = () => {

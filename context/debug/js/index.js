@@ -8,34 +8,34 @@ window.syncWait = ms => {
         continue;
     }
 }
-// _set_story();
-logToDiv(window.story?.app?.name);
+ //_set_story();
+// logToDiv(window.story?.app?.name);
 
 story.onStoryChange = function () {
     $('#story').text(JSON.stringify(window.story, null, 4));
 
-    if (window.story.debugAppState.f50 !== undefined && window.story.debugAppState.f50 !== null) {
-        logToDiv(window.story.debugAppState.f50);
-        // syncWait(500);
-        window.test50.push(window.story.debugAppState.f50);
-        console.log(test50.join());
-        if (test50.length === 5) {
-            let test50passed = true;
-            for (let i = 0; i < 5; i++) {
-                test50passed = test50passed && test50[i] === i;
-            }
-            logToDiv(test50.join());
-            logToDiv(`test50passed: ${test50passed}`);
-            window.test50 = undefined;
-            story.removeStoryProp('debugAppState.f50');
-            $("button[name='test50'").prop('disabled', false);
-        }
-    }
+    // if (window.story.debugAppState.f50 !== undefined && window.story.debugAppState.f50 !== null) {
+    //     logToDiv(window.story.debugAppState.f50);
+    //     // syncWait(500);
+    //     window.test50.push(window.story.debugAppState.f50);
+    //     console.log(test50.join());
+    //     if (test50.length === 5) {
+    //         let test50passed = true;
+    //         for (let i = 0; i < 5; i++) {
+    //             test50passed = test50passed && test50[i] === i;
+    //         }
+    //         logToDiv(test50.join());
+    //         logToDiv(`test50passed: ${test50passed}`);
+    //         window.test50 = undefined;
+    //         story.removeStoryProp('debugAppState.f50');
+    //         $("button[name='test50'").prop('disabled', false);
+    //     }
+    // }
 
-    if (window.test51running) {
-        logToDiv(JSON.stringify(window.test51func()));
-        window.test51running = false;
-    }
+    // if (window.test51running) {
+    //     logToDiv(JSON.stringify(window.test51func()));
+    //     window.test51running = false;
+    // }
 }
 
 $('#story').text(JSON.stringify(window.story, null, 4));
